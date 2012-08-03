@@ -11,12 +11,30 @@ comments: true
 welcome to my blog. This is just a "hello world" testing post.
 重新建立一个blog这个念头在脑袋里已经有些日子了，关于原因以后再说，总之今天算一个“冒烟测试”。
 
+
 * TEST
-** 各国文字
+    
+
+** 视频
+   #+begin_html
+   <div class="video-container">
+   {% video /video/hull.mp4  /rc/dovetail-special.JPG%}
+   </div>
+   #+end_html
+
+** 各国文字测试
    - 中文 :: 上边已经试过了
    - 英文 :: 上边也试过了
    - 日文 :: 现在的linux下没装日文输入法。。\\
              テストご挨拶、はじめまして。
+
+
+
+** Quote
+   {% blockquote Seth Godin http://sethgodin.typepad.com/seths_blog/2009/07/welcome-to-island-marketing.html Welcome to Island Marketing %}
+Every interaction is both precious and an opportunity to delight.
+{% endblockquote %}
+
 
 ** 二级标题
 
@@ -30,11 +48,6 @@ welcome to my blog. This is just a "hello world" testing post.
     [[http://ifq.herokuapp.com]]
     [[*%E5%9B%9B%E7%BA%A7%E6%A0%87%E9%A2%98][四级标题]]
 
-*** markdown 链接
-
-
-
-
     
 
 ** 图片
@@ -45,13 +58,7 @@ welcome to my blog. This is just a "hello world" testing post.
 
 *** markdown 格式
     #+begin_html
-    {% img /rc/dovetail-special.JPG %}
+    {% img /rc/dovetail-special.JPG '一个很特别的dovetail' '不知道这个pin和tail是怎么敲起来的啊' %}
     #+end_html
-    
 
-** 视频
-   #+begin_html
-   {% video /video/hull.mp4 640 480 /rc/dovetail-special.JPG%}
-   #+end_html
    
-

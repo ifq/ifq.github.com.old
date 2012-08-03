@@ -1,2 +1,39 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+
+dl
+{
+	margin-bottom:18px;
+}
+dt,dd
+{
+	line-height:18px;
+}
+dt
+{
+	font-weight:bold;
+}
+dd
+{
+	margin-left:9px;
+}
+
+article img, article video, article .flash-video {
+	-webkit-border-radius: 0.3em;
+	-moz-border-radius: 0.3em;
+	-ms-border-radius: 0.3em;
+	-o-border-radius: 0.3em;
+	border-radius: 0.3em;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.15) 0 1px 4px;
+	-moz-box-shadow: rgba(0,0,0,0.15) 0 1px 4px;
+	box-shadow: rgba(0, 0, 0, 0.15) 0 1px 4px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	border: white 0.5em solid;
+	margin-top: 10px;
+}
+
+article .entry-content .video-container {
+	padding-top: 1px;
+}
