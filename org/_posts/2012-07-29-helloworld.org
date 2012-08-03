@@ -16,6 +16,8 @@ welcome to my blog. This is just a "hello world" testing post.
     
 
 ** 视频
+   一个工厂里切OAK的视频，看着这过瘾。也许以后可以经常转点youtube的视频
+   来给大家看。
    #+begin_html
    <div class="video-container">
    {% video /video/hull.mp4  /rc/dovetail-special.JPG%}
