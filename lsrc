@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SRCDIR="/mnt/hgfs/temp"
+RCDIR="./source/rc"
+
+find $RCDIR/$1 -type f > tmp1
+
+perl -pe 's|^.*(/rc.*$)|{% img $1 800 600 "" "" %}|' tmp1 | sort
+
+
+rm -f tmp1

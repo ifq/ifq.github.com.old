@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SRCDIR="/mnt/hgfs/temp"
+RCDIR="./source/rc"
+
+cp -rf $SRCDIR/$1 $RCDIR
+echo "cp -rf $SRCDIR/$1 $RCDIR"
+
+source ./lsrc $1
+
+
