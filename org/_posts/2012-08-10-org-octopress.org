@@ -1,0 +1,16 @@
+#+BEGIN_HTML
+---
+layout: post
+title: emacs + org-mode + octopress(jekyll) + github
+category: [binary, orgmode, octopress]
+comments: true
+---
+#+END_HTML
+
+网站基本上搭起来了，虽然不懂Ruby，Jekyll也只知道是个什么东西。但是就how-to问题，可以和大家分享下。如果你想建立静态博客，也许有点头绪。如果你恰巧也使用emacs+orgmode，那我们
+
+<!--more-->
+
+
+* 什么是静态博客
+* 什么是octopress
