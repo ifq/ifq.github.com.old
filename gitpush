@@ -1,0 +1,16 @@
+#!/bin/bash
+
+a=$1
+
+if [ -z $1 ]
+then
+  a="$(date +%y%m%d-%H%M) commit. quick push."
+fi
+
+git add .
+
+git commit -m "$a"
+
+git push origin source
+
+echo "git push done!"

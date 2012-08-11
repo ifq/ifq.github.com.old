@@ -97,7 +97,12 @@ git push
   - 可以自动生成org文件内的目录（TOC）
 
 * how-to 整合
-  终于到了org与octopress整合的部分了。
+  终于到了org与octopress整合的部分了。关于整合 orgmode 和 octopress（jekyll），可以找到几种方式：
+  - org 导出html，直接交给 jekyll 处理。这么做有个问题，org生成的html可能和 markdown 产生的html有差异，有的时候兼容性不好。比如，插入 =<!--more-->= 语句时，由于 org 生成的 html 充满了 div ，导致在有 headline 的情况下页面可能会乱掉。
+  - org 文件通过 emacs 的插件转换为 markdown 格式，再由 jekyll 处理。可以到[[https://github.com/alexhenning/ORGMODE-Markdown][这里]] 找到相关资源。
+  - [[http://orgmode.org/worg/org-tutorials/org-ruby.html][org-ruby]]。 通过Ruby将 org 文件转化为 html，而不是通过emacs。\\
+
+  目前为止，我采用的还是第一种方法。
 ** 目录结构
    以下是我现有的目录结构供参考
    #+begin_example
@@ -122,7 +127,7 @@ git push
 
 ** emacs 设定
    以下.emacs文件的设置有几个要点：
-   - jekyll 本身针对 markdown 转化设计，但实际也兼容html。但是org模式导出html时要设置为 =body-only= ，只导出html的body的部分，不然页面重复的head会乱掉。
+   - jekyll 本身针对 markdown 转化设计，但实际也支持html。但是org模式导出html时要设置为 =body-only= ，只导出html的body的部分，页面head和footer的内容由 jekyll 生成。
    - 最好不要导出目录（TOC）。
    - base和publishing目录的设置
    - 虽然设置了资源文件的导出，但是我目前实际没有使用，而是直接把图片等资源文件放到 =source/rc/= 下。
@@ -156,8 +161,8 @@ git push
    #+end_html
 ** 操作
    假如今天要写这篇新的博客，大致过程如下：
-   - 用emacs创建 =blog/org/_post/2012-08-11-org-octopress.org= 这个文件。日期的部分设置了快捷键直接添加。
-   - 在文件的头部加入如下内容：
+   - 用emacs创建 =blog/org/_post/2012-08-11-org-octopress.org= 这个文件。(日期的部分设置了快捷键直接添加)
+   - 在文件的头部加入如下内容：(这部分可以通过 [[http://code.google.com/p/yasnippet/][YASnippet]] 加速添加)
      #+begin_src html 
 #+BEGIN_HTML
 ---
@@ -168,7 +173,7 @@ comments: true
 ---
 #+END_HTML
    #+end_src 
-   - 用org模式写实际的内容。
+   - 用org模式写博客的内容。
    - 用 =org-publish= 命令导出这个org文件。
    - =rake generate= 生成博客
    - =rake preview= 可以本地先检查下
