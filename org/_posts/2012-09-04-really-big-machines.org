@@ -1,0 +1,21 @@
+#+BEGIN_HTML
+---
+layout: post
+title: 各种 Big Machine
+categories: [cool]
+comments: true
+---
+#+END_HTML
+
+在youtube上看到的视频，各种庞然大物。各种挖矿的，运火箭的。
+- 2：00位置的那个钻洞的大家伙，每部电影中生活在地下的反派角色都应该攒钱
+  买一个。哥谭镇的贝恩是不是也有一个啊～
+- 运火箭那个，以前电视里见过，原来它的牛B之处是可以保证表面的平稳，晃动
+  都在1/6度以内！！
+#+begin_html
+   <div class="video-container">
+   {% video /video/really-big-machines-ifq.mp4  /rc/cool-big-machine.JPG %}
+   </div>
+#+end_html
+
+源视频地址：http://www.youtube.com/watch?v=iE-3awHYsG8&list=UUqmugCqELzhIMNYnsjScXXw&index=33&feature=plcp
