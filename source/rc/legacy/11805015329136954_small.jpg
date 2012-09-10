@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>百度--您的访问出错了      </title>
+<style type="text/css">
+body{margin:0;padding:0;font-size:14px;font-family:"宋体",Arial, Helvetica, sans-serif;}
+img,ul,li,form,h2,ol{border:0;padding:0;margin:0;list-style:none;}
+.cl{clear:both;height:0px;line-height:0px;font-size:0px;overflow:hidden;}
+input{vertical-align:middle;}
+a:link{color:#0033cc}
+a:visited{color:#800080;}
+a:hover{color:#800080;}
+a:actived{color:#800080;}
+#content{width:644px;margin:3px auto 0;}
+.logo{float:left;width:141px;}
+.title{float:right;width:495px;line-height:24px;background:#e5ecf9;margin:20px 0 0 0;padding-left:8px;}
+.title a{margin-left:320px;}
+.tip{font-size:18px;margin:48px 0 52px 5px;*margin:47px 0 38px 5px;}
+.reason{margin:0 0 33px 25px;*margin:0 0 17px 23px;}
+.reason li{line-height:24px;height:24px;}
+.searchbox{margin:0 0 57px 8px;*margin:0 0 61px 8px;}
+.help{margin:0 0 0 5px;}
+.footer{margin:71px 0 0 0;*margin:56px 0 0 0;text-align:center;color:#666666;}
+.footer a{color:#666666;}
+
+</style>
+</head>
+
+<body>
+<div id="content">
+	<div class="logo"><a href="http://www.baidu.com"><img src="http://www.baidu.com/search/img/logo.gif" alt="百度logo" title="百度logo" /></a></div>
+    <div class="title"><b>您的访问出错了</b><a href="http://www.baidu.com">百度首页</a></div>
+    <div class="cl">sdsffsd</div>
+    <h2 class="tip">很抱歉，您要访问的页面不存在。</h2>
+    <ol class="reason">
+    	<li>1. 请检查您输入的网址是否正确。</li>
+        <li>2. 如果您不能确认您输入的网址，请浏览<a href="http://www.baidu.com/more/index.html">百度更多</a>页面，来查看您所要访问的网址。</li>
+        <li>3. 直接输入要访问的内容进行搜索：</li>
+    </ol>
+    <div class="searchbox">
+    	<form action="http://www.baidu.com/s" name="f">
+        	<input type="text" name="wd" size="35" maxlength="100"><input type="hidden" name="cl" value="3"><input type="hidden" name="tn" value="baiduerr"><input type="submit" value="百度一下">
+        </form>
+    </div>
+    <div class="help">如还有疑问请访问<a href="http://www.baidu.com/search/jiqiao.html">百度帮助中心</a>获得解决方法。</div>
+    <div class="footer">&copy; 2012 Baidu&nbsp;<a href="http://www.baidu.com/duty/index.html">免责声明</a></div>
+</div>
+</body>
+</html>

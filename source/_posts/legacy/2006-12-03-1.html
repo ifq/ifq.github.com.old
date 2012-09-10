@@ -1,0 +1,125 @@
+---
+layout: post
+title: "转载-解析windows下IBM硬盘保护装置APS驱动"
+comments: true
+categories: [legacy]
+---
+
+<div><font face="arial,helv,helvetica" color="#ff9900" size="2"><font face="arial,helv,helvetica">本文全面记述了</font></font><font color="#ff9900" size="2"> </font><font face="arial,helv,helvetica" color="#ff9900" size="2"><font face="arial,helv,helvetica">Mark A. Smith调试APS驱动,解析出接口,并在linux实现APS驱动的过程.有空试着翻译下.</font></font><br>
+<font face="arial,helv,helvetica" color="#000000" size="-1"><font face="arial,helv,helvetica" color="#000000" size="3">The ThinkPad APS Accelerometer Interface</font><br>
+</font>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">In late 2003, IBM announced a feature called the Active Protection System (APS) in some of its line of ThinkPads. This feature is used to "park" the hard disk head when sudden motion or acceleration (such as being dropped) is detected. A parked head has much less chance of damaging data than if the head is over sectors containing data when impact occurs. The system proved very valuable and other vendors followed suit. In early 2005, Apple announced their <a href="http://www.kernelthread.com/software/ams/">Sudden Motion Sensor</a> system as an addition to their PowerBook line. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">All of these systems use accelerometers placed on the motherboard to detect motion. A kernel software driver interfaces with the accelerometer and exposes its acceleration readings to interested user-space programs. The Mac OS X system is described in detail by Amit Singh in the previously referenced article. The Windows system on ThinkPads has not been described in detail, and there was no port for Linux. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">I was interested in interfacing with the accelerometer from Linux, mostly for the sake of curiosity, but I also wanted to show Amit that his TT can't hold corners as well as my Corolla (and if I could prove it to him using Linux, so much the better). Any such port was certainly to begin with a thorough understanding of the Windows APS. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">Fortunately, I know another crazy Windows kernel hacker, Anurag Sharma. Anu is known for using computer terminology to describe even his inner workings. For example, when the conversation changes topics, he'll sometimes announce, "Just a second, I've got to swap out and page in." And, when doing a task without all of the information he would like, he will say "I'm performing speculative execution, bear with me." We started a kernel debugging session over serial cable using Windbg. We discovered that APS is comprised of two drivers, shockprf.sys and shockmgr.sys. shockprf.sys interfaces with the accelerometer hardware, while shockmgr.sys subscribes to the data from shockprf.sys and must be the component used to initiate parking of the drive head. Since we were primarily interested in the protocol used to get information out of the accelerometer, our debugging focused on shockprf.sys. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">We discovered that shockprf.sys was performing port I/O in the range 0x1600 to 0x162f. We looked at the values that shockmgr.sys was reading out of shockprf.sys and watched for those values to come in through shockprf.sys' port reads. We discovered a pattern of port writes and reads which repeatedly produced the values that shockmgr.sys was interested in. Armed with the read/write sequence that the accelerometer responded to from Windows, the task was now to produce a Linux driver which did the same thing. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">Since the amount of data that the accelerometer produces is very small, I decided the best way to expose it in Linux was through the /proc filesystem. I wrote a quick kernel module. Behold! Acceleration values! I performed a hard boot to make sure that everything would still work, and unfortunately, it did not. There was a bit of initialization port I/O that we missed. More protocol analysis from the Windows side produced our initialization sequence. After adding that code to the Linux driver, all was well. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">I could finally prove to Amit that his TT was slow. We strapped the ThinkPad into the passenger seats of both of our cars and drove up our <a href="http://maps.google.com/maps?q=bernal+rd.+95120&amp;ll=37.214856,-121.798253&amp;spn=0.028410,0.038195&amp;t=k&amp;hl=en">"closed course."</a> He destroyed me. Although I refuse to give Amit the pleasure of my posting our comparative graphs, I will post the noteworthy performance of Anu's new 350Z.</font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">{% img /rc/legacy/anufull.jpg 800 %} </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">As far as I could tell, the accelerometer in the ThinkPad has a 5 microsecond refresh rate. This is fast enough for most real-world applications. Although the lateral G values are probably slightly exaggerated due to body roll, it is interesting to note the relative detail in the graph. At time 520, there's a stop sign. One can observe Anu's acceleration become negative (breaking) approaching the stop sign, and then become sharply positive (forward acceleration). One can also see him shift at times 580 and 620. One can also deduce rough gearbox ratios between 1st, 2nd, and 3rd gears based on his acceleration values in each gear. Whether Anu accelerates through corners is also evident. Further, if one was interested in Anu's speed, he would only need to integrate the green curve (assuming a flat course, uphill courses will give slightly higher forward acceleration values than actually achieved, assuming calibration on flat ground). Unfortunately, the ThinkPad accelerometers seem only to expose "X" and "Y" acceleration values. Unlike the PowerBook, "Z" values (or "up" and "down" acceleration) are not available.</font></p>
+<h2><font face="arial,helv,helvetica" color="#000000" size="-1">Kernel Module</font></h2>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">I am not permitted to release my source code yet, but I am working to make it available. However, I am permitted to describe how it works. Below is a detailed description of how my Linux kernel module communicates with the ThinkPad accelerometer.</font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">My driver is written as four files: </font></p>
+<ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p style="MARGIN-BOTTOM: 0in">One containing acceleration common functions </p>
+</li>
+    <li>
+<p style="MARGIN-BOTTOM: 0in">One containing proc functionality </p>
+</li>
+    <li>
+<p style="MARGIN-BOTTOM: 0in">One containing thread functions for asynchronous reading </p>
+</li>
+    <li>
+<p>One containing kernel module initialization and entry points </p>
+</li>
+</font></ul>
+    <p><font face="arial,helv,helvetica" color="#000000" size="-1">They rely on a packed accelerometer_data structure which contains: </font></p>
+    <ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned char representing the accelerometer state </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned short representing the X acceleration value </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned short representing the Y acceleration value </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned char representing the temperature of the accelerometer in Celsius. </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned short representing some variation (maybe a weighted average of the previous n readings?) of the X acceleration value </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned short representing some variation (maybe a weighted average of the previous n readings?) of the Y acceleration value </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned char representing the temperature of the accelerometer in Celsius (again?). </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned char of unknown use. </p>
+</li>
+        <li>
+<p>an unsigned char indicating whether the mouse and keyboard are in use. </p>
+</li>
+</font></ul>
+        <p><font face="arial,helv,helvetica" color="#000000" size="-1">Understanding what I mean by a latch is also important for understanding this logic. In this context, a latch is simply an I/O port and a value. To “wait for a latch” is to wait for an inb from that port to produce a specified value by repeatedly performing inb's and checking the value. To check a latch is simply to do a single inb from the port and to report whether the value read from that port is the same as a specified value. The accelerometer uses these “latches” for synchronization: reporting data ready, and handshaking.</font></p>
+        <p><font face="arial,helv,helvetica" color="#000000" size="-1">My acceleration common functions file contains functions which perform the following: </font></p>
+        <ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p style="MARGIN-BOTTOM: 0in">A static function which <strong>checks a port latch</strong> for a certain value. <br>
+This function simply takes an unsigned short port value and an unsigned char compare value and returns whether the inb from the specified port (bitwise anded with 0xff) yields the specified value. No waiting is done here. </p>
+</li>
+            <li>
+<p style="MARGIN-BOTTOM: 0in">A static function which <strong>waits for a latch</strong> to have a certain value <br>
+This function also takes an unsigned short port value and an unsigned char compare value. It loops over check_latch 10 times, udelaying 5 microseconds each time, waiting for the check to become true. (A latch seems like it never takes more than 50 microseconds to become set). I return whether the latch value becomes the specified value within the allotted time. </p>
+</li>
+            <li>
+<p style="MARGIN-BOTTOM: 0in">A static function which <strong>checks the refresh state</strong> of the accelerometer data <br>
+This simple issues a latch <strong>check</strong> of port 0x1604 for value 0x50 </p>
+</li>
+            <li>
+<p style="MARGIN-BOTTOM: 0in">A static function which <strong>issues a refresh request</strong> to the accelerometer. <br>
+This function takes a single argument which tells it whether to refresh synchronously or not. This function first issues a refresh state check, if it is already refreshed, it returns success. If not, it does an outb at port 0x1610 of value 0x11, and then an outb at port 0x161f of value 0x1. If the synchronous flag is set, it does a latch wait on port 0x1604 for value 0x50. The function then returns whether the latch wait was successful. </p>
+</li>
+            <li>
+<p style="MARGIN-BOTTOM: 0in">A non-static function which <strong>reads the accelerometer data</strong>. <br>
+This function takes an accelerometer_data structure and returns whether the read was successful. It issues a synchronous accelerometer data refresh request (which is likely to return immediately since the refresh latch is likely already set). If this refresh fails, this function returns the failure. Otherwise, it reads ports 0x1611 through 0x161E, assigning the 13 bytes worth of values to the 13 bytes large accelerometer_data structure. It then tells the accelerometer that it is done reading the data. It then issues an asynchronous refresh request and exits successfully. </p>
+</li>
+            <li>
+<p style="MARGIN-BOTTOM: 0in">A static function which <strong>tells the accelerometer that it is done</strong> reading the data <br>
+This function does two port reads. One art port 0x161f, and the next at port 0x1604, discarding the values it gets. </p>
+</li>
+            <li>
+<p>A non-static function which <strong>initializes the accelerometer.</strong> <br>
+This lengthy function takes a timeout value (in seconds) as the maximum time that it should take to try to initialize itself. I initialize a "seconds waited so far" variable to zero. I issue an outb at port 0x1610 of value 0x13, followed by an outb at port 0x161f of value 0x01. I then wait for latch 0x161f for value 0x0, and then wait for latch 0x1611 for value 0x3. Three more outbs at ports 0x1610, 0x1611, and 0x161f of values 0x17, 0x81, and 0x01, respectively follow. Four more waits for latches 0x161f, 0x1611, 0x1612, and 0x1613 for values 0x0, 0x0, 0x60, and 0x0 respectively follow. Then three more outbs at ports 0x1610, 0x1611, and 0x161f of values 0x14, 0x01, and 0x01 respectively follow. Then I wait for latch 0x161f for value 0x0. Then five outbs at ports 0x1610, 0x1611, 0x1612, 0x1613, and 0x161f of values 0x10, 0xc8, 0x00, 0x02, and 0x01 respectively follow. I then wait for latch 0x161f for value 0x0 again. I then issues a synchronous refresh of the accelerometer data, and wait for latch 0x1611 to become 0x0. The next part is a little bit tricky because it can take a long time for the accelerometer to complete. I loop forever until latch 0x1611 becomes 0x02. Inside this loop, I check the timeout value against the "time waited so far" variable. If the function has taken too long, we return failure. Otherwise, I call the function which reads the accelerometer data and I throw away the (probably garbage) data (this read somehow seems to kick the accelerometer into being initialized). I set_current_state to TASK_INTERRUPTIBLE, and schedule_timeout for HZ. I then increment our "seconds waited so far" variable and continue the loop. If the loop ever exits successfully, the function returns success. A good value to pass for the initialize timeout value is 10 seconds. </p>
+</li>
+</font></ul>
+            <p><font face="arial,helv,helvetica" color="#000000" size="-1">My acceleration proc functions file only implements open, release, and read. </font></p>
+            <ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p style="MARGIN-BOTTOM: 0in">open simply starts the read thread (if it is not already started) in the acceleration thread functions file. </p>
+</li>
+                <li>
+<p style="MARGIN-BOTTOM: 0in">release stops the aforementioned read thread. </p>
+</li>
+                <li>
+<p>read simply spits out the last acceleration_data structure that was read by the read thread. (Of course, this structure is protected by a semaphore). </p>
+</li>
+</font></ul>
+                <p><font face="arial,helv,helvetica" color="#000000" size="-1">My acceleration thread functions file implements a function which is constantly reading. </font></p>
+                <ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p>The read thread first daemonizes, then loops over a volatile variable which is set the the proc release function which tells this thread to stop. It then issues a read of the accelerometer data (of course, protected by a semaphore). It then set_current_state's to TASK_INTERRUPTABLE, and schedule_timeout's to a value passed in as a module parameter (I made the refresh rate settable at insmod time), or an appropriate default value. </p>
+</li>
+</font></ul>
+                    <p><font face="arial,helv,helvetica" color="#000000" size="-1">My acceleration kernel module initialization and entry points file contains the regular kernel module init stuff. </font></p>
+                    <ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p style="MARGIN-BOTTOM: 0in">The init function requests region for the specified port range, inits the accelerometer, does an initial read, initializes semaphores, create_proc_entry's, and sets the entry's proc_fops to a file_operations structure with .open, .read and .release initialized. </p>
+</li>
+                        <li>
+<p>The exit function remove_proc_entry's, makes sure the read thread is stopped, and releases region. </p>
+</li>
+</font></ul></div>

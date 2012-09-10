@@ -1,0 +1,31 @@
+---
+layout: post
+title: "平均值滤波之鬼斧神工算法（转）"
+comments: true
+categories: [legacy]
+---
+
+<div><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span class="Apple-style-span">
+<div style="text-indent: 2em">采样值 C、累加器 S，平均值 A，采样次数 N</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">传统的平均值滤波算法</font>：</div>
+<div style="text-indent: 2em">S = C(1) + C(2) + ... + C(N)</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">需要用循环来计算累加和，比较耗时，C(1～N）是缓存，随采样数N增大，所需内存量也增大</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">向队列平均值算法推进</font>：</div>
+<div style="text-indent: 2em">S = C(1) + C(2) + ... + C(N) （第一次）</div>
+<div style="text-indent: 2em">C(x) = C(x + 1) （队列前移）</div>
+<div style="text-indent: 2em">C(N) = C</div>
+<div style="text-indent: 2em">S = S - C(1) + C(N)</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">运算量有所改进（用指针维护循环队列，不实际移动数据），占用内存问题不变</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">鬼斧神工算法</font>：</div>
+<div style="text-indent: 2em">初始化：A=初始值，S=A*N</div>
+<div style="text-indent: 2em">S = S - A + C</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">就这么简单，三个变量（N可以是常数），只要 S 的量程足够，N可以任意调整。</div>
+<div style="text-indent: 2em">可以看出，此算法是从队列平均值算法演变而来，因没有了队列，每次计算时不知道该丢弃的最老的一个采样值是多少，这里用了个替代的办法，丢弃上次计算出的平均值。</div>
+<div style="text-indent: 2em">去掉了缓存维护，节省内存空间，同时也将运算量压缩到了最小，执行效率非常高。调试时容易修改采样数。</div>
+</span></span><br class="Apple-interchange-newline"></div>

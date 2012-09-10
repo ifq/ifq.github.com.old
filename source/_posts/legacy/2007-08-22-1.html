@@ -1,0 +1,10 @@
+---
+layout: post
+title: "Sniffer Portable抓包很好用"
+comments: true
+categories: [legacy]
+---
+
+<div>&nbsp;&nbsp;&nbsp;   今天想看看一个软件通信的时候发的数据格式，于是去网上找工具。开始的时候听人介绍说什么WinSockExport之类的软件。但是和我想要的似乎有点差距。首先WinSockExport好像是用钩子函数截取发送的数据，其次对获得的数据一点都没有处理，很不方便。不过它本来就是短小精干型的程序。<br>
+&nbsp;&nbsp;&nbsp;   后来找到了Sniffer Portable，是什么NAI公司的软件。感觉很复杂，但是稍微上手之后感觉还是不错。目前用到得最主要2个功能是Filter和数据帧解析。Filter可以很详细的定制关心的包，解析可以吧协议层和内容分开，搜索也很方便。<br>
+&nbsp;&nbsp;&nbsp;   用它抓了一个叫&times;&times;P的软件的包，发现UDP数据帧里边传输的是XML格式的东东，完全没有加密。这下就好办了，下一步工作就可以继续了哈。。</div>

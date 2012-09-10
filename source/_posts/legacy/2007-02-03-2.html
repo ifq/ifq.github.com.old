@@ -1,0 +1,42 @@
+---
+layout: post
+title: "如何在Debian上安装RPM包.Install .rpm Files in Debian and Ubuntu"
+comments: true
+categories: [legacy]
+---
+
+<div>Some time you might find some applications are having only .rpm files but you want a .deb package for your debian,Ubuntu and other debian derived ditributions.If you can’t find .deb debian package in any of the debian,ubuntu repositories or elsewhere, you can use the alien package converter&nbsp;&nbsp; to install the .rpm file. 
+<p><strong>Alien</strong> is a program that converts between the rpm, dpkg, stampede slp, and slackware tgz file formats. If you want to use a package from another distribution than the one you have installed on your system, you can use alien to convert it to your preferred package format and install it.</p>
+<p>Despite the large version number, alien is still (and will probably always be) rather experimental software. It has been used by many people for many years, but there are still many bugs and limitations.</p>
+<p>Alien should not be used to replace important system packages, like sysvinit, shared libraries, or other things that are essential for the functioning of your system. Many of these packages are set up differently by Debian and Red Hat, and packages from the different distributions cannot be used interchangably. In general, if you can’t uninstall the package without breaking your system, don’t try to replace it with an alien version.</p>
+<p><strong>Install alien in debian</strong></p>
+<p>#apt-get install alien</p>
+<p>This will install all the required packages.Now you can start converting your .rpm files to .deb packages.</p>
+<p><strong>Available Options for alien</strong></p>
+<p>Convert the package.rpm into a package.deb</p>
+<p>#alien -d package-name.rpm</p>
+<p>Convert the package.rpm into a package.deb, and install the generated package.</p>
+<p>#alien -i package-name.rpm<br>
+ <br>
+If you want to keeps alien from changing the version number use the following command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<p>#alien -k rpm-package-file.rpm</p>
+<p><strong>Example</strong></p>
+<p>Suppose we have a avg antivirus avg71lms-r30-a0782.i386.rpm file</p>
+<p>To convert .rpm to debian</p>
+<p>#alien -k avg71lms-r30-a0782.i386.rpm</p>
+<p>Now you should be having avg71lms-r30-a0782.i386.deb file</p>
+<p><strong>To install .deb file</strong></p>
+<p>#dpkg -i avg71lms-r30-a0782.i386.deb</p>
+<p>If you don’t use -k option you should see avg71lms_r30-1_i386.deb file the difference is it will add 1</p>
+<p><strong>Install alien in Ubuntu</strong></p>
+<p>$sudo apt-get install alien</p>
+<p>You can check the above section for available options</p>
+<p><strong>Example</strong></p>
+<p>Suppose we have a avg antivirus avg71lms-r30-a0782.i386.rpm file</p>
+<p><strong>To convert .rpm to debian</strong></p>
+<p>$sudo alien -k avg71lms-r30-a0782.i386.rpm</p>
+<p>Now you should be having avg71lms-r30-a0782.i386.deb file</p>
+<p><strong>To install .deb file</strong></p>
+<p>$sudo dpkg -i avg71lms-r30-a0782.i386.deb</p>
+<p>If you don’t use -k option you should see avg71lms_r30-1_i386.deb file the difference is it will add 1</p>
+<p>If you want more available options for alien check alien <a target="_blank" href="http://www.debianadmin.com/manpages/alienmanpage.txt">man page</a> </p></div>

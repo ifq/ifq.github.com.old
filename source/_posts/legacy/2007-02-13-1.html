@@ -1,0 +1,101 @@
+---
+layout: post
+title: "如何创建蓝牙虚拟串口"
+comments: true
+categories: [legacy]
+---
+
+<div>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  WINCE为我们提供了便利的函数来建立蓝牙连接,其中就包括建立蓝牙的虚拟串口连接.利用虚拟串口连接,我们可以方便的把以前利用串口连接传输数据的程序改为蓝牙无线传输的程序.这个过程只需要一个步骤,就是在服务端和客户端注册虚拟串口.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <strong><font color="#ff6600">RegisterDevice这个函数就完成了这个功能.</font></strong><font color="#ff6600"><font color="#000000">通过这个函数建立了串口之后,就可以像操控以往的串口一样用CreateFile,read,write这些系统API来读写.<br>
+<br>
+以下的内容摘自MSDN:<br>
+<br>
+</font></font>You can create a connection between two Bluetooth devices by using the Microsoft Windows CE COM Port emulator facility. The COM Port emulator is the top most layer of the Bluetooth Protocol Stack and provides access to RFCOMM based on a virtual COM port. It does not expose stack interfaces but provides an API layer for opening connections to remote Bluetooth devices.<br>
+<br>
+<font color="#0000ff">When this layer is present in the Bluetooth stack</font><strong><font color="#0000ff">, </font></strong><font color="#0000ff">a virtual server or client COM port can be created to accept incoming or create outgoing RFCOMM connections.</font><br>
+<br>
+Before you create a connection between two Bluetooth devices, you must have the following information: <br>
+<br>
+<font color="#ff0000">1</font> &nbsp;&nbsp;&nbsp; Address of the Bluetooth device to connect to, stored as a BT_ADDR type (for client ports). <br>
+<font color="#ff0000">2</font> &nbsp;&nbsp;&nbsp; RFCOMM channel number (between 1 and 31). <br>
+<font color="#ff0000">3</font>&nbsp;&nbsp;&nbsp;&nbsp; COM port number (between 0 and 9) to be assigned for Bluetooth operations. <br>
+<br>
+The Com test sample that ships with Windows CE, contains source code for creating a Bluetooth connection by using a COM port. For more information about this sample, see Virtual COM Port Creation Sample.<br>
+<br>
+<strong>To create a virtual COM port </strong><br>
+<br>
+Configure the PORTEMUPortParams structure to specify attributes for the virtual COM port. This structure stores Bluetooth specific information, such as the channel and Bluetooth address information. <br>
+<strong><font color="#0000ff">For a server port</font></strong>, set PORTEMUPortParams members, as the following example shows. <br>
+<br>
+<font color="#ff6600">PORTEMUPortParams pp;<br>
+memset (&amp;pp, 0, sizeof(pp));<br>
+pp.flocal = TRUE;<br>
+pp.channel = channel &amp; 0xff;</font><br>
+<font color="#ff0000">The preceding example configures PORTEMUPortParams by setting <strong>flocal </strong>to TRUE. This enables a server COM port to accept incoming connections.</font> The server channel is specified explicitly by setting channel. <br>
+<br>
+Note&nbsp;&nbsp; To avoid conflicts, when you are selecting the server channel, it is recommended that you set channel to RFCOMM_CHANNEL_MULTIPLE (0xfe). This configures RFCOMM to use the next available channel.<br>
+<strong><font color="#0000ff">For a client port</font></strong>, set the device, channel, and the uiportflags members of PORTEMUPortParams. <br>
+<br>
+The following example code shows how to set PORTEMUPortParams for a client port. <br>
+<br>
+<font color="#ff6600">PORTEMUPortParams pp;<br>
+memset (&amp;pp, 0, sizeof(pp));<br>
+pp.device = ba;<br>
+pp.channel = channel &amp; 0xff;<br>
+pp.uiportflags = RFCOMM_PORT_FLAGS_REMOTE_DCB;</font><br>
+I<font color="#ff0000">n the preceding example, <strong>device </strong>is set to a BT_ADDR type that stores the remote device address and <strong>uiportflags </strong>is set to RFCOMM_PORT_FLAGS_REMOTE_DCB to initiate a remote connection over the RFCOMM layer. </font><br>
+<br>
+If the server channel is not known then the client can specify the UUID of the server in the uuidService member. In this case, an SDP query is performed automatically to retrieve the target channel number. <br>
+<br>
+Register the device by calling the RegisterDevice function, as the following example shows. <br>
+<strong><font color="#ff6600">HANDLE h = RegisterDevice (L&quot;COM&quot;, index, L&quot;btd.dll&quot;, (DWORD)&amp;pp);</font></strong><br>
+The preceding example specifies the port type as COM, port number, and the name of the device driver DLL, as parameters to RegisterDevice. Also, pass the address of PORTEMUPortParams structure, created in step 1, in the dwInfo parameter. RegisterDevice registers the Bluetooth Protocol stack with the virtual COM port. <br>
+<br>
+Create a null-terminated string to store the name of the COM port. You must include a colon after the port name, as the following example shows. <br>
+<font color="#ff6600">WCHAR szComPort[30];<br>
+wsprintf (szComPort, L&quot;COM%d:&quot;, index);<br>
+<font color="#000000">Open the COM port by calling the CreateFile function. </font><br>
+HANDLE hCommPort = CreateFile (szComPort, GENERIC_READ | GENERIC_WRITE,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0, NULL, OPEN_EXISTING, 0, NULL);</font><br>
+To specify the port name, pass the string created in step 3, in the lpFileName parameter of CreateFile. <br>
+<br>
+<font color="#0000ff"><strong>For client ports</strong></font>, the physical connection is created only when the device is open with read or write access by using CreateFile. The physical connection is terminated for both server and client ports when the first handle with read or write access is closed. <br>
+<br>
+Up to four open handles can be outstanding for each virtual port created. Every handle maintains its own set of communication event masks. If a file is open with a 0 access mask, it can only be used for WaitCommEvent, but not with ReadFile and WriteFile APIs. <br>
+<br>
+<strong>Once the COM port is created, it is a functional equivalent of a serial port. The same APIs can be used to access it.</strong><br>
+<br>
+To remove an existing virtual COM port <br>
+<br>
+Call the CloseHandle function and pass the handle returned by CreateFile, as the following example code shows. <br>
+<strong><font color="#ff6600">CloseHandle (hCommPort);</font></strong><br>
+To deregister the device, call the DeregisterDevice function and pass the handle returned by RegisterDevice, as the following example code shows. <br>
+DeregisterDevice (h);<br>
+To use auto-bound channel in port emulation <br>
+<br>
+Set the channel member of PORTEMUPortParams to RFCOMM_CHANNEL_MULTIPLE. <br>
+PORTEMUPortParams pp;<br>
+memset (&amp;pp, 0, sizeof(pp));<br>
+pp.channel = RFCOMM_CHANNEL_MULTIPLE;<br>
+Create the virtual COM port by using RegisterDevice and CreateFile. <br>
+Determine the assigned RFCOMM channel by using the IOCTL, IOCTL_BLUETOOTH_GET_RFCOMM_CHANNEL. <br>
+DWORD port = 0;<br>
+DWORD dwSizeOut = 0;<br>
+HANDLE hFile;<br>
+if (!DeviceIoControl (hFile, IOCTL_BLUETOOTH_GET_RFCOMM_CHANNEL, NULL, 0, &amp;port, sizeof(port), &amp;dwSizeOut, NULL)) <br>
+{<br>
+&nbsp; // Perform error handling<br>
+}<br>
+The following functions are supported: <br>
+<br>
+ClearCommError <br>
+EscapeCommFunction <br>
+GetCommMask <br>
+GetCommModemStatus <br>
+GetCommProperties <br>
+GetCommState <br>
+GetCommTimeouts <br>
+SetCommMask <br>
+SetCommState <br>
+SetCommTimeouts <br>
+WaitCommEvent</div>

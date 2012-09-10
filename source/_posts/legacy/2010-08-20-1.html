@@ -1,0 +1,50 @@
+---
+layout: post
+title: "[IFQ原创]函数时间测量之iPhone篇"
+comments: true
+categories: [legacy]
+---
+
+<div><p>函数时间测量之iPhone篇</p>
+<p>关键字：<br>
+iPhone OS (or Mac OS) Time Measure in nano second or micro sec IFQ IF.Q ifqqfi.<br>
+时间测量 测速</p>
+<p>在 iPhone （or MacOS）上以微秒或者纳秒单位来测量程序的执行时间，<br>
+我想应该是很常用的功能吧。一年前做iPhone程序的时候就出现了这个需求，当时花了一个晚上才找到相应的方法。往往在这些意想不到的小地方耗费很多时间。一年后的今天我google了下相关的关键字，还是没有相关的文章，所以我就举手之劳，帮大家省点时间吧。</p>
+<p>其实很简单，下面的这段程序就可以搞定：</p>
+<p><font color="#38761d" size="2" face="Times New Roman">-----------------------------------------------------<br>
+#import &lt;mach/mach.h&gt;<br>
+#import &lt;mach/mach_time.h&gt;</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">static uint64_t start;<br>
+static uint64_t end;<br>
+static mach_timebase_info_data_t&nbsp;&nbsp;&nbsp;  sTimebaseInfo;</font></p>
+<p><br>
+<font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountStart {<br>
+<br>
+if ( sTimebaseInfo.denom == 0 ) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  (void) mach_timebase_info(&amp;sTimebaseInfo);<br>
+&nbsp;&nbsp;&nbsp;  }<br>
+<br>
+start = mach_absolute_time();<br>
+}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountEnd {<br>
+<br>
+end = mach_absolute_time();</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQShowCount {<br>
+uint64_t diff;<br>
+uint64_t diffnano;<br>
+<br>
+diff = end - start;<br>
+<br>
+diffnano = diff * sTimebaseInfo.numer / sTimebaseInfo.denom;<br>
+<br>
+NSLog(@&quot;Nano sec : %qu&quot;, diffnano);<br>
+}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">-----------------------------------------------------</font></p>
+<p>用尻想也知道了，要测量的代码段前后放上Start，End函数，完事后 Show 一下就可以了。</p>
+<p>关于测量的精度是否真的能达到nano,现在有点不确定了。一年前的东西了，能翻出代码就不错了。。我现在用过的其他平台都是和CPU速度相同频率来计数来计时的，精度都还没到1 nano sec的。不过微秒单位的计时肯定是么有问题了。我想一般情况下微秒已经足够了吧～</p>
+<p>最后给出个参考链接。是MacOS下的官方的说明。（其实我就是把这个搬到iPhone来用而已）<br>
+<a href="http://developer.apple.com/mac/library/qa/qa2004/qa1398.html">http://developer.apple.com/mac/library/qa/qa2004/qa1398.html</a></p>
+<p><br>
+下次讲讲 VxWorks 下的计时方法～</p></div>

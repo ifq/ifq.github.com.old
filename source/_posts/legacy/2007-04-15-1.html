@@ -1,0 +1,29 @@
+---
+layout: post
+title: "R-S纠错码学习"
+comments: true
+categories: [legacy]
+---
+
+<div>&nbsp;&nbsp;&nbsp;   人在江湖身不由己,这话一点都没错啊.在学校的什么想做什么做什么,不感兴趣的东西可以不去关心,但是已进入公司就不一样了.现在公司要求我必须做他们指定的题目作为毕业设计.题目是&quot;检纠错技术在嵌入式系统中的应用&quot;.<br>
+&nbsp;&nbsp;&nbsp;   检纠错技术目前很成熟啊,在加上我算是个烂了一块板的木桶--数学那块板,既没有兴趣有没有基础,算是比较不情愿吧.不过再想想,做嵌入式不就是这样么?什么技术都会有涉及,技术积累的越多做起东西更得心应手啊.而且检纠错技术在嵌入式里应该是经常需要使用的.虽然现在现成的东东很多,不过能搞清楚它的原理不是更好么.所以还是积极一点,赶紧做完算了.<br>
+&nbsp;&nbsp;&nbsp;   毕设题目要求中R-S编码最为陌生,就从它开始.<br>
+<br>
+&nbsp;&nbsp;&nbsp;   R-S编码全程是&quot;REED-SOLOMON CODE&quot;,就是R和S这两位仁兄发现的.目前应用的十分广泛.存储设备,DVD,无线网络,卫星通信,数字电视,ADSL等领域都有应用(原来这么有用啊..) IFQ.<br>
+&nbsp;&nbsp;&nbsp;   我想光碟表面花掉也能保证数据正确性,肯定是和这个有密切关系的.试想没有纠错码的光碟,不小心划了一点点地方就不能完整读取了,那光碟的推广也就不太可能了.再如卫星通信领域,要传回从火星或者更远位置的数据,更离不开纠错码的保驾护航了.现在NASA所使用的纠错码好像就是以卷积码做内码,R-S码作为外码的组合方式,被称为&quot;NASA码&quot;.R-S码属于BCH码的一种特例,想要学习R-S码就得先了解BCH码.<br>
+<br>
+&nbsp;&nbsp;&nbsp;   BCH编码是一种线性循环码.手头只有英文的教材,看了半天才明白.其中最主要的就是模运算.有几个概念需要搞清楚:<br>
+&nbsp;&nbsp;&nbsp;   GF(q) &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   是指一个域,在BCH中是指从1至q这个范围.<br>
+&nbsp;&nbsp;&nbsp;   Primitive Element &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   是指一个元素a,在GF(q)内任何元素都可以描述成a的幂的形式.注意是在GF(q)这个域的范围,所以超出范围的数是要以q为模进行运算的.<br>
+&nbsp;&nbsp;&nbsp;   Primitive  Polynomial&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   生成表达式.解释不清楚,放弃.<br>
+&nbsp;&nbsp;&nbsp;   Minimal Polynomial  &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   最小表达式.放弃.<br>
+&nbsp;&nbsp;&nbsp;   Conjugate&nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    共轭.. 懒得说了.<br>
+&nbsp;&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;&nbsp;   直接说下如何确定能够进行t位纠错的BCH编码的生成表达式:<br>
+&nbsp;&nbsp;&nbsp;   在生成块长度为:n=qm-1.(q的m次-1)的时候:<br>
+&nbsp;&nbsp;&nbsp;   (1) 选择一个最高次为m的Prime Polynomial,生成GF(qm);<br>
+&nbsp;&nbsp;&nbsp;   (2) 在GF(qm)范围内找出所有的Minimal Polynomial,即fi(x),(i=1,...,n).<br>
+&nbsp;&nbsp;&nbsp;   (3) t位error的BCH码的生成表达式为:g(x)=LCM[f1(x),f2(x),...f2t(x)].  LCM为最小公倍数表达式.<br>
+<br>
+&nbsp;&nbsp;&nbsp;   这样生成表达式就确定了.就先写到这里吧,手困了.肯定有很多错误,个人理解,仅供参考.如果发现什么错误请帮我纠正出来,感谢:)<br>
+&nbsp;&nbsp;&nbsp;</div>

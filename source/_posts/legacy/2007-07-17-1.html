@@ -1,0 +1,21 @@
+---
+layout: post
+title: "查看 Ubuntu 版本二法"
+comments: true
+categories: [legacy]
+---
+
+<div><p><strong>方法一</strong></p>
+<p>在终端中执行下列指令：</p>
+<p><code>cat /etc/issue</code></p>
+<p>可以查看当前正在运行的 Ubuntu 的版本号。其输出结果类似下面的内容：</p>
+<p><code>Ubuntu 7.04 \n \l</code></p>
+<p><strong>方法二</strong></p>
+<p>使用 lsb_release 命令也可以查看 Ubuntu 的版本号，与方法一相比，内容更为详细。执行指令如下：</p>
+<p><code>sudo lsb_release -a</code></p>
+将输出结果：<br>
+<code><br>
+Distributor ID: Ubuntu<br>
+Description: Ubuntu 7.04<br>
+Release: 7.04<br>
+Codename: feisty</code></div>
