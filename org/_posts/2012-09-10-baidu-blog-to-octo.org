@@ -1,0 +1,48 @@
+#+BEGIN_HTML
+---
+layout: post
+title: 百度博客导入octopress--自力更生本领大
+comments: true
+categories: [binary]
+---
+#+END_HTML
+
+使用门户网站的博客系统最大的不爽就是受制于人，什么都不是自己的。网络在不断变化，形式不断在变化，谁也不能保证门户网站的博客不出什么幺蛾子，也不能保证自己不会喜新厌旧。于是想要自己写的那么点废话能够连续的，稳定的呆在某角落，自立门户是最safe的选择。
+
+{% img /rc/legacy/08704990f36425aca977a49e.jpg 500 "" "导入过来的博客中的一张照片，当年喝绿豆稀饭后的legacy，小而强大～" %}
+
+本文介绍我移动旧的百度博客的内容到octopress的方法。试想如果从baidu挪到其他门口的博客是怎么样的过程？幸运的话网站直接支持对接导入，不然就是找工具找工具找工具。但是导入到自由软件的octopress，就简单的多了。
+
+下载了你的baidu博客的数据后（恰巧最近baidu博客升级，提供了用户下载自己内容的功能），解压进入blog子目录，敲如下几个命令，5分钟整个导出导入工作就完成了。（当然trans2octo脚本是我写好的）
+
+#+begin_html
+``` sh
+cd /DIR/TO/BAIDU_DATA/
+./trans2octo.pl blog_index.html
+cp -r tmp /DIR/TO/BLOG/source/_post/legacy
+cd /DIR/TO/BLOG
+rake generate
+rake _deploy
+```
+#+end_html
+
+#+begin_html
+<!--more-->
+#+end_html
+
+有一点需要特别说明的：
+- 本人perl只会最初级的，弄弄正则表达式什么的，如果有错误或者更好的办法请高手指点。
+- 这个脚本主要任务是把baidu导出的以序号命名的html根据博客时间转换为yyyy-mm-dd-cnt.html的页面，并去掉不必要的内容，以及对img标签进行转换。
+- baidu导出的数据中不包括图片数据，图片依然链接到baidu网站。为了本地化，该脚本把所有用到的照片url记录到一个log文件，通过wget命令即可全部下载。具体看脚本内的说明。
+- 有2个问题没有解决
+  1. 之前的留言没有好办法导过来，不知道哪位大哥有高招。
+  2. baidu导出数据里没有tag，所以之前的tag也没有了。不过陈年的东西了，大多只是垫在下面让网站看起来不那么单薄。对于我来说是这样了，如果真要找东西，用搜索比tag要快些。
+
+以下奉上脚本，欢迎留言交流～ 
+{% include_code "baidu blog trans2octo script" lang:perl trans2octo.pl %}
+
+博客里多一些废话也感觉厚重了一点，各位没事可以看看类别legacy的内容，有一些我以前在日本的照片游记之类。
+
+过两天有空了把更老的csdn的博客内容也搬过来。
+
+

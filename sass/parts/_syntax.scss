@@ -48,8 +48,8 @@ article{
 		font-family: $font-mono;
 	}
 	code{
-		font-size: 0.9em;
-		padding: 1px 3px;
+		font-size: 0.8em;
+		padding: 0px 1px;
 		margin: 0 3px;
 		@include border-radius(5px);
 	}
