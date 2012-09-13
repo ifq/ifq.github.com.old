@@ -4,7 +4,7 @@
   <title><![CDATA[Geek Woodworker]]></title>
   <link href="http://ifq.github.com/atom.xml" rel="self"/>
   <link href="http://ifq.github.com/"/>
-  <updated>2012-09-11T18:29:04+08:00</updated>
+  <updated>2012-09-13T19:25:29+08:00</updated>
   <id>http://ifq.github.com/</id>
   <author>
     <name><![CDATA[靖天]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[linux下批量转换文件编码格式]]></title>
+    <link href="http://ifq.github.com/blog/2012/09/13/enconv-file-encode/"/>
+    <updated>2012-09-13T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/09/13/enconv-file-encode</id>
+    <content type="html"><![CDATA[<p>
+工作中被要求所有的代码文件以gb2312-unix编码格式来存放。但是移植的SDK等外来的代码多是UTF-8格式的。另外一些同事使用source insight，似乎不好指定unix的换行符（具体我不清楚），经常出现以dos换行符结尾的文件。在emacs看这些文件很烦，要么忍受每行后边带个^M,要么Ctrl+X-Enter-r，切换成dos。
+</p>
+<p>
+介于以上原因，新项目伊始，决定先打好基础，把所有文件都转换好一下先。linux下批量转换文件的编码格式，iconv是第一个找到的，但是不是很好用。之后找到一个好工具 enca。可以用来查看也可以转换。
+</p>
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#查看</span>
+</span><span class='line'>enca filename
+</span><span class='line'>
+</span><span class='line'><span class="c"># 将当前目录下所有的代码文件转换到gb2312格式</span>
+</span><span class='line'><span class="c"># enca方便之处是可以自动识别输入文件的编码，iconv则必须手动指定</span>
+</span><span class='line'><span class="k">for </span>i in <span class="sb">`</span>find . -name <span class="s2">&quot;*.[ch]&quot;</span><span class="sb">`</span>; <span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">do </span>enconv -x gb2312 <span class="nv">$i</span>; <span class="k">done</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 之后用sed将换行符全部转换为unix</span>
+</span><span class='line'>sed -i <span class="s1">&#39;s/\x0D//&#39;</span> *.c
+</span><span class='line'>
+</span><span class='line'><span class="c">#这个是看到的一个更改文件名的方法，mark一下</span>
+</span><span class='line'>find . -name <span class="s2">&quot;*.new&quot;</span> | sed <span class="s1">&#39;s/\(.*\).new$/mv &quot;&amp;&quot; &quot;\1&quot;/&#39;</span> | sh
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[百度博客导入octopress--自力更生本领大]]></title>
@@ -1781,21 +1824,6 @@ int&nbsp;&nbsp; BandpassFilter4(int InputAD4)<br>
 <div style="text-indent: 2em">可以看出，此算法是从队列平均值算法演变而来，因没有了队列，每次计算时不知道该丢弃的最老的一个采样值是多少，这里用了个替代的办法，丢弃上次计算出的平均值。</div>
 <div style="text-indent: 2em">去掉了缓存维护，节省内存空间，同时也将运算量压缩到了最小，执行效率非常高。调试时容易修改采样数。</div>
 </span></span><br class="Apple-interchange-newline"></div>]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Motor Control Pj]]></title>
-    <link href="http://ifq.github.com/blog/2010/06/27/1/"/>
-    <updated>2010-06-27T00:00:00+08:00</updated>
-    <id>http://ifq.github.com/blog/2010/06/27/1</id>
-    <content type="html"><![CDATA[<div><p><font size="2">最近在学习Servo Control, 所以见了很多废品回来拆。突然有了很多东西可以学，Servo，PID，Hall Sensor，H-Brige Circuit。。。希望有时间把整个过程记录下来，也给这里增加点工程师气息。。。</font></p>
-<p><font size="2">总之，先Show一下最近玩的东西。</font></p>
-<p><font size="2"><span><img src="http://ifq.github.com/rc/legacy/feb3d662fd7980e3e7113a98.jpg" width="800"></span>这是个93年的老光驱，不过马达，齿轮，滑轨，传感器都完好。最左侧的齿轮下面有个+符号，旁边黑色的芯片是霍尔传感器。费了很多时间搞清楚它的细节。</font></p>
-<p><font size="2"><span>Interface 杂志里附带的开发板。SH-2A，Renesas 的处理器。SH72620。这次的所有控制都由这个处理器完成。<br>
-<span><img src="http://ifq.github.com/rc/legacy/f2d881263eb77b298a82a198.jpg" width="800"></span></span></font></p>
-<p><font size="2"><span><span>这是另一个光存储设备。也非常老了，Olympus 的 650M 的名字忘了。设计的很有趣，滑轨不是用马达，而是直接用线圈和磁铁来完成的。还记得么，洛伦磁力，高中知识。。。<br>
-<span><img src="http://ifq.github.com/rc/legacy/e317d316c66fce26972b439f.jpg" width="800"><br>
-</span></span></span></font></p></div>]]></content>
   </entry>
   
 </feed>

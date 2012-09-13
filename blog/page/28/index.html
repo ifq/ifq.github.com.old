@@ -7,8 +7,7 @@
 	<meta name="author" content="靖天">
 
 	
-	<meta name="description" content="&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 12月23号下午考英语6级,肯定没戏拉&#8230;
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 本来9月份开始决心全力一战,这次把6级搞定,结果看了一个月开始找工作了&#8230;就再也没有功夫看英语了. &hellip;">
+	<meta name="description" content="SystemTap 是一种新颖的 Linux 内核诊断工具，提供了一种从运行中的 Linux 内核快速和安全地获取信息的能力。SystemTap 是内核开发人员和系统管理员的福音，因为这使得他们可以通过编写或者重用简单的脚本来收集内核的实时数据，而不需要再忍受修改源码、编译内核、重启系统的 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -93,6 +92,393 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2006/12/26/1/">转载-使用 SystemTap 调试内核</a></h1>
+	<div class="entry-content">
+		<div><blockquote>SystemTap 是一种新颖的 Linux 内核诊断工具，提供了一种从运行中的 Linux 内核快速和安全地获取信息的能力。SystemTap 是内核开发人员和系统管理员的福音，因为这使得他们可以通过编写或者重用简单的脚本来收集内核的实时数据，而不需要再忍受修改源码、编译内核、重启系统的 漫长煎熬。本文介绍了 SystemTap 的安装、使用和基本原理，并用一些有趣的例子揭示了 SystemTap 提供的强大能力。</blockquote>
+<p>在 SystemTap 出现之前，对于 Linux 程序员或者系统管理员而言，调试内核往往是一场噩梦。例如，你怀疑传递给系统调用 read 的参数 fd 出了问题，想把它打印出来，你需要做的是：首先得到一份内核源码，找到 sys_read() 的函数体中插入 printk() 语句，接下来重新编译内核，然后用新的内核重新启动系统。谢天谢地，你总算看到了你想要看到的东西，不过你马上会发现遇到了一个新的麻烦：除非重新启动系 统到原来的内核，printk() 会无休止地打印下去。</p>
+<p>SystemTap 的目的就是要把人们从这种泥潭中解救出来。SystemTap 提供了一个简单的命令行接口和强大的脚本语言，同时预定义了丰富的脚本库。基于内核中的 kprobe，SystemTap允许你自由地从运行中的内核无害地收集调试信息和性能数据，来用于之后的分析和处理。你可以随时开始或者停止这种收集过 程，而无需漫长的修改代码、编译内核和重启系统的悲惨循环。SystemTap 使得上面的问题变得简单了，简单得只需要一条命令就可以做到：</p>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td class="code-outline">
+<pre class="displaycode">stap -e 'probe syscall.read { printf("fd = %d\n",fd) }<br></pre>
+</td>
+    </tr>
+</tbody>
+</table>
+<br>
+<p>SystemTap的功能和Sun的DTrace和IBM的dprobe工具相似。但是和它们不同的是， SystemTap是遵循GPL的开源软件项目。它的出现使得Linux社区也拥有了功能强大而且易于使用的动态内核调试工具。目前，SystemTap 的主要开发成员来自于RedHat、IBM、Intel和Hitachi，其中还包括来自IBM中国开发中心的工程师。</p>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td><img src="/rc/legacy/blue_rule.gif" width="800"><br>
+<img src="/rc/legacy/c.gif" width="800"></td>
+    </tr>
+</tbody>
+</table>
+<table class="no-print" cellspacing="0" cellpadding="0" align="right">
+<tbody>
+    <tr align="right">
+    <td><img src="/rc/legacy/c.gif" width="800"><br>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td valign="middle"><img src="/rc/legacy/u_bold.gif" width="800"><br>
+</td>
+            <td valign="top" align="right"><a class="fbox" href="http://www.ibm.com/developerworks/cn/linux/l-systemtap/index.html#main"><strong>回页首</strong></a></td>
+        </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<br>
+<p><a name="N1004C"><span class="atitle">安装SystemTap</span></a></p>
+<p>在安装SystemTap之前，需要确保系统中已经安装了其它两个软件包：</p>
+<ul>
+<li>kernel-debuginfo RPM：SystemTap需要通过内核调试信息来定位内核函数和变量的位置。对于通常的发行版，并没有安装kernel-debuginfo RPM，我们可以到发行版的下载站点下载。对于我的ThinkPad上的Fedora Core 6，这个地址是： <a href="http://download.fedora.redhat.com/pub/fedora/linux/core/6/i386/debug/">http://download.fedora.redhat.com/pub/fedora/linux/core/6/i386/debug/</a> </li>
+    <li>elfutils RPM：SystemTap需要elfutils软件包提供的库函数来分析调试信息。目前的SystemTap要求安装elfutils-0.123以上 版本。目前最新的版本是0.124-0.1。如果需要，我们可以从SystemTap的站点下载RPM或者源码来升级。下载地址是： <a href="ftp://sources.redhat.com/pub/SystemTap/elfutils/i386/">ftp://sources.redhat.com/pub/SystemTap/elfutils/i386/</a> </li>
+</ul>
+    <p>接下来就可以安装SystemTap了，这有通过RPM或者源码安装两种方式：</p>
+    <p>1． 通过RPM安装 Fedora Core 6缺省情况下已经安装了systemtap。如果没有，也可以从如下的地址下载： <a href="http://download.fedora.redhat.com/pub/fedora/linux/core/updates/testing/6/i386/SystemTap-0.5.10-1.fc6.i386.rpm">http://download.fedora.redhat.com/pub/fedora/linux/<br>
+core/updates/testing/6/i386/SystemTap-0.5.10-1.fc6.i386.rpm</a></p>
+    <p>2．通过源码安装：</p>
+    <p>从SystemTap的FTP站点下载最新的源码</p>
+    <p><a href="ftp://sources.redhat.com/pub/SystemTap/snapshots/SystemTap-20061104.tar.bz2">ftp://sources.redhat.com/pub/SystemTap/snapshots/SystemTap-20061104.tar.bz2</a></p>
+    <p>然后安装如下：</p>
+<br>
+    <table cellspacing="0" cellpadding="0" width="100%" border="0">
+    <tbody>
+        <tr>
+            <td class="code-outline">
+<pre class="displaycode">/root &gt; tar -jxf SystemTap-20061104.tar.bz2<br>/root &gt; cd src<br>/root/src&gt; ./configure<br>/root/src&gt; make<br>/root/src&gt; make install<br></pre>
+</td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td><img src="/rc/legacy/blue_rule.gif" width="800"><br>
+<img src="/rc/legacy/c.gif" width="800"></td>
+    </tr>
+</tbody>
+</table>
+<table class="no-print" cellspacing="0" cellpadding="0" align="right">
+<tbody>
+    <tr align="right">
+    <td><img src="/rc/legacy/c.gif" width="800"><br>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td valign="middle"><img src="/rc/legacy/u_bold.gif" width="800"><br>
+</td>
+            <td valign="top" align="right"><a class="fbox" href="http://www.ibm.com/developerworks/cn/linux/l-systemtap/index.html#main"><strong>回页首</strong></a></td>
+        </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<br>
+<p><a name="N10086"><span class="atitle">运行SystemTap</span></a></p>
+<p>运行SystemTap首先需要root权限。</p>
+<p>运行SystemTap有三种形式：</p>
+<p>1． 从文件(通常以.stp作为文件名后缀)中读入并运行脚本：stap [选项] 文件名</p>
+<p>2． 从标准输入中读入并运行脚本： stap [选项] -</p>
+<p>3． 运行命令行中的脚本：stap [选项] -e 脚本</p>
+<p>4． 直接运行脚本文件(需要可执行属性并且第一行加上#!/usr/bin/stap)：./脚本文件名 使用&#8221;Ctrl+C&#8221;中止SystemTap的运行。</p>
+<p>systemtap的选项还在不断的扩展和更新中，其中最常用的选项包括：</p>
+<p>-v &#8211; 打印中间信息</p>
+<p>-p NUM &#8211; 运行完Pass Num后停止(缺省是运行到Pass 5)</p>
+<p>-k &#8211; 运行结束后保留临时文件不删除</p>
+<p>-b &#8211; 使用RelayFS文件系统来将数据从内核空间传输到用户空间</p>
+<p>-M &#8211; 仅当使用-b选项时有效，运行结束时不合并每个CPU的单独数据文件</p>
+<p>-o FILE &#8211; 输出到文件，而不是输出到标准输出</p>
+<p>-c CMD &#8211; 启动探测后，运行CMD命令，直到命令结束后退出</p>
+<p>-g &#8211; 采用guru模式，允许脚本中嵌入C语句</p>
+<p>其它更多选项请参看stap的手册。</p>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td><img src="/rc/legacy/blue_rule.gif" width="800"><br>
+<img src="/rc/legacy/c.gif" width="800"></td>
+    </tr>
+</tbody>
+</table>
+<table class="no-print" cellspacing="0" cellpadding="0" align="right">
+<tbody>
+    <tr align="right">
+    <td><img src="/rc/legacy/c.gif" width="800"><br>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td valign="middle"><img src="/rc/legacy/u_bold.gif" width="800"><br>
+</td>
+            <td valign="top" align="right"><a class="fbox" href="http://www.ibm.com/developerworks/cn/linux/l-systemtap/index.html#main"><strong>回页首</strong></a></td>
+        </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<br>
+<p><a name="N100BC"><span class="atitle">SystemTap的语法</span></a></p>
+<p>我们利用一个简单的systemtap脚本来介绍一下SystemTap的语法：</p>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td class="code-outline">
+<pre class="displaycode">#!/usr/local/bin/stap<br>global count<br>function report(stat) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("stat=%d\n", stat)<br>}<br>probe kernel.function("sys_read") {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ++count<br>}<br>probe end {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; report()<br>}<br></pre>
+</td>
+    </tr>
+</tbody>
+</table>
+<br>
+<ul>
+<li>探测点(probe)：每个systemtap脚本中至少需要定义一个探测点，也就是指定了在内核的什么位置进行探测。探测点名 称后面紧跟的一组大括号内定义了每次内核运行到该探测点时需要运行的操作，这些操作完成后再返回探测点，继续下面的指令。这里给出了systemtap目 前支持的所有探测点类型。 </li>
+    <li>全局变量(global)：用来定义全局变量。单个探测点函数体中使用的局部变量不需要预先定义，但是如果一个变量需要在多个探测点函数体中使用，则需要定义为全局变量。 </li>
+    <li>函数(function)：用来定义探测点函数体中需要用到的函数。除了可以用脚本语言定义函数以外，还可以用C语言来定义函数，只是这时函数名后面的大括号对需要换成%{ %}。例如，前面的report()函数可以写成： 
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+    <tbody>
+        <tr>
+            <td class="code-outline">
+<pre class="displaycode"> <br> function report(stat) %{<br>&nbsp;&nbsp; _stp_printf("stat=%d\n", THIS-&gt;stat);<br> %}<br> </pre>
+</td>
+        </tr>
+    </tbody>
+</table>
+<br>
+</li>
+</ul>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td><img src="/rc/legacy/blue_rule.gif" width="800"><br>
+<img src="/rc/legacy/c.gif" width="800"></td>
+    </tr>
+</tbody>
+</table>
+<table class="no-print" cellspacing="0" cellpadding="0" align="right">
+<tbody>
+    <tr align="right">
+    <td><img src="/rc/legacy/c.gif" width="800"><br>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td valign="middle"><img src="/rc/legacy/u_bold.gif" width="800"><br>
+</td>
+            <td valign="top" align="right"><a class="fbox" href="http://www.ibm.com/developerworks/cn/linux/l-systemtap/index.html#main"><strong>回页首</strong></a></td>
+        </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<br>
+<p><a name="N100DD"><span class="atitle">SystemTap的例子</span></a></p>
+<p>了解了SystemTap的基本用法，下面让我们来看几个有趣的例子。</p>
+<p><a name="N100E6"><span class="smalltitle">统计当前系统中调用最多的前10个系统调用</span></a></p>
+<p>在进行性能分析的时候，我们常常需要知道那些函数调用次数最多，才能有的放矢地展开分析。下面这个简单的例子可以打印出在过去的5秒钟里调用次数最多的那些系统调用。</p>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td class="code-outline">
+<pre class="displaycode">#!/usr/bin/env stap<br>#<br># display the top 10 syscalls called in last 5 seconds<br>#<br>global syscalls<br>function print_top () {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cnt=0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; log ("SYSCALL\t\t\t\tCOUNT")<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; foreach ([name] in syscalls-) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%-20s\t\t%5d\n",name, syscalls[name])<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (cnt++ == 10)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("--------------------------------------\n")<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delete syscalls<br>}<br>probe syscall.* {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; syscalls[probefunc()]++<br>}<br>probe timer.ms(5000) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print_top ()<br>}<br></pre>
+</td>
+    </tr>
+</tbody>
+</table>
+<br>
+<p>它的输出结果一目了然：</p>
+<br>
+<img src="/rc/legacy/image002.jpg" width="800"> <br>
+<p><a name="N1010C"><span class="smalltitle">看看是谁在偷偷动我的文件</span></a></p>
+<p>有时候，我们如果中了恶意的病毒软件，会发现某些文件莫名其妙的被修改，下面这个例子可以帮你监视谁在修改你的文件。</p>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td class="code-outline">
+<pre class="displaycode">#!/usr/bin/env stap<br>#<br># monitor who is messing my file of secrets<br>#<br>probe generic.fop.open {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(filename == "secrets")<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%s is opening my file: %s\n", execname(), filename)<br>}<br></pre>
+</td>
+    </tr>
+</tbody>
+</table>
+<br>
+<p>我们运行这个脚本，在另外一个窗口做一些操作，来看看它的输出结果：</p>
+<br>
+<img src="/rc/legacy/image004.jpg" width="800"> <br>
+<p><a name="N10132"><span class="smalltitle">打印ANSI字符串</span></a></p>
+<p>SystemTap不仅仅是一个简单的调试工具，强大的脚本语言能力让它同样能做一些有趣的事情，下面这个例子就可以对输出的字符进行美化：</p>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td class="code-outline">
+<pre class="displaycode">#!/usr/bin/env stap<br>#<br># print colorful ANSI strings<br>#<br>probe begin {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("a \\ b |");<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (c = 40; c &lt; 48; c++)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("&nbsp;&nbsp;&nbsp; %d&nbsp;&nbsp;&nbsp; ", c);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\12");<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (l = 0; l &lt; 71; l++)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("-");<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\12");<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (r = 30; r &lt; 38; r++)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (t = 0; t &lt; 2; t++) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("%d&nbsp;&nbsp;&nbsp;&nbsp; |", r);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (c = 40; c &lt; 48; c++)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\033[%d;%d%s %s \033[0;0m",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r, c, !t ? "m" : ";1m", !t ? "Normal" : "Bold&nbsp;&nbsp; ");<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; printf("\12");<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exit();<br>}<br></pre>
+</td>
+    </tr>
+</tbody>
+</table>
+<br>
+<p>来看看它的输出：</p>
+<br>
+<img src="/rc/legacy/image006.jpg" width="800"> <br>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td><img src="/rc/legacy/blue_rule.gif" width="800"><br>
+<img src="/rc/legacy/c.gif" width="800"></td>
+    </tr>
+</tbody>
+</table>
+<table class="no-print" cellspacing="0" cellpadding="0" align="right">
+<tbody>
+    <tr align="right">
+    <td><img src="/rc/legacy/c.gif" width="800"><br>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td valign="middle"><img src="/rc/legacy/u_bold.gif" width="800"><br>
+</td>
+            <td valign="top" align="right"><a class="fbox" href="http://www.ibm.com/developerworks/cn/linux/l-systemtap/index.html#main"><strong>回页首</strong></a></td>
+        </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<br>
+<p><a name="N10158"><span class="atitle">SystemTap的基本原理</span></a></p>
+<br>
+<img src="/rc/legacy/image008.gif" width="800"> <br>
+<p>现在，大家已经熟悉了SystemTap的基本用法。在结束之前，让我们再来了解一下SystemTap的基本原理和工作流程以加深理解。</p>
+<p>可以看出，SystemTap运行的过程依次分为五个阶段，通常称为Pass 1 - Pass 5。就像前面介绍用法的时候提到的，在命令行中加上-p NUM选项可以使得SystemTap在运行完Pass NUM之后停止，而不是运行到Pass 5。这允许你分析SystemTap在每一个阶段的输出，对于调试脚本尤其有用。</p>
+<p>下面来介绍每一个阶段的主要功能：</p>
+<ul>
+<li>Pass 1 - parse：这个阶段主要是检查输入脚本是否存在语法错误，例如大括号是否匹配，变量定义是否规范等 </li>
+    <li>Pass 2 - elaborate：这个阶段主要是对输入脚本中定义的探测点或者用到的函数展开，不但需要综合SystemTap的预定义脚本库，还需要分析内核或者内核模块的调试信息 </li>
+    <li>Pass 3 - translate: 在这个阶段，将展开后的脚本转换成C文件。前三个阶段的功能类似于编译器，将.stp文件编译成为完整的.c文件，因此又被合起来称为转换器(translator) </li>
+    <li>Pass 4 - build：在这个阶段，将C源文件编译成内核模块，在这过程中还会用到SystemTap的运行时库函数。 </li>
+    <li>Pass 5 - run：这个阶段，将编译好的内核模块插入内核，开始进行数据收集和传输。 </li>
+</ul>
+<br>
+    <table cellspacing="0" cellpadding="0" width="100%" border="0">
+    <tbody>
+        <tr>
+            <td><img src="/rc/legacy/blue_rule.gif" width="800"><br>
+<img src="/rc/legacy/c.gif" width="800"></td>
+        </tr>
+    </tbody>
+</table>
+<table class="no-print" cellspacing="0" cellpadding="0" align="right">
+<tbody>
+    <tr align="right">
+    <td><img src="/rc/legacy/c.gif" width="800"><br>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td valign="middle"><img src="/rc/legacy/u_bold.gif" width="800"><br>
+</td>
+            <td valign="top" align="right"><a class="fbox" href="http://www.ibm.com/developerworks/cn/linux/l-systemtap/index.html#main"><strong>回页首</strong></a></td>
+        </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<br>
+<p><a name="N1018A"><span class="atitle">小结</span></a></p>
+<p>SystemTap是一个全新的工具，但已经表现出了强大的功能和广泛的适用性。SystemTap使得动态收集Linux内核信息和性能数据变得 轻而易举，这就使人可以从繁琐的数据采集中解放出来，而专注于数据的处理和分析，这无疑是内核开发人员和系统管理人员的福音。随着越来越多用户的体验，越 来越多的bug会被报告和修正，越来越多的新功能会被添加，SystemTap也会变得越来越稳定和完善。</p>
+<br>
+<br>
+<p><a name="resources"><span class="atitle">参考资料 </span></a></p>
+<ul>
+<li>SystemTap站点：<a href="http://sourceware.org/systemtap/">http://sourceware.org/systemtap/</a><br>
+<br>
+</li>
+    <li>SystemTap手册：<a href="http://sourceware.org/systemtap/man1/stap.1.html">http://sourceware.org/systemtap/man1/stap.1.html</a><br>
+<br>
+</li>
+    <li>更多SystemTap实例：<a href="http://sourceware.org/systemtap/wiki/WarStories">http://sourceware.org/systemtap/wiki/WarStories</a><br>
+<br>
+</li>
+    <li>Architecture of systemtap：<a href="http://sourceware.org/systemtap/archpaper.pdf">http://sourceware.org/systemtap/archpaper.pdf</a><br>
+<br>
+</li>
+    <li>Kprobes站点：<a href="http://sourceware.org/systemtap/kprobes/index.html">http://sourceware.org/systemtap/kprobes/index.html</a><br>
+</li>
+</ul>
+<br>
+<br>
+    <p><a name="author"><span class="atitle">关于作者</span></a></p>
+    <table cellspacing="0" cellpadding="0" width="100%" border="0">
+    <tbody>
+        <tr>
+            <td colspan="3"><img src="/rc/legacy/c.gif" width="800"></td>
+        </tr>
+        <tr valign="top" align="left">
+        <td> </td>
+        <td><img src="/rc/legacy/c.gif" width="800"></td>
+        <td width="100%">
+<p>桂剑，IBM 中国开发中心 Linux Performance 项目的软件工程师，有五年的 Linux 开发经验，对编译器、调试技术、操作系统很感兴趣。</p>
+</td>
+    </tr>
+</tbody>
+</table></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2006-12-26T00:00:00+08:00" pubdate data-updated="true">Dec 26<span>th</span>, 2006</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
 
 
     <article class="post">
@@ -518,46 +904,6 @@ TpShPrm.jpg: banner picture for promotion pop-up window</font><br>
 第一顆又番茄没回答,所以第二顆番茄又再問了一次 <br />
 第一顆番茄終於慢慢轉頭說 <br />
 &#8230;..我們會講話嗎!?</div>
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2006-12-04T00:00:00+08:00" pubdate data-updated="true">Dec 4<span>th</span>, 2006</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/legacy/'>legacy</a>
-
-
-</div>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2006/12/04/1/">Google Earth上的FireFox麦田圈圈</a></h1>
-	<div class="entry-content">
-		<div><div forimg="1"><img src="/rc/legacy/6071b9a1ce6e6a8a47106495.jpg" width="800"></div>
-<div class="post-body">
-<p>　　其实这个FireFox麦田怪圈早已经画好了，不过最近Google Earth才更新了地图，使得现在才能在Google Earth中看到一个真实的FireFox麦田怪圈。现在应该没有人认为这是假的了吧。</p>
-<p>　　这个FireFox的Logo直径220英尺，经过2周的精心策划加上18个人的共同协作在24小时内完成的。</p>
-<p>　　和其他麦田怪圈不一样的是，这个FireFox麦田怪圈在制作前经过了大量媒体的宣传，制作者花费了很多时间和精力，甚至动用2架直升机，最终完成了这个伟大作品。应该没有人认为这是外星人做的了。</p>
-<p>　　点击下载地标文件：<a href="http://www.williamlong.info/google/upload/178_Firefox_Crop_Circle.kml">Google Earth上的FireFox</a></p>
-</div></div>
 		
 		
 	</div>

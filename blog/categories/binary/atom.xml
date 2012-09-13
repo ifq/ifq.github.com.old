@@ -4,7 +4,7 @@
   <title><![CDATA[Category: binary | Geek Woodworker]]></title>
   <link href="http://ifq.github.com/blog/categories/binary/atom.xml" rel="self"/>
   <link href="http://ifq.github.com/"/>
-  <updated>2012-09-11T18:29:04+08:00</updated>
+  <updated>2012-09-13T19:25:29+08:00</updated>
   <id>http://ifq.github.com/</id>
   <author>
     <name><![CDATA[靖天]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[linux下批量转换文件编码格式]]></title>
+    <link href="http://ifq.github.com/blog/2012/09/13/enconv-file-encode/"/>
+    <updated>2012-09-13T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/09/13/enconv-file-encode</id>
+    <content type="html"><![CDATA[<p>
+工作中被要求所有的代码文件以gb2312-unix编码格式来存放。但是移植的SDK等外来的代码多是UTF-8格式的。另外一些同事使用source insight，似乎不好指定unix的换行符（具体我不清楚），经常出现以dos换行符结尾的文件。在emacs看这些文件很烦，要么忍受每行后边带个^M,要么Ctrl+X-Enter-r，切换成dos。
+</p>
+
+
+<p>
+介于以上原因，新项目伊始，决定先打好基础，把所有文件都转换好一下先。linux下批量转换文件的编码格式，iconv是第一个找到的，但是不是很好用。之后找到一个好工具 enca。可以用来查看也可以转换。
+</p>
+
+
+<p>``` sh</p>
+
+<h1>查看</h1>
+
+<p>enca filename</p>
+
+<h1>将当前目录下所有的代码文件转换到gb2312格式</h1>
+
+<h1>enca方便之处是可以自动识别输入文件的编码，iconv则必须手动指定</h1>
+
+<p>for i in <code>find . -name "*.[ch]"</code>; echo $i; do enconv -x gb2312 $i; done</p>
+
+<h1>之后用sed将换行符全部转换为unix</h1>
+
+<p>sed -i 's/\x0D//' *.c</p>
+
+<h1>这个是看到的一个更改文件名的方法，mark一下</h1>
+
+<p>find . -name "<em>.new" | sed 's/(.</em>).new$/mv "&amp;" "\1"/' | sh<br/>
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[百度博客导入octopress--自力更生本领大]]></title>
