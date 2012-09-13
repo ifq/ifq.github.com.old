@@ -1,0 +1,31 @@
+---
+layout: post
+title: linux下批量转换文件编码格式
+categories: [binary]
+comments: true
+---
+
+<p>
+工作中被要求所有的代码文件以gb2312-unix编码格式来存放。但是移植的SDK等外来的代码多是UTF-8格式的。另外一些同事使用source insight，似乎不好指定unix的换行符（具体我不清楚），经常出现以dos换行符结尾的文件。在emacs看这些文件很烦，要么忍受每行后边带个^M,要么Ctrl+X-Enter-r，切换成dos。
+</p>
+<p>
+介于以上原因，新项目伊始，决定先打好基础，把所有文件都转换好一下先。linux下批量转换文件的编码格式，iconv是第一个找到的，但是不是很好用。之后找到一个好工具 enca。可以用来查看也可以转换。
+</p>
+
+
+
+``` sh
+#查看
+enca filename
+
+# 将当前目录下所有的代码文件转换到gb2312格式
+# enca方便之处是可以自动识别输入文件的编码，iconv则必须手动指定
+for i in `find . -name "*.[ch]"`; echo $i; do enconv -x gb2312 $i; done
+
+# 之后用sed将换行符全部转换为unix
+sed -i 's/\x0D//' *.c
+
+#这个是看到的一个更改文件名的方法，mark一下
+find . -name "*.new" | sed 's/\(.*\).new$/mv "&" "\1"/' | sh  
+```
+

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+datestr=$(date +%Y-%m-%d)
+echo "isolate $datestr"
+
+rake isolate[$datestr]
+mv source/_posts/legacy source/_stash/
+
+rake generate
+rake preview
+
+rake integrate
+mv source/_stash/legacy source/_posts/
+
