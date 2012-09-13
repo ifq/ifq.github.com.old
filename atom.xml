@@ -1,0 +1,1801 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Geek Woodworker]]></title>
+  <link href="http://ifq.github.com/atom.xml" rel="self"/>
+  <link href="http://ifq.github.com/"/>
+  <updated>2012-09-11T18:29:04+08:00</updated>
+  <id>http://ifq.github.com/</id>
+  <author>
+    <name><![CDATA[靖天]]></name>
+    <email><![CDATA[ifqqfi凹凸gmail刀com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[百度博客导入octopress--自力更生本领大]]></title>
+    <link href="http://ifq.github.com/blog/2012/09/10/baidu-blog-to-octo/"/>
+    <updated>2012-09-10T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/09/10/baidu-blog-to-octo</id>
+    <content type="html"><![CDATA[<p>
+使用门户网站的博客系统最大的不爽就是受制于人，什么都不是自己的。网络在不断变化，形式不断在变化，谁也不能保证门户网站的博客不出什么幺蛾子，也不能保证自己不会喜新厌旧。于是想要自己写的那么点废话能够连续的，稳定的呆在某角落，自立门户是最safe的选择。
+</p>
+<p>
+<img src="http://ifq.github.com/rc/legacy/08704990f36425aca977a49e.jpg" width="500"  alt="导入过来的博客中的一张照片，当年喝绿豆稀饭后的legacy，小而强大～">
+</p>
+<p>
+本文介绍我移动旧的百度博客的内容到octopress的方法。试想如果从baidu挪到其他门口的博客是怎么样的过程？幸运的话网站直接支持对接导入，不然就是找工具找工具找工具。但是导入到自由软件的octopress，就简单的多了。
+</p>
+<p>
+下载了你的baidu博客的数据后（恰巧最近baidu博客升级，提供了用户下载自己内容的功能），解压进入blog子目录，敲如下几个命令，5分钟整个导出导入工作就完成了。（当然trans2octo脚本是我写好的）
+</p>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd</span> /DIR/TO/BAIDU_DATA/
+</span><span class='line'>./trans2octo.pl blog_index.html
+</span><span class='line'>cp -r tmp /DIR/TO/BLOG/source/_post/legacy
+</span><span class='line'><span class="nb">cd</span> /DIR/TO/BLOG
+</span><span class='line'>rake generate
+</span><span class='line'>rake _deploy
+</span></code></pre></td></tr></table></div></figure>
+
+<!--more-->
+
+<p>
+有一点需要特别说明的：
+</p><ul>
+<li>本人perl只会最初级的，弄弄正则表达式什么的，如果有错误或者更好的办法请高手指点。
+</li>
+<li>这个脚本主要任务是把baidu导出的以序号命名的html根据博客时间转换为yyyy-mm-dd-cnt.html的页面，并去掉不必要的内容，以及对img标签进行转换。
+</li>
+<li>baidu导出的数据中不包括图片数据，图片依然链接到baidu网站。为了本地化，该脚本把所有用到的照片url记录到一个log文件，通过wget命令即可全部下载。具体看脚本内的说明。
+</li>
+<li>有2个问题没有解决
+<ol>
+<li>之前的留言没有好办法导过来，不知道哪位大哥有高招。
+</li>
+<li>baidu导出数据里没有tag，所以之前的tag也没有了。不过陈年的东西了，大多只是垫在下面让网站看起来不那么单薄。对于我来说是这样了，如果真要找东西，用搜索比tag要快些。
+</li>
+</ol>
+
+</li>
+</ul>
+
+
+<p>
+以下奉上脚本，欢迎留言交流～ 
+<figure class='code'><figcaption><span>&#8220;baidu blog trans2octo script&#8221;  (trans2octo.pl)</span> <a href='http://ifq.github.com/code/trans2octo.pl'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/bin/perl</span>
+</span><span class='line'><span class="c1"># 用法：</span>
+</span><span class='line'><span class="c1"># trans2octo.pl blog_index.html</span>
+</span><span class='line'><span class="c1"># 将blog目录下的baidu博客转换为octopress格式的博客，存入tmp文件夹。</span>
+</span><span class='line'><span class="c1"># 文章中的img图片标签会自动替换为octopress格式，指向本地$IMGDIR目录下。</span>
+</span><span class='line'><span class="c1"># 同时会生成imglist.log记录所有图片url，可使用 wget -i imglist.log</span>
+</span><span class='line'><span class="c1"># 下载到本地，保存至$IMGDIR目录。</span>
+</span><span class='line'><span class="c1"># [2012-09-10 一] IFQ</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">use</span>   <span class="nn">File::</span><span class="n">Path</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># match汉字用，不想加载其他库，还有什么好做法？</span>
+</span><span class='line'><span class="nv">$HZ</span> <span class="o">=</span> <span class="s">&quot;[\x80-\xFF][\x80-\xFF].*?&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="c1"># YAML Head</span>
+</span><span class='line'><span class="nv">$PRE</span> <span class="o">=</span> <span class="s">&quot;---\nlayout: post\ntitle: \&quot;XXXTXXX\&quot;\ncomments: true\ncategories: [legacy]\n---\n\n&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="c1"># 替换img字符串</span>
+</span><span class='line'><span class="nv">$IMG</span> <span class="o">=</span> <span class="s">&quot;{% img XXXPIC 800 %}&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="c1"># img 文件夹位置</span>
+</span><span class='line'><span class="nv">$IMGDIR</span> <span class="o">=</span> <span class="s">&quot;/rc/legacy/&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># 创建临时文件夹</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="o">!-</span><span class="n">e</span> <span class="s">&quot;tmp&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>	<span class="k">print</span> <span class="s">&quot;create tmp dir.\n&quot;</span><span class="p">;</span>
+</span><span class='line'>	<span class="nb">mkdir</span> <span class="s">&quot;./tmp&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">while</span><span class="p">(</span><span class="o">&lt;&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>	<span class="nv">@links</span> <span class="o">=</span> <span class="nv">$_</span> <span class="o">=~</span><span class="sr"> /\&lt;a(.*?)\&lt;\/a\&gt;/g</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>	<span class="nb">open</span> <span class="n">IMGLIST</span><span class="p">,</span> <span class="s">&quot;&gt;./imglist.log&quot;</span> <span class="o">||</span> <span class="nb">die</span> <span class="s">&quot;open imglist fail.&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>	<span class="k">foreach</span> <span class="p">(</span><span class="nv">@links</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>		<span class="k">if</span> <span class="p">(</span><span class="sr">/(\.\/blog\/.*?html).*?(\d{4})$HZ(\d{1,2})$HZ(\d{1,2}).* ($HZ)$/</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>			<span class="nv">$cnt</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>			<span class="c1"># 防止重名加cnt</span>
+</span><span class='line'>			<span class="k">while</span><span class="p">(</span><span class="o">-</span><span class="n">e</span> <span class="p">(</span><span class="nv">$tgt</span> <span class="o">=</span> <span class="s">&quot;./tmp/$2-$3-$4-$cnt.html&quot;</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>				<span class="nv">$cnt</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>			<span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>			<span class="nb">open</span> <span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="s">&quot;&lt;$1&quot;</span><span class="p">)</span> <span class="o">||</span> <span class="k">next</span><span class="p">;</span> <span class="c1">#die (&quot;Could not open file $1&quot;);</span>
+</span><span class='line'>			<span class="nb">open</span> <span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="s">&quot;&gt;$tgt&quot;</span><span class="p">)</span> <span class="o">||</span> <span class="nb">die</span> <span class="p">(</span><span class="s">&quot;Could not open file $tgt&quot;</span><span class="p">);</span>
+</span><span class='line'>			<span class="k">print</span> <span class="s">&quot;$1 --&gt; $tgt : &quot;</span><span class="p">;</span>
+</span><span class='line'>			<span class="c1"># start trans</span>
+</span><span class='line'>			<span class="k">while</span><span class="p">(</span><span class="sr">&lt;origin&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>				<span class="c1"># get blog title</span>
+</span><span class='line'>				<span class="k">if</span> <span class="p">(</span><span class="sr">/\&lt;title\&gt;(.*)\&lt;\/title\&gt;/</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>					<span class="nv">$tmp_pre</span> <span class="o">=</span> <span class="nv">$PRE</span><span class="p">;</span>
+</span><span class='line'>					<span class="nv">$title</span> <span class="o">=</span> <span class="nv">$1</span><span class="p">;</span>
+</span><span class='line'>					<span class="nv">$tmp_pre</span> <span class="o">=~</span> <span class="sr">s/XXXTXXX/$title/</span><span class="p">;</span>
+</span><span class='line'>					<span class="k">print</span> <span class="n">target</span> <span class="nv">$tmp_pre</span><span class="p">;</span>
+</span><span class='line'>				<span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>				<span class="c1"># del content before &lt;body&gt;</span>
+</span><span class='line'>				<span class="nv">$_</span> <span class="o">=~</span> <span class="sr">s/^.*\&lt;body\&gt;//</span><span class="p">;</span>
+</span><span class='line'>				<span class="c1"># del content after &lt;/body&gt;</span>
+</span><span class='line'>				<span class="nv">$_</span> <span class="o">=~</span> <span class="sr">s/\&lt;\/body\&gt;.*$//</span><span class="p">;</span>
+</span><span class='line'>				<span class="c1"># del h1 title</span>
+</span><span class='line'>				<span class="nv">$_</span> <span class="o">=~</span> <span class="n">s</span><span class="o">|\</span><span class="sr">&lt;h1\&gt;</span><span class="o">.*</span><span class="p">?</span><span class="o">\</span><span class="sr">&lt;\/h1\&gt;</span><span class="o">||</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>				<span class="c1"># trans &lt;img&gt; to {% img %}</span>
+</span><span class='line'>				<span class="nv">@imgs</span> <span class="o">=</span> <span class="nv">$_</span> <span class="o">=~</span><span class="sr"> /\&lt;img .*?src=&quot;(.*?)&quot;.*?\&gt;/</span><span class="p">;</span>
+</span><span class='line'>				<span class="k">foreach</span> <span class="nv">$img_itr</span> <span class="p">(</span><span class="nv">@imgs</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>					<span class="nv">$tmp_img</span> <span class="o">=</span> <span class="nv">$IMG</span><span class="p">;</span>
+</span><span class='line'>					<span class="nv">$url</span> <span class="o">=</span> <span class="nv">$img_itr</span><span class="p">;</span>
+</span><span class='line'>					<span class="nv">$url</span> <span class="o">=~</span> <span class="sr">s/http.*\//$IMGDIR/</span><span class="p">;</span>
+</span><span class='line'>					<span class="nv">$tmp_img</span> <span class="o">=~</span> <span class="sr">s/XXXPIC/$url/</span><span class="p">;</span>
+</span><span class='line'>					<span class="nv">$_</span> <span class="o">=~</span> <span class="sr">s/\&lt;img .*src=&quot;$img_itr&quot;.*?\&gt;/$tmp_img/g</span><span class="p">;</span>
+</span><span class='line'>					<span class="k">print</span> <span class="n">IMGLIST</span> <span class="s">&quot;$img_itr\n&quot;</span><span class="p">;</span>
+</span><span class='line'>				<span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>				<span class="c1"># write to file</span>
+</span><span class='line'>				<span class="k">print</span> <span class="n">target</span> <span class="nv">$_</span><span class="p">;</span>
+</span><span class='line'>			<span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>			<span class="nb">close</span> <span class="n">origin</span><span class="p">;</span>
+</span><span class='line'>			<span class="nb">close</span> <span class="n">target</span><span class="p">;</span>
+</span><span class='line'>			<span class="k">print</span> <span class="s">&quot;done.\n&quot;</span><span class="p">;</span>
+</span><span class='line'>		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>			<span class="k">print</span> <span class="s">&quot;$_ trans fail\n&quot;</span><span class="p">;</span>
+</span><span class='line'>		<span class="p">}</span>
+</span><span class='line'>	<span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>	<span class="nb">close</span> <span class="n">IMGLIST</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+</p>
+<p>
+博客里多一些废话也感觉厚重了一点，各位没事可以看看类别legacy的内容，有一些我以前在日本的照片游记之类。
+</p>
+<p>
+过两天有空了把更老的csdn的博客内容也搬过来。
+</p>
+<p>
+(baidu 百度 博客 搬家)
+</p>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[各种 Big Machine]]></title>
+    <link href="http://ifq.github.com/blog/2012/09/04/really-big-machines/"/>
+    <updated>2012-09-04T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/09/04/really-big-machines</id>
+    <content type="html"><![CDATA[<p>
+在youtube上看到的视频，各种庞然大物。各种挖矿的，运火箭的。
+</p><ul>
+<li>2：00位置的那个钻洞的大家伙，每部电影中生活在地下的反派角色都应该攒钱
+  买一个。哥谭镇的贝恩是不是也有一个啊～
+</li>
+<li>运火箭那个，以前电视里见过，原来它的牛B之处是可以保证表面的平稳，晃动
+  都在1/6度以内！！
+</li>
+</ul>
+
+
+   <div class="video-container">
+   <video width='' height='' preload='none' controls poster='  /rc/cool-big-machine.JPG'><source src='http://ifq.github.com/video/really-big-machines-ifq.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/></video>
+   </div>
+
+<p>
+源视频地址：<a href="http://www.youtube.com/watch?v=iE-3awHYsG8&amp;list=UUqmugCqELzhIMNYnsjScXXw&amp;index=33&amp;feature=plcp">http://www.youtube.com/watch?v=iE-3awHYsG8&amp;list=UUqmugCqELzhIMNYnsjScXXw&amp;index=33&amp;feature=plcp</a>
+</p>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[简易又结实的木工台钳方式-video]]></title>
+    <link href="http://ifq.github.com/blog/2012/08/17/bench-vise-video/"/>
+    <updated>2012-08-17T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/08/17/bench-vise-video</id>
+    <content type="html"><![CDATA[<p>
+刚刚在youtube上乱逛，发现了这个视频，转载过来和大家讨论下，希望没有侵犯版权什么的。
+</p>
+<p>
+本人接下来要开始做自己的第一个木工桌了，在参考各种各样的方案和设计，其中和重要的一个考虑因素是稳定的台钳（vise）。从之前post的图片大家可以看到，我是用一些木工夹子和在淘宝买的简易bench作为工作台面，非常单薄，非常另人丧气。不管是矩，还是刨，都会各种晃动，夹的很不稳。目前打算是未来的bench要有一个
+</p><ul>
+<li>leg vise，就是腿钳，最大的优势是可以垂直夹长的木料
+</li>
+</ul>
+
+
+
+
+
+  <img src="http://ifq.github.com/rc/2012-8-18/vise1.JPG" width="400"  alt="leg vise 用这个来做">
+
+<ul>
+<li>还要有一个 end vise，在短边上，有来夹小物件，做燕尾榫什么的。
+  <img class="left" src="http://ifq.github.com/rc/2012-8-18/vise2.JPG" width="400"  alt="end vise 用这种的来做">
+</li>
+</ul>
+
+
+<p>
+但是看过下面这个视频后，对我的触动蛮大的。其实这家叫bench craft的公司早就注意到，他们的腿钳效果非常的好，东西也非常的贵。这个视频中的这种方式很简单，但是是我第一次看到。
+</p>
+<p>
+<b>想要请教大家的是，我能不能在淘宝上买到视频中那样的丝杆，或者在哪里可以买到？多少钱？</b> 之前在论坛上看到有人说那种雕刻机移轴用的丝杆太密不适合做台钳，那么哪种属性的才适合呢？请机械方面的懂行人士不吝赐教。（在下方留言十分方便，不管有没有注册都可以的）
+</p>
+
+<p>
+最后奉上视频，点击后可能需要等待一下，但不会很长。
+   <div class="video-container">
+   <video width='' height='' preload='none' controls poster='  /video/great-vise.JPG'><source src='http://ifq.github.com/video/great-vise.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/></video>
+   </div>
+</p>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[纱门(Screen Door)制作专题-1]]></title>
+    <link href="http://ifq.github.com/blog/2012/08/15/screen-door/"/>
+    <updated>2012-08-15T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/08/15/screen-door</id>
+    <content type="html"><![CDATA[<p>
+我家房子有个特点，很多时候大门打开狂风乱做，凉爽无比。装修的时候没有发觉，也没有加以利用，因此大门口缺一个纱门。由于防盗门已经朝外开了，纱门只能朝内。单扇的纱门朝里开，不仅占地方而且很丑，于是到店里找折叠的铝合金纱门。没想到做工好点的都要4、5百一平米，不足2平的按2平算，也就是1K大洋。要是装修时花钱花麻木了兴许也就装了，搬进来过日子就觉得好贵啊。
+</p>
+<p>
+OK，基于上述理由，自己做木头纱门成为了不二的选择，Oh yeah！
+</p>
+<p>
+目前准备的材料如下：
+</p><dl>
+<dt>木头</dt><dd>鉴于新手怕浪费高级木头，以及本地（福州）木材的匮乏，使用了杉木。4＊6＊400的木方，18元一根，大概需要4根。
+</dd>
+<dt>纱网</dt><dd>在淘宝买，不锈钢的，加上固定用的胶条，一扇门大概需要30元吧。（我买的多些）
+</dd>
+<dt>连接件</dt><dd>这个在淘宝上找了好久，一直举旗不定，由于特殊原因怕买回来不能用，不过到货之后觉得没有问题（具体问题下次讲）。2个暗装（中间用），3个明装（旁边用），总共50元。
+</dd>
+</dl>
+
+
+<p>
+写这篇博客的时候工程已经做了差不多一半了。先show一下前段时间完成的情况：
+<img class="left" src="http://ifq.github.com/rc/2012-07-22/IMG_3497.JPG" width="400" title="半个门～" alt="做好半个框的时候迫不及待试了一下">
+</p>
+
+
+<!--more-->
+
+<p>
+做这个东西最关键的问题就是怎么把木方弄直。木头买回来的时候还比较湿，加上天气潮湿，很容易变形。花了很大功夫把2米长的木方弄得基本上平直了。毕竟，自己给自己做东西，又不是给NASA做，不用那么苛刻。
+<img src="http://ifq.github.com/rc/2012-07-22/IMG_3270.JPG" width="800" height="600"  alt="最初刨的几根横向的短木方">
+</p>
+<p>
+<img src="http://ifq.github.com/rc/2012-07-22/IMG_3496.JPG" width="400"  alt="开同样的榫，每次都在尝试不同的方法">
+</p>
+<p>
+<img class="/rc/2012-07-22/IMG_3499.JPG 400 " src=""组装第一个1/2扇门"">
+</p>
+<p>
+<img src="http://ifq.github.com/rc/2012-07-22/IMG_3504.JPG" width="800" height="600"  alt="确保边角都是直角">
+</p>
+<p>
+上边的图是之前用手机拍的，夜拍效果很差。而且漏了一个重要的东西，就是背面的开槽，用于固定纱网。
+</p>
+<p>
+<img src="http://ifq.github.com/rc/2012-07-22/P8162969.JPG" width="600"  alt="背面槽子的样子，广角镜头有点变形">
+<img src="http://ifq.github.com/rc/2012-07-22/P8162970.JPG" width="800" height="600"  alt="纵向的槽子本来应该不拉通，但是为了简便，所以拉通，不影响使用">
+<img src="http://ifq.github.com/rc/2012-07-22/P8162971.JPG" width="800" height="600"  alt="中间横杠的链接，用的最简单的榫头，最不容易切坏，即使切的或者凿的不好，塞进去也不会很难看">
+<img src="http://ifq.github.com/rc/2012-07-22/P8162972.JPG" width="800" height="600"  alt="上下端的榫头用的透榫，就比较要求手工了，锯的不好就有缝隙，我还在琢磨怎么做最好.这个榫头还没有最终处理完。">
+</p>
+
+<p>
+下边这些图是最近两天开动的第二个1/2扇门的制作。与之前的部分已经时隔几周，眼看夏天要结束了，纱门还没做好。。不过这次没有现成的plan指导，属于闭门造车，需要考虑很多东西，最头疼的就是与门框的连接，要占几毫米？什么形式？导致实际门宽小多少？在淘宝上考察，等到货什么的也废了不少时间。
+</p>
+<p>
+<img src="http://ifq.github.com/rc/2012-07-22/P8152956.JPG" width="600" title="要使用的木料" alt="两条长的刨完立在那又有点变形了，不知道最终的影响有多大。。">
+<img src="http://ifq.github.com/rc/2012-07-22/P8152961.JPG" width="800" height="600"  alt="新作的双线画线器来划线">
+<img src="http://ifq.github.com/rc/2012-07-22/P8162964.JPG" width="800" height="600" title="玉鸟锯子的成果" alt="锯路真的很细，感觉和之前做东西用圆珠笔画的线差不多粗了,当然如果锯歪了也是一样没精度">
+<img src="http://ifq.github.com/rc/2012-07-22/P8162973.JPG" width="800" height="600"  alt="玉鸟导突锯，好东西啊～">
+</p>
+
+<p>
+目前的进展就是这样，谢谢大家围观，欢迎在下方留言交流！
+</p>
+<p>
+最后附上一张手机拍的美图，福州乌龙江。So nice～
+<img src="http://ifq.github.com/rc/2012-07-22/IMG_3597.JPG" width="800" height="600"  alt="夏日的傍晚吃饱了从食堂出来经常可以看到">
+</p>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[emacs + org-mode + octopress + github]]></title>
+    <link href="http://ifq.github.com/blog/2012/08/10/org-octopress/"/>
+    <updated>2012-08-10T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/08/10/org-octopress</id>
+    <content type="html"><![CDATA[<p>
+网站基本上搭起来了，虽然不懂Ruby，Jekyll也只知道是个什么东西。但是就how-to问题，可以和大家分享下。如果你想建立静态博客，也许有点头绪。如果你恰巧也使用emacs+orgmode，那我们就有更多共同语言了：）
+<!--more-->
+
+
+</p>
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">什么是静态博客</h2>
+<div class="outline-text-2" id="text-1">
+
+<p>  静态博客（Static Blog）。。就是静态网页组成的博客。与之对比的动态博客，也就是页面是动态生成的，博客内容依存于数据库，国内各大网站提供的博客系统大都是动态博客。
+</p>
+<p>
+  静态博客的页面可以是手工通过制作html页面来维护，这样的话博客最基本的按日期管理、文章分类等特征都得手工完成，这么笨拙的办法可能没人喜欢。于是现在多是使用辅助工具帮助生成整个博客站点，文章自动按照日期管理、有类别或者TAG分类、还融合了留言板等其他技术，octopress就是其中一员。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">什么是octopress</h2>
+<div class="outline-text-2" id="text-2">
+
+<p>  说到 <a href="#www.octopress.org">octopress</a>，得先说说 <a href="http://jekyllrb.com/">jekyll</a>。 jekyll 可以把以日期为文件名的 <a href="http://en.wikipedia.org/wiki/Markdown">markdown</a> 格式的文本文件转换为html的静态博客。
+</p><blockquote>
+
+<p>Jekyll is a simple, blog aware, static site generator. It takes a template directory (representing the raw form of a website), runs it through Textile or Markdown and Liquid converters, and spits out a complete, static website suitable for serving with Apache or your favorite web server. 
+</p>
+</blockquote>
+
+
+<p>
+  可以理解为jekyll是实际转化生成静态站点的脚本程序，而octopress是套在jekyll外的一层封装，使得最终生成的站点上有更好的UI，更有风格，并且有更丰富的辅助功能（留言、代码展示、视频）。与octopress类似的还有<a href="http://jekyllbootstrap.com/">bootstrip</a>。 我在公司里记录一些东西也在用，只是觉得 octopress 对移动设备的支持更好，所以才打算在公开博客里使用它。
+</p>
+<p>
+  生成和更新服务器的命令大致如下,每次写完内容后要做的操作：
+<figure class='code'><figcaption><span>生成＆更新博客的命令</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake generate   <span class="c">#将source目录下的markdown文本生产为public目录下的blog</span>
+</span><span class='line'>rake preview    <span class="c">#本地预览 localhost:4000</span>
+</span><span class='line'>rake deploy     <span class="c">#根据public目录生成_deploy目录并上传github </span>
+</span><span class='line'><span class="c">#上边的操作已经更新了网站服务器，以下是保存代码改动到github服务器的其他branch               </span>
+</span><span class='line'>git add .
+</span><span class='line'>git commit -m <span class="s2">&quot;comments&quot;</span>
+</span><span class='line'>git push
+</span></code></pre></td></tr></table></div></figure>
+
+</p></div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">什么是emacs</h2>
+<div class="outline-text-2" id="text-3">
+
+<p>  <a href="http://en.wikipedia.org/wiki/Emacs">emacs</a> 是一个拥有强大扩展能力的文本编辑器，扩展能力强大到可以浏览网页、发微博、调试程序、管理日程，总之什么都可以做。我本人并不是一个all-in-emacs控，我不会用emacs做发微博这类的事情，但是还是很喜欢用它工作。它有几个特点吸引我：
+</p><ul>
+<li>免费。
+</li>
+<li>丰富的辅助开发功能，比如和SVN，GIT的融合，编译make的融合。
+</li>
+<li>快捷键便利。
+</li>
+<li>不断在更新，比如现在对多国语言的支持越来越好。
+</li>
+<li>全球范围内强大的技术支持，网上资源很多。
+</li>
+</ul>
+
+
+
+
+  <img src="http://ifq.github.com/rc/emacs.png" width="800" height="600" title=" " alt="emacs 启动界面">
+
+<p>
+  既然emacs这么好，如果熟悉它的话，自然写博客的时候也想用它了。单纯用emacs来写markdown格式的文本固然也可以，也有相应的emacs模式配合。但是寡人不熟悉markdown格式，相反对同类型的功能更强大的org-mode略知一二，所以就想用org格式来写博客。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">什么是org-mode</h2>
+<div class="outline-text-2" id="text-4">
+
+<p>  <a href="http://orgmode.org/">org-mode</a> 是emacs的一种扩展模式，是在 <a href="http://emacswiki.org/emacs/OutlineMode">outline mode</a> 基础上发展出来的一种文本编辑辅助模式。适合在编写大纲（outline）组织结构的文档时使用。orgmode拥有丰富的快捷键由于编辑文档，支持url link，有强大的TODO、Agenda功能用于组织计划、有方便的表格功能、可以快捷的将org文档导出成html、pdf、laTex等格式的文档。
+</p>
+<p>
+  <img src="http://ifq.github.com/rc/orgmode.jpg" width="800" height="600" title=" " alt="简单的org模式的界面">
+</p>
+<p>
+  这里重点说一下org模式下的html导出功能。org模式可以通过配置，将指定文件夹下的所有org文件导出到一个指定文件夹内（包括子文件的层级关系），org文件之间的link也会转化为html的link，因此直接使用这个功能就可以很方便的用org模式维护一个简单的静态网站。
+</p>
+
+
+<figure class='code'><figcaption><span>org模式publish配置示例 </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>(setq org-publish-project-alist
+</span><span class='line'>      '(("note-org"
+</span><span class='line'>         :base-directory "~/org/"
+</span><span class='line'>         :publishing-directory "~/pub/"
+</span><span class='line'>         :base-extension "org"
+</span><span class='line'>         :recursive t
+</span><span class='line'>         :publishing-function org-publish-org-to-html
+</span><span class='line'>     :headline-levels 3
+</span><span class='line'>     :html-extension "html"
+</span><span class='line'>     :table-of-contents t
+</span><span class='line'>     :link-home "/index.html"
+</span><span class='line'>     :section-numbers t
+</span><span class='line'>     :style "&lt;link rel=\"stylesheet\" href=\"/org.css\" type=\"text/css\"/>"
+</span><span class='line'>     )
+</span><span class='line'>
+</span><span class='line'>        ("note-static"
+</span><span class='line'>         :base-directory "~/org/"
+</span><span class='line'>         :publishing-directory "~/pub/"
+</span><span class='line'>         :recursive t
+</span><span class='line'>         :base-extension "css\\|js\\|bmp\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|swf\\|zip\\|gz\\|txt\\|el\\|pl\\|mht\\|log\\|bin_\\|bat\\|tst\\|doc\\|docx\\|gz"
+</span><span class='line'>         :publishing-function org-publish-attachment
+</span><span class='line'>     )
+</span><span class='line'>        ("note" 
+</span><span class='line'>         :components ("note-org" "note-static")
+</span><span class='line'>         :author "wangjingtian@xxx.com.cn"
+</span><span class='line'>         )))</span></code></pre></td></tr></table></div></figure>
+
+<p>
+  通过上边的设置我只需要一个快捷键就可以将 <code>~/org/</code> 下的org文件全部导成 html 存在 <code>~/pub</code> 下。
+</p><ul>
+<li>org子文件层级关系保留
+</li>
+<li>可以为导出的html指定css格式
+</li>
+<li>org文件夹内的其他格式的文件，如图片也可以设置一并导入pub目录
+</li>
+<li>可以自动生成org文件内的目录（TOC）
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">how-to 整合</h2>
+<div class="outline-text-2" id="text-5">
+
+<p>  终于到了org与octopress整合的部分了。关于整合 orgmode 和 octopress（jekyll），可以找到几种方式：
+</p><ul>
+<li>org 导出html，直接交给 jekyll 处理。这么做有个问题，org生成的html可能和 markdown 产生的html有差异，有的时候兼容性不好。比如，插入 <code>&lt;!--more--&gt;</code> 语句时，由于 org 生成的 html 充满了 div ，导致在有 headline 的情况下页面可能会乱掉。
+</li>
+<li>org 文件通过 emacs 的插件转换为 markdown 格式，再由 jekyll 处理。可以到<a href="https://github.com/alexhenning/ORGMODE-Markdown">这里</a> 找到相关资源。
+</li>
+<li><a href="http://orgmode.org/worg/org-tutorials/org-ruby.html">org-ruby</a>。 通过Ruby将 org 文件转化为 html，而不是通过emacs。<br/>
+</li>
+</ul>
+
+
+<p>
+  目前为止，我采用的还是第一种方法。
+</p>
+</div>
+
+<div id="outline-container-5-1" class="outline-3">
+<h3 id="sec-5-1">目录结构</h3>
+<div class="outline-text-3" id="text-5-1">
+
+<p>   以下是我现有的目录结构供参考
+</p>
+
+
+<pre class="example">+ blog               # 博客根目录
+   + org             # org文件根目录
+      + _post
+   + source          # org导出根目录，也是octopress本身用于生成blog的根目录
+      + _post        # markdown或者org导出的html存在这里
+      + _include     # 这里是一些octopress的UI template文件
+      + _layouts     # 这里也是
+      + rc           # 我的照片等资源的文件夹
+      + video        # 我的视频文件夹
+      + ...
+   + public          # 通过命令 source下的内容会自动导出到 该目录，包括自定义的 rc、video
+      + blog         # 内部的子文件按年月日排列
+      + rc
+      + video
+      + ...
+   + _deploy         #通过部署命令生产，为了更新github而产生
+      + ...
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5-2" class="outline-3">
+<h3 id="sec-5-2">emacs 设定</h3>
+<div class="outline-text-3" id="text-5-2">
+
+<p>   以下.emacs文件的设置有几个要点：
+</p><ul>
+<li>jekyll 本身针对 markdown 转化设计，但实际也支持html。但是org模式导出html时要设置为 <code>body-only</code> ，只导出html的body的部分，页面head和footer的内容由 jekyll 生成。
+</li>
+<li>最好不要导出目录（TOC）。
+</li>
+<li>base和publishing目录的设置
+</li>
+<li>虽然设置了资源文件的导出，但是我目前实际没有使用，而是直接把图片等资源文件放到 <code>source/rc/</code> 下。
+</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>生成＆更新博客的命令</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="o">(</span>setq org-publish-project-alist
+</span><span class='line'>      <span class="err">&#39;</span><span class="o">((</span><span class="s2">&quot;blog-org&quot;</span>
+</span><span class='line'>         :base-directory <span class="s2">&quot;~/blog/org/&quot;</span>
+</span><span class='line'>         :publishing-directory <span class="s2">&quot;~/blog/source/&quot;</span>
+</span><span class='line'>         :base-extension <span class="s2">&quot;org&quot;</span>
+</span><span class='line'>         :recursive t
+</span><span class='line'>         :publishing-function org-publish-org-to-html
+</span><span class='line'>     :headline-levels 4
+</span><span class='line'>     :html-extension <span class="s2">&quot;html&quot;</span>
+</span><span class='line'>     :body-only t ;; Only <span class="nb">export </span>section between &lt;body&gt; &lt;/body&gt;
+</span><span class='line'>     :table-of-contents nil
+</span><span class='line'>     <span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="o">(</span><span class="s2">&quot;blog-static&quot;</span>
+</span><span class='line'>         :base-directory <span class="s2">&quot;~/blog/org/&quot;</span>
+</span><span class='line'>         :publishing-directory <span class="s2">&quot;~/blog/source/&quot;</span>
+</span><span class='line'>         :recursive t
+</span><span class='line'>         :base-extension <span class="s2">&quot;css\\|js\\|bmp\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|swf\\|zip\\|gz\\|txt\\|el\\|pl\\|mht\\|log\\|bin_\\|bat\\|tst\\|doc\\|docx\\|gz&quot;</span>
+</span><span class='line'>         :publishing-function org-publish-attachment
+</span><span class='line'>     <span class="o">)</span>
+</span><span class='line'>        <span class="o">(</span><span class="s2">&quot;blog&quot;</span>
+</span><span class='line'>         :components <span class="o">(</span><span class="s2">&quot;blog-org&quot;</span> <span class="s2">&quot;blog-static&quot;</span><span class="o">)</span>
+</span><span class='line'>         :author <span class="s2">&quot;靖天&quot;</span>
+</span><span class='line'>         <span class="o">)))</span>
+</span></code></pre></td></tr></table></div></figure>   
+</div>
+
+</div>
+
+<div id="outline-container-5-3" class="outline-3">
+<h3 id="sec-5-3">操作</h3>
+<div class="outline-text-3" id="text-5-3">
+
+<p>   假如今天要写这篇新的博客，大致过程如下：
+</p><ul>
+<li>用emacs创建 <code>blog/org/_post/2012-08-11-org-octopress.org</code> 这个文件。(日期的部分设置了快捷键直接添加)
+</li>
+<li>在文件的头部加入如下内容：(这部分可以通过 <a href="http://code.google.com/p/yasnippet/">YASnippet</a> 加速添加)
+
+
+
+<pre class="example">#+BEGIN_HTML
+---
+layout: post
+title: emacs + org-mode + octopress + github
+categories: [binary, orgmode, octopress]
+comments: true
+---
+ORG-LIST-END-MARKER
+</pre>
+
+</li>
+<li>用org模式写博客的内容。
+</li>
+<li>用 <code>org-publish</code> 命令导出这个org文件。
+</li>
+<li><code>rake generate</code> 生成博客
+</li>
+<li><code>rake preview</code> 可以本地先检查下
+</li>
+<li><code>rake deploy</code> 部署到服务器
+</li>
+</ul>
+
+
+<p>
+以上内容仅是让还未入门的同鞋了解下用octopress写博客大概的流程是什么样子。如果你不熟悉命令行，或者觉得这种方式写博客过于繁琐，那可能并不适合你。但是如果你熟悉命令行或者脚本，可以给你写博客带来不一样的感受。比如要添加很多图片到一篇博客，可以用脚本便利目录下的所有图片自动生产相应的语句，或者做更酷的事情。
+</p>
+<p>
+Thanks for watching. Any comments and suggestions are welcomed.
+</p></div>
+</div>
+</div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[玉鸟导突锯使用感受]]></title>
+    <link href="http://ifq.github.com/blog/2012/08/07/gyokujou-saw/"/>
+    <updated>2012-08-07T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/08/07/gyokujou-saw</id>
+    <content type="html"><![CDATA[<p>
+托朋友从日本带回来了一些工具，其中包括一把玉鸟的导突锯（doutuki）。其实没有追求日式工具，初学者工具不全，之前都是用木井方的小号框锯开榫，只是想体验下夹背锯。夹背锯又有日式、欧式之分。差了下正宗的欧式夹背锯很难买到切很贵，自己刚好有朋友在日本所以就选择了日式的。要特别说明的是，我觉得各式工具没有必要拼个高下，自己用这顺手就是好工具。作为业余爱好，体验不同风格的工具，是一种乐趣。
+</p>
+<p>
+因为我还是个初学者，没有摸过多少工具，所以做不了深度的评价。之所以写出来，是因为体会到国内没有木工爱好者的生态环境，相应的工具、书籍和其他资源少之又少。想在自己所在的城市逛逛，看看夹背锯？估计大部分人没有机会。所以我分享点图片，让其他初学者能多一点概念。
+</p>
+<p>
+根据官网的介绍锯齿和锯片都分别做了特殊处理。
+</p><ul>
+<li>锯齿用什么微波冲击什么的，使得表面硬度很高，内部具有韧性。这样锯子很耐用。表面硬度达到Hv900～1200，而给出的参考硬度三棱锉的硬度为Hv800～850.因此这样的替刃式锯片后期想自己锉齿基本上是没有什么意义的，表面的高硬度的一层被锉掉之后，这个锯子应该就没有多少特别之处了。
+</li>
+<li>锯片这个表面做了防锈处理。不过我还是保险起见涂了油保护。
+</li>
+</ul>
+
+
+<p>
+<img src="http://ifq.github.com/rc/2012-08-04/P8042736.JPG" width="800" height="600" title="玉鸟夹背锯" alt="锯子的一面，官网说表面有特殊的图层，防止生锈。">
+<img src="http://ifq.github.com/rc/2012-08-04/P8042737.JPG" width="800" height="600" title="玉鸟夹背锯" >
+</p>
+
+
+<!--more-->
+
+<p>
+看到锯子的外观的第一感受：
+</p><ul>
+<li>锯柄很长，足有30cm长。对这种设计还不是很习惯和理解。难道是为了双手使
+  用么？ 但是这个锯子的主要用途不是精细加工么？
+</li>
+<li>锯刃很薄，官网说是0.3mm，总之很薄。
+</li>
+<li>夹背的部分金属比较厚，很结实，不会晃动。
+</li>
+<li>整个的尺寸如下:
+<ul>
+<li>锯柄长30cm
+</li>
+<li>锯刃长24cm
+</li>
+<li>锯片最宽处5.5cm，靠手柄最窄处4cm左右
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+<p>
+<img src="http://ifq.github.com/rc/2012-08-04/P8042738.JPG" width="800" height="600" title="玉鸟夹背锯" >
+<img src="http://ifq.github.com/rc/2012-08-04/P8042740.JPG" width="800" height="600" title="手柄" alt="广角镜头，变形比较严重点，不过手柄确实很长">
+<img src="http://ifq.github.com/rc/2012-08-04/P8042743.JPG" width="800" height="600" title="夹背的部分" alt="夹背的部分比想象中的厚实">
+<img src="http://ifq.github.com/rc/2012-08-04/P8042744.JPG" width="800" height="600" title="固定锯片的旋钮" alt="和田岛之类的锯子不一样，这个锯片的锁紧方式是用旋钮">
+<img src="http://ifq.github.com/rc/2012-08-04/P8042745.JPG" width="800" height="600"  alt="锯子的齿间距为1.3mm，换算一下大概19.5tpi">
+<img src="http://ifq.github.com/rc/2012-08-04/P8042763.JPG" width="800" height="600"  alt="找块木头试一下">
+</p>
+<p>
+顺便展示下今天刚到的C型大力钳。加持的厚度需要通过手柄后部的旋钮调节，但是调节好后操作十分方便。对于需要反复夹住松开的场景十分便利。比如需要刨平一个木方，需要反复检查的时候，用F夹就很烦，其实并不需要特别大的加持力，这时候用大力钳就省事多了。
+</p>
+<p>
+<img src="http://ifq.github.com/rc/2012-08-04/P8042766.JPG" width="800" height="600"  alt="新买的大力钳，很方便。在这种场景下比F夹快很多">
+<img src="http://ifq.github.com/rc/2012-08-04/P8042767.JPG" width="800" height="600"  alt="夹持的效果很好，力度适中">
+</p>
+<p>
+查看官网对锯齿设定的解释：
+</p><ul>
+<li>这个锯子的另一个特点是为了迎合榫头的加工，锯齿设计为即适合横截（cross cut），又适合纵解（rip cut）。由于没有微距镜头，不能把实际的锯齿样子特写出来。。
+</li>
+<li>19.5 TPI 的设定和欧式夹背锯是差不多的。（TPI就是每英寸多少个齿的意思）
+</li>
+</ul>
+
+
+
+<p>
+实际使用的感受：
+</p><ul>
+<li>锯路很细。锯片只有0.3mm，当然锯路不会宽到哪里去。
+</li>
+<li>还是没有体会到长手柄的用途，感觉不会握到很后边的位置去。如果有了解日本锯的朋友可以在下边留言，教教我。
+</li>
+<li>和田岛三倍速比较，感觉锯的手感要快许多。但是有两个问题需要指出：
+<ul>
+<li>我的田岛已经用了好几个月了，不是新的。
+</li>
+<li>我没有实际数锯了几个来回，只是手上感觉要快许多。
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+<p>
+<img src="http://ifq.github.com/rc/2012-08-04/P8042768.JPG" width="800" height="600" title="锯路的情况" alt="与最常见的田岛三倍速的对比，右边四个是田岛的">
+<img src="http://ifq.github.com/rc/2012-08-04/P8042772.JPG" width="800" height="600"  alt="锯路的一面">
+<img src="http://ifq.github.com/rc/2012-08-04/P8042773.JPG" width="800" height="600"  alt="锯路的另一面">
+</p>
+<p>
+关于这个锯子有任何问题都欢迎你在下方留言与我交流。Thanks for watching.
+</p>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[N0.0 Post - Why I'm back to blog]]></title>
+    <link href="http://ifq.github.com/blog/2012/08/03/1stpost/"/>
+    <updated>2012-08-03T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/08/03/1stpost</id>
+    <content type="html"><![CDATA[<p>
+为什么我又回到博客？既然说到“又”，那最好介绍下以前的博客，他们现在还活着，不过已经沉寂很久了。
+</p>
+<dl>
+<dt><a href="http://blog.csdn.net/ifq">http://blog.csdn.net/ifq</a></dt><dd>2006年2月建立。既然在csdn，那表示当时一心在学术，写的也多是计算机、找工作相关的内容。记录了我最单纯最充实的一段生活。放了这么多年没管，这个博客在csdn还能排3000多名让人有点惊讶。看来只要你有认真分享，就有人能找到其中的价值。当时写的最有价值的可能就是交叉编译BlueZ蓝牙协议栈到我的ARM板吧，这在2006年还不多。最终选择了离开，是因为当时的csdn很不稳定，让人烦躁。
+
+</dd>
+<dt><a href="http://hi.baidu.com/ifqq">http://hi.baidu.com/ifqq</a></dt><dd>离开csdn，来到baidu，少了许多专业气氛，大家的互动也增加了，慢慢的随着后来工作后身在异乡，也懒得写技术的东西了。开始传照片，show在异国的生活，表达对伟大祖国的思念(哈哈)。后期有一些猫猫的照片，喜欢猫的同志可以去参观下。最终离开，可能是对网页里写博客的厌倦吧。。
+     <img src="http://ifq.github.com/rc/219e75c61d06e65b9c163dff.jpg" width="600" title="haru猫" alt="外边捉来的猫，当时好兴奋，中文名字哈鲁，陪我度过了在日本的最后一段时光。">
+
+</dd>
+<dt><a href="http://t.qq.com/Jingtianwang">http://t.qq.com/Jingtianwang</a></dt><dd>离开baidu，被朋友邀请来到微博。（好像三次转移都是同一个人邀请的。。@kebing）那是不知道国内微博行情，以为腾讯会比新浪牛一些，结果现在发现好像不是了&ndash;。
+</dd>
+</dl>
+
+
+<p>
+一开始觉得微博拥有积少成多的力量，每个人不一定有功夫发一片博客，但是总有时间发发微博。这样就有很大的信息量和并且具有很强的实时性。这一点在一些社会公益、爱心传递、社会监督方面起到了很好的作用。但是谈到专业领域和兴趣爱好方面，微博上很少有高分享度的东西。大部分微博可以归类到以下几种：
+</p><ul>
+<li>我今天吃了两个包子
+</li>
+<li>今天好难过
+</li>
+<li>ZF都是傻逼，我要民主
+</li>
+<li>狮子座今年最牛逼
+</li>
+<li>你来，我热情拥抱。你走，我坦然放手。
+</li>
+</ul>
+
+
+
+
+<!--more-->
+
+<p>
+玩了两年微博，看到的废话越来越多。和我最初的想象不太一样。如果大家都拿它来扯淡，你也不得不拿他来扯淡。。造成这种局面，我想和厂商的导向是有关系的。首先，微博似乎与搜索引擎隔绝，很难搜到微博的信息，所以大家不会觉得微博上有重要的东西，也不会自己在上边认真分享；另外，140 Byte的长度限制搞得很难写出有用的东西（这个限制最初是为了SMS短信设计的）。
+</p>
+<p>
+各种的不满意，导致开始寻找替代的解决方案，不再关心快捷的互动，更关心有内容的交流。不需要人人都看你的页面，只需要与志同道合的人分享。其实Google+是个不错的东西，很方便，内容可长可短，还有很强的hangout视频功能，结合youtube是一种全新的体验。但是在国内你懂的。
+</p>
+<p>
+最终我回到了blog，也许是回国之后度过了浮躁期，以及装修+生娃的忙碌之后，可以坐下来反朴贵真了～当然现在建博客也要与时俱进了，静态网页博客什么时候开始火的我不知道，不过感觉也很久了。但由于技术上有一定门槛，所以国内大多是IT人事居多，讲的也多是IT或宅男生活。我的这个可不同，讲二进制也讲木工，一虚一实两个极端。
+</p>
+<p>
+<img src="http://ifq.github.com/rc/P6142136-001.JPG" width="380" title="薄薄的刨花" alt="木工让人感觉到真实的存在，也许我应该另开一题讲讲为什么喜欢木工">
+</p>
+<p>
+我使用的博客环境是 emacs + org-mode + octopress + github。四个词也许很多人都很陌生，回头可以慢慢分解（这篇不是技术博～），这里只简单介绍下。
+</p>
+<dl>
+<dt>emacs</dt><dd>简单说是一个文本编辑器。特点是可定执性强、快捷键操作很方便，缺点是入门困难。也就是说是一个越用越好用的东西。鉴于我上班一直用这东西，所以觉得得心应手（不过还是emacs菜鸟）。
+</dd>
+<dt>org-mode</dt><dd>简单说就是emacs下的一种编辑模式，写提纲式的文档很快捷。写的文档可以很方便的导成html等格式。
+</dd>
+<dt>octopress</dt><dd>重点来了。生成静态博客的脚本工具。也就是说我用emacs+org写的简单的文档，通过这个工具就可以转化成博客组织形式的，格式统一的静态页面。（octopress实际是基于jekyll的）
+</dd>
+<dt>github</dt><dd>这里理解为一个提供免费站点host服务的网站就好。octopress生成的页面通过git工具同步到github，就成了你现在看到的页面。
+</dd>
+</dl>
+
+
+<p>
+看起来听复杂，其实。。真的有点复杂。但是复杂并不代表不好用，站点只要建立了，后边就很简单。这种方式的吸引力对我来说有几个：
+</p><ol>
+<li>让你专注你的内容
+</li>
+<li>很强的扩展和定制性
+</li>
+<li>内容全部在本地备份，从容应对未来变化。（话说以前的博客内容怎么弄过来才好呢～）
+</li>
+<li>用着心里舒服。。
+</li>
+<li>对移动设备的支持好。如果你现在拿手机在浏览，就有体会。
+</li>
+<li>HTML5。还能直接丢mp4文件进来，只要浏览器支持HTML5，就能播放。
+</li>
+<li>好像还有个啥来着
+</li>
+</ol>
+
+
+<p>
+忍不住贴张emacs的图给大家看看。
+<img src="http://ifq.github.com/rc/20120804-1.JPG" title="emacs写博客的样子" alt="看似单调的界面，其实暗藏玄机～">
+</p>
+<p>
+其实说了这么多，并不是向谁解释我回博客的理由，而是为自己的博客找一个存在的理由，找一个定位，等于是写文档先开个题。
+</p>
+<p>
+如果你赞同或者不赞同我的观点，都欢迎你在下面留言～谢谢。
+</p>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[hello world - NO.-1 post]]></title>
+    <link href="http://ifq.github.com/blog/2012/07/29/helloworld/"/>
+    <updated>2012-07-29T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/07/29/helloworld</id>
+    <content type="html"><![CDATA[<p>
+welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
+重新建立一个blog这个念头在脑袋里已经有些日子了，关于原因以后再说，总之今天算一个“冒烟测试”。
+</p>
+
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">TEST</h2>
+<div class="outline-text-2" id="text-1">
+
+
+
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1">视频</h3>
+<div class="outline-text-3" id="text-1-1">
+
+<p>   一个工厂里切OAK的视频，看着这过瘾。也许以后可以经常转点youtube的视频
+   来给大家看。
+   <div class="video-container">
+   <video width='' height='' preload='none' controls poster='  /rc/dovetail-special.JPG'><source src='http://ifq.github.com/video/hull.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/></video>
+   </div>
+
+</p></div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2">各国文字测试</h3>
+<div class="outline-text-3" id="text-1-2">
+
+<dl>
+<dt>中文</dt><dd>上边已经试过了
+</dd>
+<dt>英文</dt><dd>上边也试过了
+</dd>
+<dt>日文</dt><dd>现在的linux下没装日文输入法。。<br/>
+             テストご挨拶、はじめまして。
+</dd>
+</dl>
+
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3">Quote</h3>
+<div class="outline-text-3" id="text-1-3">
+
+
+   <blockquote><p>Every interaction is both precious and an opportunity to delight.</p><footer><strong>Seth Godin</strong> <cite><a href='http://sethgodin.typepad.com/seths_blog/2009/07/welcome-to-island-marketing.html'>Welcome to Island Marketing</a></cite></footer></blockquote>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4" class="outline-3">
+<h3 id="sec-1-4">二级标题</h3>
+<div class="outline-text-3" id="text-1-4">
+
+
+
+</div>
+
+<div id="outline-container-1-4-1" class="outline-4">
+<h4 id="sec-1-4-1">三级标题</h4>
+<div class="outline-text-4" id="text-1-4-1">
+
+
+
+</div>
+
+<div id="outline-container-1-4-1-1" class="outline-5">
+<h5 id="sec-1-4-1-1">四级标题</h5>
+<div class="outline-text-5" id="text-1-4-1-1">
+
+
+</div>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1-5" class="outline-3">
+<h3 id="sec-1-5">链接</h3>
+<div class="outline-text-3" id="text-1-5">
+
+
+
+</div>
+
+<div id="outline-container-1-5-1" class="outline-4">
+<h4 id="sec-1-5-1">ORG 链接</h4>
+<div class="outline-text-4" id="text-1-5-1">
+
+<p>    <a href="http://ifq.herokuapp.com">http://ifq.herokuapp.com</a>
+    <a href="#sec-1-4-1-1">四级标题</a>
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1-6" class="outline-3">
+<h3 id="sec-1-6">图片</h3>
+<div class="outline-text-3" id="text-1-6">
+
+
+</div>
+
+<div id="outline-container-1-6-1" class="outline-4">
+<h4 id="sec-1-6-1">ORG</h4>
+<div class="outline-text-4" id="text-1-6-1">
+
+<p>    <img src="file:///rc/dovetail-special.JPG"  alt="file:///rc/dovetail-special.JPG" />
+</p>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-6-2" class="outline-4">
+<h4 id="sec-1-6-2">markdown 格式</h4>
+<div class="outline-text-4" id="text-1-6-2">
+
+
+    <img src="http://ifq.github.com/rc/dovetail-special.JPG" title="一个很特别的dovetail" alt="不知道这个pin和tail是怎么敲起来的啊">
+
+
+</div>
+</div>
+</div>
+</div>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[回国了！换博了！]]></title>
+    <link href="http://ifq.github.com/blog/2010/10/20/1/"/>
+    <updated>2010-10-20T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/10/20/1</id>
+    <content type="html"><![CDATA[<div><p> </p>
+<p>如题！终于把东西都扛回来了。累死了。。所以懒得打字了，以后没特殊情况就去微博了~</p>
+<p><a target="_blank" href="http://t.qq.com/Jingtianwang">t.qq.com/Jingtianwang</a></p></div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[越来越懒了，换微博吧。]]></title>
+    <link href="http://ifq.github.com/blog/2010/10/10/1/"/>
+    <updated>2010-10-10T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/10/10/1</id>
+    <content type="html"><![CDATA[<div>http://t.qq.com/Jingtianwang  </div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[IFQ原创]函数时间测量之iPhone篇]]></title>
+    <link href="http://ifq.github.com/blog/2010/08/20/1/"/>
+    <updated>2010-08-20T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/08/20/1</id>
+    <content type="html"><![CDATA[<div><p>函数时间测量之iPhone篇</p>
+<p>关键字：<br>
+iPhone OS (or Mac OS) Time Measure in nano second or micro sec IFQ IF.Q ifqqfi.<br>
+时间测量 测速</p>
+<p>在 iPhone （or MacOS）上以微秒或者纳秒单位来测量程序的执行时间，<br>
+我想应该是很常用的功能吧。一年前做iPhone程序的时候就出现了这个需求，当时花了一个晚上才找到相应的方法。往往在这些意想不到的小地方耗费很多时间。一年后的今天我google了下相关的关键字，还是没有相关的文章，所以我就举手之劳，帮大家省点时间吧。</p>
+<p>其实很简单，下面的这段程序就可以搞定：</p>
+<p><font color="#38761d" size="2" face="Times New Roman">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;<br>
+#import &lt;mach/mach.h&gt;<br>
+#import &lt;mach/mach_time.h&gt;</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">static uint64_t start;<br>
+static uint64_t end;<br>
+static mach_timebase_info_data_t&nbsp;&nbsp;&nbsp;  sTimebaseInfo;</font></p>
+<p><br>
+<font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountStart {<br>
+<br>
+if ( sTimebaseInfo.denom == 0 ) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  (void) mach_timebase_info(&amp;sTimebaseInfo);<br>
+&nbsp;&nbsp;&nbsp;  }<br>
+<br>
+start = mach_absolute_time();<br>
+}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountEnd {<br>
+<br>
+end = mach_absolute_time();</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQShowCount {<br>
+uint64_t diff;<br>
+uint64_t diffnano;<br>
+<br>
+diff = end - start;<br>
+<br>
+diffnano = diff * sTimebaseInfo.numer / sTimebaseInfo.denom;<br>
+<br>
+NSLog(@&quot;Nano sec : %qu&quot;, diffnano);<br>
+}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;</font></p>
+<p>用尻想也知道了，要测量的代码段前后放上Start，End函数，完事后 Show 一下就可以了。</p>
+<p>关于测量的精度是否真的能达到nano,现在有点不确定了。一年前的东西了，能翻出代码就不错了。。我现在用过的其他平台都是和CPU速度相同频率来计数来计时的，精度都还没到1 nano sec的。不过微秒单位的计时肯定是么有问题了。我想一般情况下微秒已经足够了吧～</p>
+<p>最后给出个参考链接。是MacOS下的官方的说明。（其实我就是把这个搬到iPhone来用而已）<br>
+<a href="http://developer.apple.com/mac/library/qa/qa2004/qa1398.html">http://developer.apple.com/mac/library/qa/qa2004/qa1398.html</a></p>
+<p><br>
+下次讲讲 VxWorks 下的计时方法～</p></div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[通知]]></title>
+    <link href="http://ifq.github.com/blog/2010/08/06/1/"/>
+    <updated>2010-08-06T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/08/06/1</id>
+    <content type="html"><![CDATA[<div>本人将于10月17日离开日本回国工作。望各单位做好迎接准备。特此通知。</div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[一段关于路径搜索的题目]]></title>
+    <link href="http://ifq.github.com/blog/2010/08/04/1/"/>
+    <updated>2010-08-04T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/08/04/1</id>
+    <content type="html"><![CDATA[<div><p>帮WK做的题，Memo一下。</p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span"><font size="1">長さnの文字列を、m個のノードで構成されるグラフを探索し、<wbr></wbr>以下のルールで文字列を生成する時、<wbr></wbr>生成される文字列のパターン数を求めてください。<br>
+(1 &lt;= m, n &lt;= 20)<br>
+<br>
+グラフのルール：<br>
+２個以上の複数のノードがある<br>
+各ノードは、a,b,c三つのアクションにより、<wbr></wbr>他のノードに遷移する。<br>
+各ノードのa,b,cのアクションは、<wbr></wbr>自分自身への遷移となる場合もある。<br>
+<br>
+文字列生成のルール：<br>
+スタートノードから始まり、<wbr></wbr>n回アクションをたどりノードを遷移し、<wbr></wbr>n回目にゴールノードにたどり着くようにする。<br>
+その際のアクションの履歴により文字列を生成する（例：<wbr></wbr>abaabcbca）<br>
+1番目のノードがスタートノード、<wbr></wbr>番号の最も大きなノードがゴールノード。<br>
+<br>
+例えば、添付された画像ファイルのようなグラフが与えられ、<wbr></wbr>n=4と指定された場合は、<br>
+a b a c<br>
+a a a c<br>
+a c a c<br>
+a c b c<br>
+上記4つが生成されるので、解は4となります。<br>
+<br>
+グラフ構造は、<wbr></wbr>下記のようなフォーマットの配列で渡すように実装してください。<br>
+{<br>
+1(ノード番号), aのジャンプ先ノード番号, bのジャンプ先ノード番号, cのジャンプ先ノード番号,<br>
+2(ノード番号), aのジャンプ先ノード番号, bのジャンプ先ノード番号, cのジャンプ先ノード番号,<br>
+&#8230;..<br>
+}<br>
+<br>
+例(C言語)：<br>
+#include &lt;stdio.h&gt;<br>
+#include &lt;stdlib.h&gt;<br>
+<br>
+int graph1[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 4,<br>
+3, 3, 3, 3,<br>
+4, 1, 2, 2<br>
+};<br>
+<br>
+int graph2[32] = {<br>
+1, 2, 3, 4,<br>
+2, 1, 5, 6,<br>
+3, 1, 5, 7,<br>
+4, 1, 6, 7,<br>
+5, 2, 3, 8,<br>
+6, 2, 4, 8,<br>
+7, 3, 4, 8,<br>
+8, 5, 6, 7<br>
+};<br>
+<br>
+int graph3[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 2,<br>
+3, 3, 1, 3,<br>
+4, 1, 2, 2<br>
+};<br>
+<br>
+//ここを実装する<br>
+int solve(int graph[], int n, int m){<br>
+return 0;<br>
+}<br>
+<br>
+int main(void){<br>
+printf(&quot;%d\n&quot;, solve(graph1, 4, 4)); //4<br>
+printf(&quot;%d\n&quot;, solve(graph2, 9, 8)); //4920<br>
+printf(&quot;%d\n&quot;, solve(graph3, 19, 4)); //0<br>
+return 0;<br>
+}</font></span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">以下是解答：</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</span></span></p>
+<p> </p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">#include &lt;stdio.h&gt;<br>
+#include &lt;stdlib.h&gt;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">int graph1[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 4,<br>
+3, 3, 3, 3,<br>
+4, 2, 2, 2<br>
+};</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">int graph2[32] = {<br>
+1, 2, 3, 4,<br>
+2, 1, 5, 6,<br>
+3, 1, 5, 7,<br>
+4, 1, 6, 7,<br>
+5, 2, 3, 8,<br>
+6, 2, 4, 8,<br>
+7, 3, 4, 8,<br>
+8, 5, 6, 7<br>
+};</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">int graph3[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 2,<br>
+3, 3, 1, 3,<br>
+4, 1, 2, 2<br>
+};</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">//ここを実装する</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">#define ACTION_NUM 3<br>
+#define ARRAY_COL (ACTION_NUM + 1)</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">static int g_count = 0;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">void search_dst(int graph[], int n, int m, int num)<br>
+{<br>
+int i, row, pos;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span"><br>
+for(row = 0; row &lt; m; row++) {<br>
+&nbsp;&nbsp;  for(i = 1; i &lt;= ACTION_NUM; i++) {<br>
+&nbsp;&nbsp;&nbsp;  pos = row * ARRAY_COL + i;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">&nbsp;&nbsp;&nbsp;  if(graph[pos] == num) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;  if(n &gt; 1) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  search_dst(graph, n - 1, m, row+1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;  } else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  if(row == 0) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  g_count++;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;  }<br>
+&nbsp;&nbsp;&nbsp;  }<br>
+&nbsp;&nbsp;  }<br>
+}<br>
+}</span></span></p>
+<span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">
+<p><br>
+int solve(int graph[], int n, int m) {</p>
+<p>g_count = 0;<br>
+search_dst(graph, n, m, m);</p>
+<p>return g_count;</p>
+<p>}</p>
+<p>int main(void){<br>
+printf(&quot;%d\n&quot;, solve(graph1, 4, 4)); //4<br>
+printf(&quot;%d\n&quot;, solve(graph2, 9, 8)); //4920<br>
+printf(&quot;%d\n&quot;, solve(graph3, 19, 4)); //0<br>
+return 0;<br>
+}</p>
+</span></span></div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[等稀饭，上照片]]></title>
+    <link href="http://ifq.github.com/blog/2010/08/01/1/"/>
+    <updated>2010-08-01T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/08/01/1</id>
+    <content type="html"><![CDATA[<div><p> </p>
+<p><span>Haru 的态度突然有所改观。。<img src="http://ifq.github.com/rc/legacy/c37f0ff340ba7b890b46e040.jpg" width="800"><br>
+</span></p>
+<p><span>放松了许多啊。</span></p>
+<p><span><span><img src="http://ifq.github.com/rc/legacy/ca8509d119a0f291562c8449.jpg" width="800"><br>
+</span></span></p>
+<p><span><span><span>（爪子后边是胡须）</span></span></span></p>
+<p><span><span><span><img src="http://ifq.github.com/rc/legacy/5a89194cf272d9bbd62afc55.jpg" width="800"><br>
+</span></span></span></p></div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[吃完猫薄荷]]></title>
+    <link href="http://ifq.github.com/blog/2010/07/14/1/"/>
+    <updated>2010-07-14T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/07/14/1</id>
+    <content type="html"><![CDATA[<div><p>拌在饭里稀里糊涂吃下去，最开始几分钟四肢抽抽，后来就这幅模样软在这了。。</p>
+<p><span><img src="http://ifq.github.com/rc/legacy/3357ccfc31fea2c2b801a0ff.jpg" width="800"></span></p>
+<p><span>眼神也空灵了。。。<br>
+<span><img src="http://ifq.github.com/rc/legacy/219e75c61d06e65b9c163dff.jpg" width="800"><br>
+</span></span></p></div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[haru]]></title>
+    <link href="http://ifq.github.com/blog/2010/07/11/1/"/>
+    <updated>2010-07-11T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/07/11/1</id>
+    <content type="html"><![CDATA[<div><span><img src="http://ifq.github.com/rc/legacy/004430faaf337f21a9d3110d.jpg" width="800"><span><img class="blogimg" border="0" small="0" src="http://hiphotos.baidu.com/ifqq/pic/item/813f261fa07308f7a686690e.jpg"></span><br>
+<span><img src="http://ifq.github.com/rc/legacy/54ace4119754aff9a6ef3f08.jpg" width="800"><br>
+<span><img src="http://ifq.github.com/rc/legacy/265ad7076a403ff27a89470f.jpg" width="800"><br>
+<span><img src="http://ifq.github.com/rc/legacy/09e8aa01d7b1b7391c95830f.jpg" width="800"><br>
+<span><br>
+</span></span></span></span></span></div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Motor93 (Jul,4)]]></title>
+    <link href="http://ifq.github.com/blog/2010/07/04/1/"/>
+    <updated>2010-07-04T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/07/04/1</id>
+    <content type="html"><![CDATA[<div><p><span><font size="2" face="黑体"><img src="http://ifq.github.com/rc/legacy/08704990c20854b2a977a4d8.jpg" width="800"><br>
+话接上回，Motor Control 。我命名其为 Motor93 Pj &#8211; 因为拆的这个老光驱是93年产的。</font></span><span><font size="2" face="黑体">我买了些元件，拆了从公司捡回来的面板的按钮之类，拼接了 H-Bridge 电路。现在光驱的head可以上下移动。</font></span></p>
+<p><span><font size="2" face="黑体">图左边2个8pin的元件是 H-Bridge 电路的重点。（其实也没有其他东西了）其他就是电阻，滤波电容之类。右边光驱接过来的2根的排线，是Motor的电源线。另外一组7根的排线，是Hall Sensor的电源和反馈。（这个下回再说。）</font></span></p>
+<p><span><font size="2" face="黑体">查了下，Motor 好像和 <a target="_blank" href="http://www.mabuchi-motor.co.jp/cgi-bin/catalog/e_catalog.cgi?CAT_ID=rf_300fa">RF-300FA</a> 很像。工作电压范围 1.5 - 6.0V 。现在的电路，Motor通的是 3.3V。电路左下角的三极管一样的黑色元件，是输出3.3V的电源元件。</font></span></p>
+<p><span><font size="2" face="黑体">本想上传一段 Motor 工作的视频，但是想到国内不能看 YouTube，优酷这边又很慢，所以算了。。</font></span><span><font size="2" face="黑体"><span><img src="http://ifq.github.com/rc/legacy/475568607477a07bebf8f891.jpg" width="800"></span></font></span></p>
+<p><span><font size="2" face="黑体"><span>这是一个 H-Bridge 的电路图。（From Openservo）</span></font></span><span><font size="2" face="黑体"><span>可以改变通过改变电流方向控制 Motor 向两个方向旋转。</span></font></span></p>
+<p><span><font size="2" face="黑体"><span><br>
+</span></font></span> </p></div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[几种经典的滤波算法(转)]]></title>
+    <link href="http://ifq.github.com/blog/2010/06/28/2/"/>
+    <updated>2010-06-28T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/06/28/2</id>
+    <content type="html"><![CDATA[<div><p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="line-height: 25px; color: rgb(142,104,96); font-size: 14px" class="Apple-style-span"><span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">1、限幅滤波法（又称程序判断滤波法）</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">    A、方法：</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 根据经验判断，确定两次采样允许的最大偏差值（设为A）</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 每次检测到新值时判断：</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果本次值与上次值之差&lt;=A,则本次值有效</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果本次值与上次值之差&gt;A,</span>则本次值无效,放弃本次值,用上次值代替本次值<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 能有效克服因偶然因素引起的脉冲干扰<br>
+    C、缺点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 无法抑制那种周期性的干扰<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 平滑度差<br>
+   <span class="Apple-converted-space"> </span><br>
+2、中位值滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 连续采样N次（N取奇数）<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 把N次采样值按大小排列<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 取中间值为本次有效值<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 能有效克服因偶然因素引起的波动干扰<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对温度、液位的变化缓慢的被测参数有良好的滤波效果<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对流量、速度等快速变化的参数不宜<br>
+<br>
+3、算术平均滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 连续取N个采样值进行算术平均运算<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值较大时：信号平滑度较高，但灵敏度较低<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值较小时：信号平滑度较低，但灵敏度较高<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值的选取：一般流量，N=12；压力：N=4<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于对一般具有随机干扰的信号进行滤波<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 这样信号的特点是有一个平均值，信号在某一数值范围附近上下波动<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于测量速度较慢或要求数据计算速度较快的实时控制不适用<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;<br>
+4、递推平均滤波法（又称滑动平均滤波法）<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 把连续取N个采样值看成一个队列<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 队列的长度固定为N<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 每次采样到一个新数据放入队尾,并扔掉原来队首的一次数据.(先进先出原则)<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 把队列中的N个数据进行算术平均运算,就可获得新的滤波结果<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值的选取：流量，N=12；压力：N=4；液面，N=4~12；温度，N=1~4<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对周期性干扰有良好的抑制作用，平滑度高<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于高频振荡的系统   <span class="Apple-converted-space"> </span><br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 灵敏度低<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对偶然出现的脉冲性干扰的抑制作用较差<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不易消除由于脉冲干扰所引起的采样值偏差<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不适用于脉冲干扰比较严重的场合<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;<br>
+5、中位值平均滤波法（又称防脉冲干扰平均滤波法）<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相当于&ldquo;中位值滤波法&rdquo;+&ldquo;算术平均滤波法&rdquo;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 连续采样N个数据，去掉一个最大值和一个最小值<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 然后计算N-2个数据的算术平均值<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值的选取：3~14<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 融合了两种滤波法的优点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于偶然出现的脉冲性干扰，可消除由于脉冲干扰所引起的采样值偏差<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 测量速度较慢，和算术平均滤波法一样<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+<br>
+<br>
+6、限幅平均滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相当于&ldquo;限幅滤波法&rdquo;+&ldquo;递推平均滤波法&rdquo;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 每次采样到的新数据先进行限幅处理，<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 再送入队列进行递推平均滤波处理<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 融合了两种滤波法的优点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于偶然出现的脉冲性干扰，可消除由于脉冲干扰所引起的采样值偏差<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+<br>
+7、一阶滞后滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 取a=0~1<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 本次滤波结果=（1-a）*本次采样值+a*上次滤波结果<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对周期性干扰具有良好的抑制作用<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于波动频率较高的场合<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相位滞后，灵敏度低<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 滞后程度取决于a值大小<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不能消除滤波频率高于采样频率的1/2的干扰信号<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;<br>
+8、加权递推平均滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 是对递推平均滤波法的改进，即不同时刻的数据加以不同的权<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 通常是，越接近现时刻的数据，权取得越大。<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 给予新采样值的权系数越大，则灵敏度越高，但信号平滑度越低<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于有较大纯滞后时间常数的对象<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 和采样周期较短的系统<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于纯滞后时间常数较小，采样周期较长，变化缓慢的信号<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不能迅速反应系统当前所受干扰的严重程度，滤波效果差<br>
+<br>
+9、消抖滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 设置一个滤波计数器<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 将每次采样值与当前有效值比较：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果采样值＝当前有效值，则计数器清零<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果采样值&lt;&gt;当前有效值，则计数器+1，并判断计数器是否&gt;=上限N(溢出)<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   如果计数器溢出,则将本次值替换当前有效值,并清计数器<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于变化缓慢的被测参数有较好的滤波效果,<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 可避免在临界值附近控制器的反复开/关跳动或显示器上数值抖动<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于快速变化的参数不宜<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果在计数器溢出的那一次采样到的值恰好是干扰值,则会将干扰值当作有效值导入系统<br>
+<br>
+10、限幅消抖滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相当于&ldquo;限幅滤波法&rdquo;+&ldquo;消抖滤波法&rdquo;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 先限幅,后消抖<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 继承了&ldquo;限幅&rdquo;和&ldquo;消抖&rdquo;的优点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 改进了&ldquo;消抖滤波法&rdquo;中的某些缺陷,避免将干扰值导入系统<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于快速变化的参数不宜<br>
+<br>
+<br>
+第11种方法：IIR 数字滤波器<span class="Apple-converted-space"> </span><br>
+<br>
+A. 方法：<br>
+   确定信号带宽， 滤之。<br>
+   Y(n) = a1*Y(n-1) + a2*Y(n-2) + &#8230; + ak*Y(n-k) + b0*X(n) + b1*X(n-1) + b2*X(n-2) + &#8230; + bk*X(n-k)<br>
+<br>
+B. 优点：高通，低通，带通，带阻任意。设计简单(用matlab）<br>
+C. 缺点：运算量大。<br>
+　<span class="Apple-converted-space"> </span><br>
+<br>
+//&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;<span class="Apple-converted-space"> </span><br>
+<br>
+软件滤波的C程序样例<br>
+<br>
+10种软件滤波方法的示例程序<br>
+<br>
+假定从8位AD中读取数据（如果是更高位的AD可定义数据类型为int),子程序为get_ad();<br>
+<br>
+1、限副滤波<br>
+/*&nbsp;&nbsp; A值可根据实际情况调整<br>
+    value为有效值，new_value为当前采样值&nbsp;&nbsp;<br>
+    滤波程序返回有效的实际值&nbsp;&nbsp; */<br>
+#define A 10<br>
+<br>
+char value;<br>
+<br>
+char filter()<br>
+{<br>
+   char&nbsp;&nbsp; new_value;<br>
+   new_value = get_ad();<br>
+   if ( ( new_value - value &gt; A ) || ( value - new_value &gt; A )<br>
+  &nbsp;&nbsp;   return value;<br>
+   return new_value;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   <br>
+}<br>
+<br>
+2、中位值滤波法<br>
+/*&nbsp;&nbsp; N值可根据实际情况调整<br>
+    排序采用冒泡法*/<br>
+#define N&nbsp;&nbsp; 11<br>
+<br>
+char filter()<br>
+{<br>
+   char value_buf[N];<br>
+   char count,i,j,temp;<br>
+   for ( count=0;count<br>
+   {<br>
+  &nbsp;&nbsp;   value_buf[count] = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   for (j=0;j<br>
+   {<br>
+  &nbsp;&nbsp;   for (i=0;i<br>
+  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   if ( value_buf&gt;value_buf[i+1] )<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   temp = value_buf;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   value_buf = value_buf[i+1];<span class="Apple-converted-space"> </span><br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;    value_buf[i+1] = temp;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   }<br>
+  &nbsp;&nbsp;   }<br>
+   }<br>
+   return value_buf[(N-1)/2];<br>
+}  &nbsp;&nbsp;&nbsp;<br>
+<br>
+3、算术平均滤波法<br>
+/*<br>
+*/<br>
+<br>
+#define N 12<br>
+<br>
+char filter()<br>
+{<br>
+   int&nbsp;&nbsp; sum = 0;<br>
+   for ( count=0;count<br>
+   {<br>
+  &nbsp;&nbsp;   sum + = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   return (char)(sum/N);<br>
+}<br>
+<br>
+4、递推平均滤波法（又称滑动平均滤波法）<br>
+/*<br>
+*/<br>
+#define N 12<span class="Apple-converted-space"> </span><br>
+<br>
+char value_buf[N];<br>
+char i=0;<br>
+<br>
+char filter()<br>
+{<br>
+   char count;<br>
+   int&nbsp;&nbsp; sum=0;<br>
+   value_buf[i++] = get_ad();<br>
+   if ( i == N )   i = 0;<br>
+   for ( count=0;count<br>
+  &nbsp;&nbsp;   sum = value_buf[count];<br>
+   return (char)(sum/N);<br>
+}<br>
+<br>
+5、中位值平均滤波法（又称防脉冲干扰平均滤波法）<br>
+/*<br>
+*/<br>
+#define N 12<br>
+<br>
+char filter()<br>
+{<br>
+   char count,i,j;<br>
+   char value_buf[N];<br>
+   int&nbsp;&nbsp; sum=0;<br>
+   for&nbsp;&nbsp; (count=0;count<br>
+   {<br>
+  &nbsp;&nbsp;   value_buf[count] = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   for (j=0;j<br>
+   {<br>
+  &nbsp;&nbsp;   for (i=0;i<br>
+  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   if ( value_buf&gt;value_buf[i+1] )<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   temp = value_buf;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   value_buf = value_buf[i+1];<span class="Apple-converted-space"> </span><br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;    value_buf[i+1] = temp;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   }<br>
+  &nbsp;&nbsp;   }<br>
+   }<br>
+   for(count=1;count<br>
+  &nbsp;&nbsp;   sum += value[count];<br>
+   return (char)(sum/(N-2));<br>
+}<br>
+<br>
+6、限幅平均滤波法<br>
+/*<br>
+*/&nbsp;&nbsp;<br>
+略 参考子程序1、3<br>
+<br>
+7、一阶滞后滤波法<br>
+/* 为加快程序处理速度假定基数为100，a=0~100 */<br>
+<br>
+#define a 50<br>
+<br>
+char value;<br>
+<br>
+char filter()<br>
+{<br>
+   char&nbsp;&nbsp; new_value;<br>
+   new_value = get_ad();<br>
+   return (100-a)*value + a*new_value;<span class="Apple-converted-space"> </span><br>
+}<br>
+<br>
+8、加权递推平均滤波法<br>
+/* coe数组为加权系数表，存在程序存储区。*/<br>
+<br>
+#define N 12<br>
+<br>
+char code coe[N] = {1,2,3,4,5,6,7,8,9,10,11,12};<br>
+char code sum_coe = 1+2+3+4+5+6+7+8+9+10+11+12;<br>
+<br>
+char filter()<br>
+{<br>
+   char count;<br>
+   char value_buf[N];<br>
+   int&nbsp;&nbsp; sum=0;<br>
+   for (count=0,count<br>
+   {<br>
+  &nbsp;&nbsp;   value_buf[count] = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   for (count=0,count<br>
+  &nbsp;&nbsp;   sum += value_buf[count]*coe[count];<br>
+   return (char)(sum/sum_coe);<br>
+}<br>
+<br>
+9、消抖滤波法<br>
+<br>
+#define N 12<br>
+<br>
+char filter()<br>
+{<br>
+   char count=0;<br>
+   char new_value;<br>
+   new_value = get_ad();<br>
+   while (value !=new_value);<br>
+   {<br>
+  &nbsp;&nbsp;   count++;<br>
+  &nbsp;&nbsp;   if (count&gt;=N)   return new_value;<br>
+  &nbsp;&nbsp;    delay();<br>
+  &nbsp;&nbsp;   new_value = get_ad();<br>
+   }<br>
+   return value;   <span class="Apple-converted-space"> </span><br>
+}<br>
+<br>
+10、限幅消抖滤波法<br>
+/*<br>
+*/<br>
+略 参考子程序1、9<br>
+<br>
+11、IIR滤波例子<br>
+<br>
+int&nbsp;&nbsp; BandpassFilter4(int InputAD4)<br>
+{<br>
+    int&nbsp;&nbsp; ReturnValue;<span class="Apple-converted-space"> </span><br>
+    int&nbsp;&nbsp; ii;<br>
+    RESLO=0;<br>
+    RESHI=0;<br>
+    MACS=*PdelIn;<br>
+    OP2=1068; //FilterCoeff4[4];<br>
+    MACS=*(PdelIn+1);<br>
+    OP2=8;    //FilterCoeff4[3];<br>
+    MACS=*(PdelIn+2);<br>
+    OP2=-2001;//FilterCoeff4[2];<br>
+    MACS=*(PdelIn+3);<br>
+    OP2=8;    //FilterCoeff4[1];<br>
+    MACS=InputAD4;<br>
+    OP2=1068; //FilterCoeff4[0];<br>
+    MACS=*PdelOu;<br>
+    OP2=-7190;//FilterCoeff4[8];<br>
+    MACS=*(PdelOu+1);<br>
+    OP2=-1973; //FilterCoeff4[7];<br>
+    MACS=*(PdelOu+2);<br>
+    OP2=-19578;//FilterCoeff4[6];<br>
+    MACS=*(PdelOu+3);<br>
+    OP2=-3047; //FilterCoeff4[5];<br>
+    *p=RESLO;<br>
+    *(p+1)=RESHI;<br>
+    mytestmul&lt;&lt;=2;<br>
+    ReturnValue=*(p+1);<br>
+    for&nbsp;&nbsp; (ii=0;ii&lt;3;ii++)<br>
+    {<br>
+  &nbsp;&nbsp;&nbsp; DelayInput[ii]=DelayInput[ii+1];<br>
+  &nbsp;&nbsp;&nbsp; DelayOutput[ii]=DelayOutput[ii+1];<br>
+  &nbsp;&nbsp;&nbsp; }<span class="Apple-converted-space"> </span><br>
+  &nbsp;&nbsp;&nbsp; DelayInput[3]=InputAD4;<br>
+  &nbsp;&nbsp;&nbsp; DelayOutput[3]=ReturnValue;<br>
+  &nbsp;&nbsp;&nbsp;<br>
+   //&nbsp;&nbsp; if (ReturnValue&lt;0)<br>
+   //&nbsp;&nbsp; {<br>
+   //&nbsp;&nbsp; ReturnValue=-ReturnValue;<br>
+   //&nbsp;&nbsp; }<br>
+    return ReturnValue;&nbsp;&nbsp;<br>
+}</span></span></p></div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[平均值滤波之鬼斧神工算法（转）]]></title>
+    <link href="http://ifq.github.com/blog/2010/06/28/1/"/>
+    <updated>2010-06-28T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/06/28/1</id>
+    <content type="html"><![CDATA[<div><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span class="Apple-style-span">
+<div style="text-indent: 2em">采样值 C、累加器 S，平均值 A，采样次数 N</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">传统的平均值滤波算法</font>：</div>
+<div style="text-indent: 2em">S = C(1) + C(2) + &#8230; + C(N)</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">需要用循环来计算累加和，比较耗时，C(1～N）是缓存，随采样数N增大，所需内存量也增大</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">向队列平均值算法推进</font>：</div>
+<div style="text-indent: 2em">S = C(1) + C(2) + &#8230; + C(N) （第一次）</div>
+<div style="text-indent: 2em">C(x) = C(x + 1) （队列前移）</div>
+<div style="text-indent: 2em">C(N) = C</div>
+<div style="text-indent: 2em">S = S - C(1) + C(N)</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">运算量有所改进（用指针维护循环队列，不实际移动数据），占用内存问题不变</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">鬼斧神工算法</font>：</div>
+<div style="text-indent: 2em">初始化：A=初始值，S=A*N</div>
+<div style="text-indent: 2em">S = S - A + C</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">就这么简单，三个变量（N可以是常数），只要 S 的量程足够，N可以任意调整。</div>
+<div style="text-indent: 2em">可以看出，此算法是从队列平均值算法演变而来，因没有了队列，每次计算时不知道该丢弃的最老的一个采样值是多少，这里用了个替代的办法，丢弃上次计算出的平均值。</div>
+<div style="text-indent: 2em">去掉了缓存维护，节省内存空间，同时也将运算量压缩到了最小，执行效率非常高。调试时容易修改采样数。</div>
+</span></span><br class="Apple-interchange-newline"></div>]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Motor Control Pj]]></title>
+    <link href="http://ifq.github.com/blog/2010/06/27/1/"/>
+    <updated>2010-06-27T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/06/27/1</id>
+    <content type="html"><![CDATA[<div><p><font size="2">最近在学习Servo Control, 所以见了很多废品回来拆。突然有了很多东西可以学，Servo，PID，Hall Sensor，H-Brige Circuit。。。希望有时间把整个过程记录下来，也给这里增加点工程师气息。。。</font></p>
+<p><font size="2">总之，先Show一下最近玩的东西。</font></p>
+<p><font size="2"><span><img src="http://ifq.github.com/rc/legacy/feb3d662fd7980e3e7113a98.jpg" width="800"></span>这是个93年的老光驱，不过马达，齿轮，滑轨，传感器都完好。最左侧的齿轮下面有个+符号，旁边黑色的芯片是霍尔传感器。费了很多时间搞清楚它的细节。</font></p>
+<p><font size="2"><span>Interface 杂志里附带的开发板。SH-2A，Renesas 的处理器。SH72620。这次的所有控制都由这个处理器完成。<br>
+<span><img src="http://ifq.github.com/rc/legacy/f2d881263eb77b298a82a198.jpg" width="800"></span></span></font></p>
+<p><font size="2"><span><span>这是另一个光存储设备。也非常老了，Olympus 的 650M 的名字忘了。设计的很有趣，滑轨不是用马达，而是直接用线圈和磁铁来完成的。还记得么，洛伦磁力，高中知识。。。<br>
+<span><img src="http://ifq.github.com/rc/legacy/e317d316c66fce26972b439f.jpg" width="800"><br>
+</span></span></span></font></p></div>]]></content>
+  </entry>
+  
+</feed>

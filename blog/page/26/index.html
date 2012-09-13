@@ -1,0 +1,856 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>一个热爱木工的软件工程师</title>
+	<meta name="author" content="靖天">
+
+	
+	<meta name="description" content="Some time you might find some applications are having only .rpm files but you want a .deb package for your debian,Ubuntu and other debian derived &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Geek Woodworker</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:ifq.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		<a class="google" href="https://plus.google.com/115086707443303900229?rel=author" title="Google+">Google+</a>
+		
+		
+		
+		<a class="github" href="https://github.com/ifq" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:ifq.github.com">
+	</form>
+</nav>
+
+
+</header>
+	
+		
+	
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/02/03/2/">如何在Debian上安装RPM包.Install .rpm Files in Debian and Ubuntu</a></h1>
+	<div class="entry-content">
+		<div>Some time you might find some applications are having only .rpm files but you want a .deb package for your debian,Ubuntu and other debian derived ditributions.If you can’t find .deb debian package in any of the debian,ubuntu repositories or elsewhere, you can use the alien package converter&nbsp;&nbsp; to install the .rpm file. 
+<p><strong>Alien</strong> is a program that converts between the rpm, dpkg, stampede slp, and slackware tgz file formats. If you want to use a package from another distribution than the one you have installed on your system, you can use alien to convert it to your preferred package format and install it.</p>
+<p>Despite the large version number, alien is still (and will probably always be) rather experimental software. It has been used by many people for many years, but there are still many bugs and limitations.</p>
+<p>Alien should not be used to replace important system packages, like sysvinit, shared libraries, or other things that are essential for the functioning of your system. Many of these packages are set up differently by Debian and Red Hat, and packages from the different distributions cannot be used interchangably. In general, if you can’t uninstall the package without breaking your system, don’t try to replace it with an alien version.</p>
+<p><strong>Install alien in debian</strong></p>
+<p>#apt-get install alien</p>
+<p>This will install all the required packages.Now you can start converting your .rpm files to .deb packages.</p>
+<p><strong>Available Options for alien</strong></p>
+<p>Convert the package.rpm into a package.deb</p>
+<p>#alien -d package-name.rpm</p>
+<p>Convert the package.rpm into a package.deb, and install the generated package.</p>
+<p>#alien -i package-name.rpm<br>
+ <br>
+If you want to keeps alien from changing the version number use the following command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<p>#alien -k rpm-package-file.rpm</p>
+<p><strong>Example</strong></p>
+<p>Suppose we have a avg antivirus avg71lms-r30-a0782.i386.rpm file</p>
+<p>To convert .rpm to debian</p>
+<p>#alien -k avg71lms-r30-a0782.i386.rpm</p>
+<p>Now you should be having avg71lms-r30-a0782.i386.deb file</p>
+<p><strong>To install .deb file</strong></p>
+<p>#dpkg -i avg71lms-r30-a0782.i386.deb</p>
+<p>If you don’t use -k option you should see avg71lms_r30-1_i386.deb file the difference is it will add 1</p>
+<p><strong>Install alien in Ubuntu</strong></p>
+<p>$sudo apt-get install alien</p>
+<p>You can check the above section for available options</p>
+<p><strong>Example</strong></p>
+<p>Suppose we have a avg antivirus avg71lms-r30-a0782.i386.rpm file</p>
+<p><strong>To convert .rpm to debian</strong></p>
+<p>$sudo alien -k avg71lms-r30-a0782.i386.rpm</p>
+<p>Now you should be having avg71lms-r30-a0782.i386.deb file</p>
+<p><strong>To install .deb file</strong></p>
+<p>$sudo dpkg -i avg71lms-r30-a0782.i386.deb</p>
+<p>If you don’t use -k option you should see avg71lms_r30-1_i386.deb file the difference is it will add 1</p>
+<p>If you want more available options for alien check alien <a target="_blank" href="http://www.debianadmin.com/manpages/alienmanpage.txt">man page</a> </p></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-03T00:00:00+08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/02/03/1/">如何在Debian中安装Vmware Tools. Installing VMWare Tools on a Linux Debian Server Without X</a></h1>
+	<div class="entry-content">
+		<div>Open your Server Console and login as root<br>
+During installation the kernel-headers package is required. So we start by first asking the system what kernel we are using, then we install the kernel headers for this kernel.<br>
+# uname –r<br>
+2.6.8-2-386<br>
+#apt-get install kernel-headers-2.6.8-2-386<br>
+The following extra packages will be installed:<br>
+kernel-headers-2.6.8-2 kernel-kbuild-2.6-3<br>
+The following NEW packages will be installed:<br>
+kernel-headers-2.6.8-2 kernel-headers-2.6.8-2-386 kernel-kbuild-2.6-3<br>
+0 upgraded, 3 newly installed, 0 to remove and 8 not upgraded.<br>
+Inst kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
+Inst kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Inst kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Conf kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
+Conf kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Conf kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Press Y(es) to continue<br>
+Now on your server Console go to: VM, Install VMWare Tools, Nothing will happen but the Linux VMWare Tools ISO is now mounted on your virtual machine.<br>
+Now mount the iso in your Debian box:<br>
+#mount /dev/cdrom<br>
+To see your mounted drives type:<br>
+#mount<br>
+My cdrom is mounted as cdrom0 so I type:<br>
+#cd /media/cdrom0<br>
+Let’s copy the tools to the debian box:<br>
+#cp vmware-linux-tools.tar.gz /root/.<br>
+#cd /root<br>
+Let’s unpack the VMWare tools and start the installation:<br>
+Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
+#tar zxf vmware-linux-tools.tar.gz<br>
+#cd vmware-tools-distrib<br>
+#./vmware-install.pl<br>
+After this command the setup will start, the setup does a proper job of selecting where to put what. I left everything default (just enter through the questions)<br>
+Creating a new installer database using the tar3 format.<br>
+Installing the content of the package.<br>
+In which directory do you want to install the binary files?<br>
+[/usr/bin]<br>
+What is the directory that contains the init directories (rc0.d/ to rc6.d/)?<br>
+[/etc]<br>
+What is the directory that contains the init scripts?<br>
+[/etc/init.d]<br>
+In which directory do you want to install the daemon files?<br>
+[/usr/sbin]<br>
+In which directory do you want to install the library files?<br>
+[/usr/lib/vmware-tools]<br>
+The path &#8220;/usr/lib/vmware-tools&#8221; does not exist currently. This program is going<br>
+to create it, including needed parent directories. Is this what you want?<br>
+[yes]<br>
+In which directory do you want to install the documentation files?<br>
+[/usr/share/doc/vmware-tools]<br>
+The path &#8220;/usr/share/doc/vmware-tools&#8221; does not exist currently. This program is<br>
+going to create it, including needed parent directories. Is this what you want?<br>
+[yes]<br>
+Unmounting the Tools ISO image cdrom .<br>
+The installation of VMware Tools 3.2.0 build-14497 for Linux completed<br>
+successfully. You can decide to remove this software from your system at any<br>
+time by invoking the following command: &#8220;/usr/bin/vmware-uninstall-tools.pl&#8221;.<br>
+Before running VMware Tools for the first time, you need to configure it by<br>
+invoking the following command: &#8220;/usr/bin/vmware-config-tools.pl&#8221;. Do you want<br>
+this program to invoke the command for you now? [yes]<br>
+Making sure services for VMware Tools are stopped.<br>
+Stopping VMware Tools services in the virtual machine:<br>
+Guest operating system daemon: done<br>
+Trying to find a suitable vmhgfs module for your running kernel.<br>
+None of the pre-built vmhgfs modules for VMware Tools is suitable for your<br>
+running kernel. Do you want this program to try to build the vmhgfs module for<br>
+your system (you need to have a C compiler installed on your system)? [yes]<br>
+Using compiler &#8220;/usr/bin/gcc&#8221;. Use environment variable CC to override.<br>
+What is the location of the directory of C header files that match your running<br>
+kernel? [/lib/modules/2.6.8-2-386/build/include]<br>
+Extracting the sources of the vmhgfs module.<br>
+Building the vmhgfs module.<br>
+Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
+Using 2.6.x kernel build system.<br>
+make: Entering directory `/tmp/vmware-config0/vmhgfs-only&#8217;<br>
+make -C /lib/modules/2.6.8-2-386/build/include/.. SUBDIRS=$PWD SRCROOT=$PWD/. modules<br>
+make[1]: Entering directory `/usr/src/kernel-headers-2.6.8-2-386&#8217;<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/cpName.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/cpNameLinux.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/dev.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/driver.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/hgfsUtil.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/main.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/staticEscape.o<br>
+LD [M] /tmp/vmware-config0/vmhgfs-only/vmhgfs.o<br>
+Building modules, stage 2.<br>
+MODPOST<br>
+CC /tmp/vmware-config0/vmhgfs-only/vmhgfs.mod.o<br>
+LD [M] /tmp/vmware-config0/vmhgfs-only/vmhgfs.ko<br>
+make[1]: Leaving directory `/usr/src/kernel-headers-2.6.8-2-386&#8217;<br>
+cp -f vmhgfs.ko ./../vmhgfs.o<br>
+make: Leaving directory `/tmp/vmware-config0/vmhgfs-only&#8217;<br>
+The module loads perfectly in the running kernel.<br>
+No X install found.<br>
+Starting VMware Tools services in the virtual machine:<br>
+Switching to guest configuration: done<br>
+Guest filesystem driver: done<br>
+DMA setup: done<br>
+Guest operating system daemon: done<br>
+The configuration of VMware Tools 3.2.0 build-14497 for Linux for this running<br>
+kernel completed successfully.<br>
+You can now run VMware Tools by invoking the following command:<br>
+&#8220;/usr/bin/vmware-toolbox&#8221; during an XFree86 session.<br>
+Enjoy,<br>
+As you can see, the VMXNet adapter has not been compiled. I asked around on the VMWare forum and found out that the vmware-config-tools.pl for GSX differs from the one provided with ESX (Thanks to Petr from the VMWare forum).<br>
+Now shutdown your Debian Box:<br>
+#halt<br>
+After your debian box has halted, change your NIC hardware to now use the VMXNet adapter.<br>
+Now turn on your Debian Box.<br>
+After the system has booted, login as root and enter the following command: #vi /usr/bin/vmware-config-tools.pl<br>
+Now search for the string “class” and edit the following line: original line = if ($line =~ /class [0-9a-f]{4}: &#8230;../) {<br>
+and change it to:<br>
+if ($line =~ /[0-9a-f]{4}: &#8230;../) {<br>
+Save the file and let the compiling begin!<br>
+Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
+Enter the following command:<br>
+#./usr/bin/vmware-config-tools.pl<br>
+Just enter through the questions…if everything went ok, you’ll see the VMXNet adapter being compiled. Info looks like this: Extracting the sources of the vmxnet module.<br>
+Building the vmxnet module.<br>
+Do the following checks to insure the proper startup of the vmxnet adapter:<br>
+Check in /etc/modules.conf for the following line : # Added by VMware Tools alias eth0 vmxnet<br>
+#vi /etc/modutils/aliases<br>
+Edit /etc/modutils/aliases an add the following line:<br>
+alias eth0 vmxnet<br>
+#vi /etc/modules<br>
+then edit the /etc/modules and add: vmxnet to the bottom<br>
+Now the vmxdriver is loaded but the network is brought up before the vmxdriver has loaded. (so no nic is available until you do a network restart) vmwaretools is called at S06vmware-tools in rc2.d<br>
+I made it work like this: #/etc/rc2.d #ln -s /etc/init.d/networking S98networking<br>
+This command creates a link to the networking script and makes it run again at the end of the bootcycle. The vmxnet driver is then already loaded and will now be used<br>
+Time synchronization To enable proper time synch on your Debian box you enter the following command:<br>
+#vi /boot/grub/menu.lst and added the option: clock=pit nosmp noapic nolapic (check VMWare document 1420 for more info about this subject)<br>
+You also need to edit the .vmx file (after shutting down you VM)<br>
+Edit your .vmx file and edit the following line:<br>
+tools.syncTime = FALSE Change FALSE to TRUE!<br>
+And now you have successfully installed the GSX VMWare Tools on your Debian box!!<br>
+After rebooting you might get a message stating: “vmhgfs module taints kernel” error. I checked the message on the VMWare forum and it looks harmless so just ignore it.<br>
+My server now has a smooth power off when I use the VMWare power off script so I can make a good backup whenever I want to.<br>
+Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
+VMWare tools, the ESX-way Luckily the procedure for a installation of the tools in a ESX environment is much easier because the install script does a good job of detecting the VMXNet adapter. During installation the kernel-headers package is required. So we start by first asking the system what kernel we are using,then we install the kernel headers for this kernel.<br>
+# uname –r<br>
+2.6.8-2-386<br>
+#apt-get install kernel-headers-2.6.8-2-386<br>
+The following extra packages will be installed:<br>
+kernel-headers-2.6.8-2 kernel-kbuild-2.6-3<br>
+The following NEW packages will be installed:<br>
+kernel-headers-2.6.8-2 kernel-headers-2.6.8-2-386 kernel-kbuild-2.6-3<br>
+0 upgraded, 3 newly installed, 0 to remove and 8 not upgraded.<br>
+Inst kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
+Inst kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Inst kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Conf kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
+Conf kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Conf kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Press Y(es) to continue<br>
+Make sure you have met all system requirements because in a minute you won’t have access to the Internet anymore…. Now turn off you Virtual Debian server and change your NIC to use the VMXNet Adapter. Turn on the server and lets install the VMWare Tools!!!<br>
+Now on your server Console go to: VM, Install VMWare Tools, Nothing will happen but the Linux VMWare Tools ISO is now mounted on your virtual machine.<br>
+Now mount the iso in your Debian box:<br>
+#mount /dev/cdrom<br>
+To see your mounted drives type:<br>
+#mount<br>
+My cdrom is mounted as cdrom0 so I type:<br>
+#cd /media/cdrom0<br>
+Let’s copy the tools to the debian box:<br>
+#cp vmware-linux-tools.tar.gz /root/.<br>
+#cd /root<br>
+Let’s unpack the VMWare tools and start the installation:<br>
+#tar zxf vmware-linux-tools.tar.gz<br>
+#cd vmware-tools-distrib<br>
+#./vmware-install.pl Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
+After this command the setup will start, the setup does a proper job of selecting where to put what. I left everything default (just enter through the questions)<br>
+Because I selected the VMX Net adapter, I don’t have a ethernet connection, so I can’t provide the output.<br>
+But this is a good thing, because selecting the hardware to use the VMXNet adapter, makes the install script detect the VMXNet adapter and compile the VMXNet driver!!!<br>
+After the smoked has cleared. You should have the VMWare tools installed including the VMXNet driver! What remains is the time synch.<br>
+To enable time synch on your Debian box you enter the following command:<br>
+#vi /boot/grub/menu.lst and added the option: clock=pit nosmp noapic nolapic (check VMWare document 1420 for more info about this subject)<br>
+You also need to edit the .vmx file (after shutting down you VM)<br>
+Edit your .vmx file and edit the following line:<br>
+tools.syncTime = FALSE Change FALSE to TRUE!<br>
+And now you have successfully installed the ESX VMWare Tools on your Debian box!!<br>
+Good luck and cheers<br>
+Aleks<br>
+- - - - Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006</div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-03T00:00:00+08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/02/01/1/">Google推升级版Mini搜索工具 新增安全功能</a></h1>
+	<div class="entry-content">
+		<div>1月31日国际报道 Google推出升级版Mini专用搜索工具，增加了安全功能，这意味着企业客户可以对其网络上的公开和秘密数据进行搜索。<br>
+本周二，Google欧洲区企业业务主管罗伯托表示，以前的Mini专用搜索工具缺乏安全功能，这意味着企业可以用来索引面向公众的网站或内部网，但不能同时对这两者进行索引。 
+<p>他解释说，Google Mini 2.2解除了这一限制。小型公司可以通过Mini获得Google专用搜索工具的完整功能。客户可以拥有安全的索引-其中包括LDAP和活动目录数据，因此，即使是小公司也能够索引其他用户认为不会搜索到的数据。</p>
+<p>Google Mini被客户用于在网站上增添搜索功能。Google Mini 2.2使用了OneBox等来自Google的公共搜索引擎的技术。<br>
+Google Mini 2.2不会直接对企业应用软件的数据进行索引，而是通过插件与它们通讯，由企业软件完成搜索功能。这意味着Google Mini 2.2能够索引的文档数量仍然是有限制的，根据不同型号，这一限制为50000-300000个文件。</p>
+<p>Google Mini 2.2还集成了Google Analytics和SiteMaps等功能。Google Analytics能够提供一个网站上用户活动的统计资料。</p>
+<p>Google Mini 2.2的价格在不足1995美元至8995美元之间。</p></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-01T00:00:00+08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/01/31/1/">微软新专利：模块化操作系统</a></h1>
+	<div class="entry-content">
+		<div><p>早在Vista出世之前，人们就开始考虑后Vista时代了。有人说网络应用程序会逐渐取代桌面系统，也有人说今后的系统不会这样几年重大发布一次，而是逐步模块化升级。从近日透露的一份微软专利文档来看，后者的可能性还真不小。</p>
+<div align="center">
+<div align="center" forimg="1"><img src="/rc/legacy/6029cfbf7e556e0b18d81f23.jpg" width="800"></div>
+<br>
+</div>
+<p>根据美国专利商标局(USPTO)的专利文件，微软的这种技术称为&ldquo;实现模块化操作系统的系统与方法&rdquo;。据其描述，在操作系统中，厂商和用户可以自主决定使用一些附加模块来开启额外功能，就像Vista的Anytime Upgrade升级。</p>
+<p>微软在整个文件中不断提到&ldquo;模块&rdquo;字样，并详细描述了其工作方式：&ldquo;核心模块&rdquo;与&ldquo;授权认证模块&rdquo;相伴，前者提供操作系统的核心功能，后者负责决定 其他附加模块是否可以激活并使用，并借助DRM技术保证授权许可。每一个附加模块都可以提供特定的扩展功能，如硬件和外围设备支持、应用程序与功能支持 等。</p>
+<p>这种模块化设计可以让微软随时为系统加入新功能，也能让某些功能像&ldquo;共享软件&rdquo;一样，允许在一定时间内试用，然后让用户选择购买还是放弃。当然，这 样做就不用集中将所有功能开发完毕再统一发布，也可以避免某些功能延迟导致整体进度迟缓的弊病。在Vista的开发过程，微软可谓深受其害。</p>
+<p>专利文件还描述了微软如何使用DRM限制特定软件或硬件的使用，比如未不许使用经授权的模块、不能安装没有数字版权保护的功能、限制没有认证的软硬件等等。</p>
+<p>现在的Windows和Mac OS都是&ldquo;一次成型&rdquo;产品，而Unix和Linux已经有了模块化概念和应用。也许微软会因此受到专利官司的困扰，不过可以预见的是，模块化将成为未来Windows的一个重要方向，操作系统的概念也可能会被改写。</p></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-31T00:00:00+08:00" pubdate data-updated="true">Jan 31<span>st</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/01/25/1/">几个笑话</a></h1>
+	<div class="entry-content">
+		<div><p><font face="Courier, Monospaced" class="fixed_width"><font color="#ff0000">算术测验 </font><br>
+楚阳向：今天的算术测验没及格。 <br>
+爸爸：为什么？ <br>
+楚阳向：老师问我2x3等于几，我说6。 <br>
+爸爸：没错啊！ <br>
+楚阳向：老师又问我3x2等于几。 <br>
+爸爸：这他妈有什么区别！ <br>
+楚阳向：我也是这样说的。 <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width"><font color="#ff0000">童言无忌</font> <br>
+5岁儿子：（指着妈妈红色的迷你裙）妈妈，你今天真性感！ <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width">妈妈：小崽子，怎么这么跟妈妈说话？跟谁学的！ <br>
+10岁儿子：（冲着弟弟）我跟你说过多少遍啦，不要招惹有夫之妇！ <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width">口渴 <br>
+爸爸把儿子哄上床后，回到自己的卧室准备睡觉。 <br>
+&quot;爸爸！&quot;儿子叫道。 <br>
+&quot;什么事儿？&quot; <br>
+&quot;我口渴，给我拿杯水好吗？&quot; <br>
+&quot;你刚才不是喝过了嘛！快睡觉，我已经关灯啦！&quot; <br>
+5分钟后&#8230;&#8230; <br>
+&quot;爸爸！我口渴，你就不能给我拿杯水吗？&quot; <br>
+&quot;我刚才不是说过了嘛！你再叫我揍你！&quot; <br>
+又过了五分钟&#8230;&#8230; <br>
+&quot;爸爸！&quot; <br>
+&quot;又怎么啦？&quot; <br>
+&quot;你过来揍我的时候一定要带杯水！&quot; <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width"><font color="#ff0000">理由 </font><br>
+儿子：爸爸，今天我不想上学。 <br>
+爸爸：怎么啦？ <br>
+儿子：上周农场死了只鸡，第二天中午饭就吃&quot;红烧鸡块&quot;，三天前农场死了头猪，<br>
+第二天中午就吃&quot;红烧猪肉&quot;。 <br>
+爸爸：那又怎么啦？ <br>
+儿子：昨天我们的英语老师去世了。 <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width"><font color="#ff0000">性早熟 </font><br>
+父亲发现10岁的儿子过早地成熟，便决定对他进行早期性教育。不过，跟孩子谈这种事情总是很难为情的，但出于对孩子的关心，父亲还是鼓起了勇气。 <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width">&quot;儿子，爸爸想跟你聊聊。&quot; <br>
+&quot;什么事儿，爸爸。&quot; <br>
+&quot;也没什么，是关于&quot;性&quot;的问题。&quot;父亲满脸憋得通红，话语有些吞吞吐吐。 <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width">儿子注视着爸爸异样的面孔，关切地问道：&quot;没关系，您想知道哪方面的问题？&quot; <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width"><font color="#ff0000">祈祷 </font><br>
+教堂里，一个小男孩在祈祷：&quot;上帝呀！我只有一个小小的心愿，请把首都移到纽约吧！&quot;一个牧师在旁边听到后，问小男孩：&quot;小朋友，你为什么祈祷要把首都移到纽约<wbr></wbr>？&quot; <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width">小男孩答道：&quot;有一个考试题问的是首都在哪，我答的是纽约。&quot; <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width"><font color="#ff0000">广告的效应</font> <br>
+小男孩：我想买那个卫生巾。 <br>
+服务员：是你妈妈叫你来买的吗？ <br>
+小男孩：不是。 <br>
+服务员：那是你姐姐？ <br>
+小男孩：也不是，我想买。 <br>
+服务员：你买卫生巾干什么？ <br>
+小男孩：我看电视上说：有了它又能游泳，又能滑冰，还能打网球 <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width"><font color="#ff0000">母子对话 </font><br>
+孩子：妈妈！我能不能跟姥姥玩一会儿？ <br>
+妈妈：可以，不过你不能再扒姥姥的坟 <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width"><font color="#ff0000">幼儿园</font>小芳老师指着黑板上:m,a,y,d,b几个拼音考考小朋友, <br>
+小朋友们用最标准的发音说:&quot;摸-阿-姨-的-波&quot;！！ <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width"><font color="#ff0000">佐罗之死 </font><br>
+&nbsp; 一日，佐罗到情妇家与情妇幽会。情妇问佐罗：&quot;要是我丈夫回来了，怎么办？ <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width">&nbsp; &quot;佐罗说：&quot;没事儿，你丈夫要是回来了，我就从窗户跳下去，我的马会在下面接我的。&quot; <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width">&nbsp; 情妇说：要是听到三声敲门，就是我丈夫回来了。 <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width">&nbsp; 佐罗说：我知道了。 <br>
+&nbsp; 过了一会儿，天下雨了。突然传来&quot;咚、咚、咚&quot;三声敲门声。说时迟，那 <br>
+</font></p>
+<p><font face="Courier, Monospaced" class="fixed_width">&nbsp; 时快，佐罗从床上飞身跃下，一转眼，已经从窗户跳出。情妇见佐罗已走，便去开门。 <br>
+</font></p>
+<font face="Courier, Monospaced" class="fixed_width">&nbsp; 只见门前站着一匹马，对她说：&quot;你告诉佐罗一声，外面下雨了，我在楼道里等他。&quot;</font></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-25T00:00:00+08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/01/24/3/">笑话</a></h1>
+	<div class="entry-content">
+		<div>每当我考试，砍下八九十分，在考场上随心所欲地发挥，拿下两届得分王。你还真以为那是我一个人干的？不过说真的！考试是一帮人的。。。。。 期中考试考场。。。不对，是期末考试，离交卷时间还剩下20秒，麦迪打算作弊。系主任就站在他的旁边，瞎扯，是校长~随便吧，反正他把纸条传出去了。。。。还剩10秒，麦迪拿到了答案！最后3秒，他还需要一道填空题！答案传过来了，整个考场都试图阻止他！但他抄了起来~是左手！天啊！连老师都感动得哭了。但那张纸上写着：我也不会。。。是的，当时就是这样。</div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-24T00:00:00+08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/01/24/2/">游泳池里面的Google</a></h1>
+	<div class="entry-content">
+		<div><div forimg="1" align="center"><img src="/rc/legacy/f661ba12971003cfc2fd783b.jpg" width="800"></div>
+<br>
+<div class="post-body">
+<p>　　Googleplex，是Google公司总部的名字，位于美国加州圣克拉拉县的山景城，离旧金山很近。</p>
+<p align="center"> </p>
+<div forimg="1" align="center"><img src="/rc/legacy/ab3d520f3d15172b6159f304.jpg" width="800"></div>
+<br>
+<p> </p>
+<p>　　“Googleplex”来源于英文单词“googolplex”（古戈尔普勒克斯），而“Google”转变于单词“googol”（古戈尔）。</p>
+<p>　　Googleplex里面有一个带有Google图标的游泳池，看起来好像是Google的logo绘制在游泳池的底部。</p>
+<p>　　通过Google Earth的测量工具，这个“游泳池”只有1米宽，3米长，实际上叫大浴缸更合适，大概Google的人喜欢露天泡浴缸吧。</p>
+<p>　　照片来源：<a href="http://www.flickr.com/photos/shawiz/299824751/">http://www.flickr.com/photos/shawiz/299824751/</a></p>
+<p>　　点击下载地标文件：<a href="http://www.williamlong.info/google/upload/196_google.kml">游泳池里面的Google</a></p>
+</div></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-24T00:00:00+08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/01/24/1/">终于得到iPhone了!哇哈哈哈哈</a></h1>
+	<div class="entry-content">
+		<div>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  从来没有体验过Apple公司的精妙设计,这次终于有机会了!<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  iPhone! 绝对的经典 !通过朋友我有幸拿到了iPhone的内部版本,虽然说用起来可能没有最终发行的版本那么舒服,不过作为体验版也具备的最基本的功能:&nbsp; 电话,音乐和上网.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  下面就给大家展示一下我的iPhone.<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+<div align="center" forimg="1"><img src="/rc/legacy/af668982231bf591f603a6ea.jpg" width="800"></div></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-24T00:00:00+08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/01/14/1/">相關係數的小故事</a></h1>
+	<div class="entry-content">
+		<div><table height="592">
+    <tbody>
+        <tr height="110" style="height: 82.5pt;">
+            <td width="700" height="85" class="xl24" style="width: 525pt;"><font color="#ff6600">转载</font>
+            <p style="text-indent: 32px;">相關係數的發展大約是在十九世紀末期的時候，當時的人們還不太清楚要如何去描述在一群樣本中，兩個隨機變項之間的關係。但是在十九世紀中期的時候，許多的數 學家，像是Pascal， Bernoulli， De Moivre ，Simpson ，Laplace ，Gauss ，還有Quetelet等人，已經發展出來機率的概念，集中趨勢指標的測量，誤差值呈現常態分配，中央極限定理，以及可能的誤差概念等，促成了 Galton發展出相關係數的概念。</p>
+            </td>
+        </tr>
+        <tr height="220" style="height: 165pt;">
+            <td width="700" height="177" class="xl24" style="width: 525pt;">
+            <p style="text-indent: 32px;"><span>Galton 會開始研究統計上的問題，是源自於他對遺傳學上的興趣。他在達爾文的「物種原始」一書中提到他對於遺傳的看法：「這些新的觀念激勵了我去從事研究我有興趣 的遺傳學和人類種族的進化。」由於之前已經有人發現誤差值呈現一個常態分配的定理在實際的情況中也可以觀察到，所以Galton就在想，這個定理可能可以 用來描述人類在身體和心理特徵上的差異。在1884年的時候，Galton成立了人體測量實驗室，透過了測量數百人身體的特徵後，證實了人的身體特徵的確 符合了誤差值呈常態分配的理論。但是，Galton不僅僅對身體上的特徵有興趣而已，他認為智力也是經由遺傳而來的。因此，他需要一個方法來描述這一個世 代的智力，與前一個世代的智力是&rdquo;相關&rdquo;的。幸運的，Galton知道這種方法在科學上的重要性必需要跟人類的心理特質的研究分開，因為人類的心理特質並 不容易用量化的方式來測量。所以他就藉著研究香豌豆的特徵，和人類身體上的特徵，而發展出了相關和迴歸的概念。</span></p>
+            </td>
+        </tr>
+        <tr height="88" style="height: 66pt;">
+            <td width="700" height="84" class="xl24" style="width: 525pt;">
+            <p style="text-indent: 32px;"><span>Galton 在1888年的論文中定義了相關係數：有兩個隨機變項（X,Y），其中一個變項（X）的變化，或多或少的跟隨著另一個變項（Y）的變化。而且是相同方向的 變化時，這兩個變項(X,Y)被定義為&rdquo;相關的&rdquo;。&hellip;&hellip;而在這兩個變項中必定有部份相同的因素同時影響著它們，如果兩者間沒有相同的因素的話，那這兩個變 項就不可能有相關。</span></p>
+            </td>
+        </tr>
+        <tr height="154" style="height: 115.5pt;">
+            <td width="700" height="117" class="xl24" style="width: 525pt;">
+            <p style="text-indent: 32px;">在Galton 的定義中，顯示了相關係數的特性。相關係數是用來表示線性關係的強度，強度越大，相關係數越靠近1；並且可以藉由一條線性公式互相作預測。另外，相關係數 也具有方向性：如果相關係數為正，表示當其中一個變項增加的時候，另一個變項會跟著增加；而當相關係數為負的時候，其中一個變項的增加會導致另一個變項減 少。但要注意的是，在Galton的定義中，相關係數並沒有代表著因果關係。Galton計算相關係數的方法是請統計學家把資料點畫出來，然後再去畫出與 這些點最適合的直線，最後再去計算這條直線的斜率。Galton並沒有發展出特殊的公式來計算出這條直線，計算相關係數的公式，則是由Karl Pearson所發展出來的。</p>
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-14T00:00:00+08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/01/11/1/">千呼万唤始出来!iPhone终于要出来了</a></h1>
+	<div class="entry-content">
+		<div>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  Apple公司早就打算做一个手机与音乐播放器的结合,可是迟迟不见动静,于是各方猜测,iPhone到底会是什么样子,PS的假象图片也数不胜数.现在终于知道iPhone是个什么模样了哈.<br>
+&nbsp;&nbsp;&nbsp;
+<div align="center" forimg="1"><img src="/rc/legacy/7f6a9e16a1ee2650f3de32e3.jpg" width="800"></div>
+<font color="#ff6600">iPhone combines three products &mdash; a revolutionary mobile phone, a&nbsp;widescreen iPod with touch controls, and a&nbsp;breakthrough Internet communications device with desktop-class email, web browsing, maps, and searching &mdash; into one small and lightweight handheld device.&nbsp;iPhone also introduces an entirely new user interface based on a large multi-touch display and pioneering new software, letting you control everything with just your fingers. So it ushers in an era of software power and sophistication never before seen in a mobile device, completely redefining what you can do on a mobile phone. <br>
+<font color="#000000">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 话不多说,大家自己到<a href="http://www.apple.com/iphone/" target="_blank">Apple的官网</a>去看看把!</font></font></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-11T00:00:00+08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="/blog/page/25/" class="prev">Prev</a>
+    
+    
+        <a href="/blog/page/27/" class="next">Next</a>
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav>
+<center> <a href="http://www.freedomain.co.nr/" title="Free Domain Name"><img src="http://ecozooa.imdrv.net/soof62.gif" alt="Free Domain Name" style="width:88px;height:31px;border:0;" /></a></center>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<!-- 
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+ -->
+
+
+</body>
+</html>

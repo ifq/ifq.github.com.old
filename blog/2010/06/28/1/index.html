@@ -1,0 +1,240 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>平均值滤波之鬼斧神工算法（转） - 一个热爱木工的软件工程师</title>
+	<meta name="author" content="靖天">
+
+	
+	<meta name="description" content="采样值 C、累加器 S，平均值 A，采样次数 N 传统的平均值滤波算法：
+S = C(1) + C(2) + &#8230; + C(N)
+A = S / N
+需要用循环来计算累加和，比较耗时，C(1～N）是缓存，随采样数N增大，所需内存量也增大 向队列平均值算法推进：
+S = C(1) + C &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Geek Woodworker</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:ifq.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		<a class="google" href="https://plus.google.com/115086707443303900229?rel=author" title="Google+">Google+</a>
+		
+		
+		
+		<a class="github" href="https://github.com/ifq" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:ifq.github.com">
+	</form>
+</nav>
+
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">平均值滤波之鬼斧神工算法（转）</h1>
+	<div class="entry-content"><div><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span class="Apple-style-span">
+<div style="text-indent: 2em">采样值 C、累加器 S，平均值 A，采样次数 N</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">传统的平均值滤波算法</font>：</div>
+<div style="text-indent: 2em">S = C(1) + C(2) + &#8230; + C(N)</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">需要用循环来计算累加和，比较耗时，C(1～N）是缓存，随采样数N增大，所需内存量也增大</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">向队列平均值算法推进</font>：</div>
+<div style="text-indent: 2em">S = C(1) + C(2) + &#8230; + C(N) （第一次）</div>
+<div style="text-indent: 2em">C(x) = C(x + 1) （队列前移）</div>
+<div style="text-indent: 2em">C(N) = C</div>
+<div style="text-indent: 2em">S = S - C(1) + C(N)</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">运算量有所改进（用指针维护循环队列，不实际移动数据），占用内存问题不变</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">鬼斧神工算法</font>：</div>
+<div style="text-indent: 2em">初始化：A=初始值，S=A*N</div>
+<div style="text-indent: 2em">S = S - A + C</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">就这么简单，三个变量（N可以是常数），只要 S 的量程足够，N可以任意调整。</div>
+<div style="text-indent: 2em">可以看出，此算法是从队列平均值算法演变而来，因没有了队列，每次计算时不知道该丢弃的最老的一个采样值是多少，这里用了个替代的办法，丢弃上次计算出的平均值。</div>
+<div style="text-indent: 2em">去掉了缓存维护，节省内存空间，同时也将运算量压缩到了最小，执行效率非常高。调试时容易修改采样数。</div>
+</span></span><br class="Apple-interchange-newline"></div></div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-28T00:00:00+08:00" pubdate data-updated="true">Jun 28<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<!--a class="addthis_counter addthis_pill_style"></a-->
+
+<!-- JiaThis Button BEGIN -->
+<div id="ckepop">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_renren"></a>
+	<a class="jiathis_button_kaixin001"></a>
+	<a href="http://www.jiathis.com/share?uid=1663055" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1344059400115285" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+      
+        
+        // var disqus_developer = 1;
+      //var disqus_identifier = '';
+      //var disqus_url = '';
+      var disqus_identifier = 'http://ifq.github.com/blog/2010/06/28/1/';
+      var disqus_url = 'http://ifq.github.com/blog/2010/06/28/1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<!-- 
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+ -->
+
+
+</body>
+</html>

@@ -1,0 +1,1094 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>一个热爱木工的软件工程师</title>
+	<meta name="author" content="靖天">
+
+	
+	<meta name="description" content="函数时间测量之iPhone篇
+关键字：
+iPhone OS (or Mac OS) Time Measure in nano second or micro sec IFQ IF.Q ifqqfi.
+时间测量 测速
+在 iPhone （or MacOS）上以微秒或者纳秒单位来测量程序的执行时间 &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Geek Woodworker</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:ifq.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		<a class="google" href="https://plus.google.com/115086707443303900229?rel=author" title="Google+">Google+</a>
+		
+		
+		
+		<a class="github" href="https://github.com/ifq" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:ifq.github.com">
+	</form>
+</nav>
+
+
+</header>
+	
+		
+	
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/08/20/1/">[IFQ原创]函数时间测量之iPhone篇</a></h1>
+	<div class="entry-content">
+		<div><p>函数时间测量之iPhone篇</p>
+<p>关键字：<br>
+iPhone OS (or Mac OS) Time Measure in nano second or micro sec IFQ IF.Q ifqqfi.<br>
+时间测量 测速</p>
+<p>在 iPhone （or MacOS）上以微秒或者纳秒单位来测量程序的执行时间，<br>
+我想应该是很常用的功能吧。一年前做iPhone程序的时候就出现了这个需求，当时花了一个晚上才找到相应的方法。往往在这些意想不到的小地方耗费很多时间。一年后的今天我google了下相关的关键字，还是没有相关的文章，所以我就举手之劳，帮大家省点时间吧。</p>
+<p>其实很简单，下面的这段程序就可以搞定：</p>
+<p><font color="#38761d" size="2" face="Times New Roman">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;<br>
+#import &lt;mach/mach.h&gt;<br>
+#import &lt;mach/mach_time.h&gt;</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">static uint64_t start;<br>
+static uint64_t end;<br>
+static mach_timebase_info_data_t&nbsp;&nbsp;&nbsp;  sTimebaseInfo;</font></p>
+<p><br>
+<font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountStart {<br>
+<br>
+if ( sTimebaseInfo.denom == 0 ) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  (void) mach_timebase_info(&amp;sTimebaseInfo);<br>
+&nbsp;&nbsp;&nbsp;  }<br>
+<br>
+start = mach_absolute_time();<br>
+}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountEnd {<br>
+<br>
+end = mach_absolute_time();</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQShowCount {<br>
+uint64_t diff;<br>
+uint64_t diffnano;<br>
+<br>
+diff = end - start;<br>
+<br>
+diffnano = diff * sTimebaseInfo.numer / sTimebaseInfo.denom;<br>
+<br>
+NSLog(@&quot;Nano sec : %qu&quot;, diffnano);<br>
+}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;</font></p>
+<p>用尻想也知道了，要测量的代码段前后放上Start，End函数，完事后 Show 一下就可以了。</p>
+<p>关于测量的精度是否真的能达到nano,现在有点不确定了。一年前的东西了，能翻出代码就不错了。。我现在用过的其他平台都是和CPU速度相同频率来计数来计时的，精度都还没到1 nano sec的。不过微秒单位的计时肯定是么有问题了。我想一般情况下微秒已经足够了吧～</p>
+<p>最后给出个参考链接。是MacOS下的官方的说明。（其实我就是把这个搬到iPhone来用而已）<br>
+<a href="http://developer.apple.com/mac/library/qa/qa2004/qa1398.html">http://developer.apple.com/mac/library/qa/qa2004/qa1398.html</a></p>
+<p><br>
+下次讲讲 VxWorks 下的计时方法～</p></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-20T00:00:00+08:00" pubdate data-updated="true">Aug 20<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/08/06/1/">通知</a></h1>
+	<div class="entry-content">
+		<div>本人将于10月17日离开日本回国工作。望各单位做好迎接准备。特此通知。</div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-06T00:00:00+08:00" pubdate data-updated="true">Aug 6<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/08/04/1/">一段关于路径搜索的题目</a></h1>
+	<div class="entry-content">
+		<div><p>帮WK做的题，Memo一下。</p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span"><font size="1">長さnの文字列を、m個のノードで構成されるグラフを探索し、<wbr></wbr>以下のルールで文字列を生成する時、<wbr></wbr>生成される文字列のパターン数を求めてください。<br>
+(1 &lt;= m, n &lt;= 20)<br>
+<br>
+グラフのルール：<br>
+２個以上の複数のノードがある<br>
+各ノードは、a,b,c三つのアクションにより、<wbr></wbr>他のノードに遷移する。<br>
+各ノードのa,b,cのアクションは、<wbr></wbr>自分自身への遷移となる場合もある。<br>
+<br>
+文字列生成のルール：<br>
+スタートノードから始まり、<wbr></wbr>n回アクションをたどりノードを遷移し、<wbr></wbr>n回目にゴールノードにたどり着くようにする。<br>
+その際のアクションの履歴により文字列を生成する（例：<wbr></wbr>abaabcbca）<br>
+1番目のノードがスタートノード、<wbr></wbr>番号の最も大きなノードがゴールノード。<br>
+<br>
+例えば、添付された画像ファイルのようなグラフが与えられ、<wbr></wbr>n=4と指定された場合は、<br>
+a b a c<br>
+a a a c<br>
+a c a c<br>
+a c b c<br>
+上記4つが生成されるので、解は4となります。<br>
+<br>
+グラフ構造は、<wbr></wbr>下記のようなフォーマットの配列で渡すように実装してください。<br>
+{<br>
+1(ノード番号), aのジャンプ先ノード番号, bのジャンプ先ノード番号, cのジャンプ先ノード番号,<br>
+2(ノード番号), aのジャンプ先ノード番号, bのジャンプ先ノード番号, cのジャンプ先ノード番号,<br>
+&#8230;..<br>
+}<br>
+<br>
+例(C言語)：<br>
+#include &lt;stdio.h&gt;<br>
+#include &lt;stdlib.h&gt;<br>
+<br>
+int graph1[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 4,<br>
+3, 3, 3, 3,<br>
+4, 1, 2, 2<br>
+};<br>
+<br>
+int graph2[32] = {<br>
+1, 2, 3, 4,<br>
+2, 1, 5, 6,<br>
+3, 1, 5, 7,<br>
+4, 1, 6, 7,<br>
+5, 2, 3, 8,<br>
+6, 2, 4, 8,<br>
+7, 3, 4, 8,<br>
+8, 5, 6, 7<br>
+};<br>
+<br>
+int graph3[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 2,<br>
+3, 3, 1, 3,<br>
+4, 1, 2, 2<br>
+};<br>
+<br>
+//ここを実装する<br>
+int solve(int graph[], int n, int m){<br>
+return 0;<br>
+}<br>
+<br>
+int main(void){<br>
+printf(&quot;%d\n&quot;, solve(graph1, 4, 4)); //4<br>
+printf(&quot;%d\n&quot;, solve(graph2, 9, 8)); //4920<br>
+printf(&quot;%d\n&quot;, solve(graph3, 19, 4)); //0<br>
+return 0;<br>
+}</font></span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">以下是解答：</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</span></span></p>
+<p> </p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">#include &lt;stdio.h&gt;<br>
+#include &lt;stdlib.h&gt;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">int graph1[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 4,<br>
+3, 3, 3, 3,<br>
+4, 2, 2, 2<br>
+};</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">int graph2[32] = {<br>
+1, 2, 3, 4,<br>
+2, 1, 5, 6,<br>
+3, 1, 5, 7,<br>
+4, 1, 6, 7,<br>
+5, 2, 3, 8,<br>
+6, 2, 4, 8,<br>
+7, 3, 4, 8,<br>
+8, 5, 6, 7<br>
+};</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">int graph3[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 2,<br>
+3, 3, 1, 3,<br>
+4, 1, 2, 2<br>
+};</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">//ここを実装する</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">#define ACTION_NUM 3<br>
+#define ARRAY_COL (ACTION_NUM + 1)</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">static int g_count = 0;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">void search_dst(int graph[], int n, int m, int num)<br>
+{<br>
+int i, row, pos;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span"><br>
+for(row = 0; row &lt; m; row++) {<br>
+&nbsp;&nbsp;  for(i = 1; i &lt;= ACTION_NUM; i++) {<br>
+&nbsp;&nbsp;&nbsp;  pos = row * ARRAY_COL + i;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">&nbsp;&nbsp;&nbsp;  if(graph[pos] == num) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;  if(n &gt; 1) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  search_dst(graph, n - 1, m, row+1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;  } else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  if(row == 0) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  g_count++;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;  }<br>
+&nbsp;&nbsp;&nbsp;  }<br>
+&nbsp;&nbsp;  }<br>
+}<br>
+}</span></span></p>
+<span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">
+<p><br>
+int solve(int graph[], int n, int m) {</p>
+<p>g_count = 0;<br>
+search_dst(graph, n, m, m);</p>
+<p>return g_count;</p>
+<p>}</p>
+<p>int main(void){<br>
+printf(&quot;%d\n&quot;, solve(graph1, 4, 4)); //4<br>
+printf(&quot;%d\n&quot;, solve(graph2, 9, 8)); //4920<br>
+printf(&quot;%d\n&quot;, solve(graph3, 19, 4)); //0<br>
+return 0;<br>
+}</p>
+</span></span></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-04T00:00:00+08:00" pubdate data-updated="true">Aug 4<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/08/01/1/">等稀饭，上照片</a></h1>
+	<div class="entry-content">
+		<div><p> </p>
+<p><span>Haru 的态度突然有所改观。。<img src="/rc/legacy/c37f0ff340ba7b890b46e040.jpg" width="800"><br>
+</span></p>
+<p><span>放松了许多啊。</span></p>
+<p><span><span><img src="/rc/legacy/ca8509d119a0f291562c8449.jpg" width="800"><br>
+</span></span></p>
+<p><span><span><span>（爪子后边是胡须）</span></span></span></p>
+<p><span><span><span><img src="/rc/legacy/5a89194cf272d9bbd62afc55.jpg" width="800"><br>
+</span></span></span></p></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-01T00:00:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/07/14/1/">吃完猫薄荷</a></h1>
+	<div class="entry-content">
+		<div><p>拌在饭里稀里糊涂吃下去，最开始几分钟四肢抽抽，后来就这幅模样软在这了。。</p>
+<p><span><img src="/rc/legacy/3357ccfc31fea2c2b801a0ff.jpg" width="800"></span></p>
+<p><span>眼神也空灵了。。。<br>
+<span><img src="/rc/legacy/219e75c61d06e65b9c163dff.jpg" width="800"><br>
+</span></span></p></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-14T00:00:00+08:00" pubdate data-updated="true">Jul 14<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/07/11/1/">Haru</a></h1>
+	<div class="entry-content">
+		<div><span><img src="/rc/legacy/004430faaf337f21a9d3110d.jpg" width="800"><span><img class="blogimg" border="0" small="0" src="http://hiphotos.baidu.com/ifqq/pic/item/813f261fa07308f7a686690e.jpg"></span><br>
+<span><img src="/rc/legacy/54ace4119754aff9a6ef3f08.jpg" width="800"><br>
+<span><img src="/rc/legacy/265ad7076a403ff27a89470f.jpg" width="800"><br>
+<span><img src="/rc/legacy/09e8aa01d7b1b7391c95830f.jpg" width="800"><br>
+<span><br>
+</span></span></span></span></span></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-11T00:00:00+08:00" pubdate data-updated="true">Jul 11<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/07/04/1/">Motor93 (Jul,4)</a></h1>
+	<div class="entry-content">
+		<div><p><span><font size="2" face="黑体"><img src="/rc/legacy/08704990c20854b2a977a4d8.jpg" width="800"><br>
+话接上回，Motor Control 。我命名其为 Motor93 Pj &#8211; 因为拆的这个老光驱是93年产的。</font></span><span><font size="2" face="黑体">我买了些元件，拆了从公司捡回来的面板的按钮之类，拼接了 H-Bridge 电路。现在光驱的head可以上下移动。</font></span></p>
+<p><span><font size="2" face="黑体">图左边2个8pin的元件是 H-Bridge 电路的重点。（其实也没有其他东西了）其他就是电阻，滤波电容之类。右边光驱接过来的2根的排线，是Motor的电源线。另外一组7根的排线，是Hall Sensor的电源和反馈。（这个下回再说。）</font></span></p>
+<p><span><font size="2" face="黑体">查了下，Motor 好像和 <a target="_blank" href="http://www.mabuchi-motor.co.jp/cgi-bin/catalog/e_catalog.cgi?CAT_ID=rf_300fa">RF-300FA</a> 很像。工作电压范围 1.5 - 6.0V 。现在的电路，Motor通的是 3.3V。电路左下角的三极管一样的黑色元件，是输出3.3V的电源元件。</font></span></p>
+<p><span><font size="2" face="黑体">本想上传一段 Motor 工作的视频，但是想到国内不能看 YouTube，优酷这边又很慢，所以算了。。</font></span><span><font size="2" face="黑体"><span><img src="/rc/legacy/475568607477a07bebf8f891.jpg" width="800"></span></font></span></p>
+<p><span><font size="2" face="黑体"><span>这是一个 H-Bridge 的电路图。（From Openservo）</span></font></span><span><font size="2" face="黑体"><span>可以改变通过改变电流方向控制 Motor 向两个方向旋转。</span></font></span></p>
+<p><span><font size="2" face="黑体"><span><br>
+</span></font></span> </p></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-04T00:00:00+08:00" pubdate data-updated="true">Jul 4<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/06/28/2/">几种经典的滤波算法(转)</a></h1>
+	<div class="entry-content">
+		<div><p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="line-height: 25px; color: rgb(142,104,96); font-size: 14px" class="Apple-style-span"><span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">1、限幅滤波法（又称程序判断滤波法）</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">    A、方法：</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 根据经验判断，确定两次采样允许的最大偏差值（设为A）</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 每次检测到新值时判断：</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果本次值与上次值之差&lt;=A,则本次值有效</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果本次值与上次值之差&gt;A,</span>则本次值无效,放弃本次值,用上次值代替本次值<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 能有效克服因偶然因素引起的脉冲干扰<br>
+    C、缺点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 无法抑制那种周期性的干扰<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 平滑度差<br>
+   <span class="Apple-converted-space"> </span><br>
+2、中位值滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 连续采样N次（N取奇数）<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 把N次采样值按大小排列<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 取中间值为本次有效值<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 能有效克服因偶然因素引起的波动干扰<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对温度、液位的变化缓慢的被测参数有良好的滤波效果<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对流量、速度等快速变化的参数不宜<br>
+<br>
+3、算术平均滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 连续取N个采样值进行算术平均运算<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值较大时：信号平滑度较高，但灵敏度较低<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值较小时：信号平滑度较低，但灵敏度较高<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值的选取：一般流量，N=12；压力：N=4<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于对一般具有随机干扰的信号进行滤波<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 这样信号的特点是有一个平均值，信号在某一数值范围附近上下波动<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于测量速度较慢或要求数据计算速度较快的实时控制不适用<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;<br>
+4、递推平均滤波法（又称滑动平均滤波法）<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 把连续取N个采样值看成一个队列<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 队列的长度固定为N<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 每次采样到一个新数据放入队尾,并扔掉原来队首的一次数据.(先进先出原则)<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 把队列中的N个数据进行算术平均运算,就可获得新的滤波结果<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值的选取：流量，N=12；压力：N=4；液面，N=4~12；温度，N=1~4<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对周期性干扰有良好的抑制作用，平滑度高<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于高频振荡的系统   <span class="Apple-converted-space"> </span><br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 灵敏度低<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对偶然出现的脉冲性干扰的抑制作用较差<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不易消除由于脉冲干扰所引起的采样值偏差<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不适用于脉冲干扰比较严重的场合<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;<br>
+5、中位值平均滤波法（又称防脉冲干扰平均滤波法）<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相当于&ldquo;中位值滤波法&rdquo;+&ldquo;算术平均滤波法&rdquo;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 连续采样N个数据，去掉一个最大值和一个最小值<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 然后计算N-2个数据的算术平均值<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值的选取：3~14<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 融合了两种滤波法的优点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于偶然出现的脉冲性干扰，可消除由于脉冲干扰所引起的采样值偏差<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 测量速度较慢，和算术平均滤波法一样<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+<br>
+<br>
+6、限幅平均滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相当于&ldquo;限幅滤波法&rdquo;+&ldquo;递推平均滤波法&rdquo;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 每次采样到的新数据先进行限幅处理，<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 再送入队列进行递推平均滤波处理<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 融合了两种滤波法的优点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于偶然出现的脉冲性干扰，可消除由于脉冲干扰所引起的采样值偏差<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+<br>
+7、一阶滞后滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 取a=0~1<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 本次滤波结果=（1-a）*本次采样值+a*上次滤波结果<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对周期性干扰具有良好的抑制作用<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于波动频率较高的场合<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相位滞后，灵敏度低<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 滞后程度取决于a值大小<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不能消除滤波频率高于采样频率的1/2的干扰信号<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;<br>
+8、加权递推平均滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 是对递推平均滤波法的改进，即不同时刻的数据加以不同的权<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 通常是，越接近现时刻的数据，权取得越大。<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 给予新采样值的权系数越大，则灵敏度越高，但信号平滑度越低<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于有较大纯滞后时间常数的对象<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 和采样周期较短的系统<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于纯滞后时间常数较小，采样周期较长，变化缓慢的信号<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不能迅速反应系统当前所受干扰的严重程度，滤波效果差<br>
+<br>
+9、消抖滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 设置一个滤波计数器<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 将每次采样值与当前有效值比较：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果采样值＝当前有效值，则计数器清零<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果采样值&lt;&gt;当前有效值，则计数器+1，并判断计数器是否&gt;=上限N(溢出)<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   如果计数器溢出,则将本次值替换当前有效值,并清计数器<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于变化缓慢的被测参数有较好的滤波效果,<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 可避免在临界值附近控制器的反复开/关跳动或显示器上数值抖动<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于快速变化的参数不宜<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果在计数器溢出的那一次采样到的值恰好是干扰值,则会将干扰值当作有效值导入系统<br>
+<br>
+10、限幅消抖滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相当于&ldquo;限幅滤波法&rdquo;+&ldquo;消抖滤波法&rdquo;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 先限幅,后消抖<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 继承了&ldquo;限幅&rdquo;和&ldquo;消抖&rdquo;的优点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 改进了&ldquo;消抖滤波法&rdquo;中的某些缺陷,避免将干扰值导入系统<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于快速变化的参数不宜<br>
+<br>
+<br>
+第11种方法：IIR 数字滤波器<span class="Apple-converted-space"> </span><br>
+<br>
+A. 方法：<br>
+   确定信号带宽， 滤之。<br>
+   Y(n) = a1*Y(n-1) + a2*Y(n-2) + &#8230; + ak*Y(n-k) + b0*X(n) + b1*X(n-1) + b2*X(n-2) + &#8230; + bk*X(n-k)<br>
+<br>
+B. 优点：高通，低通，带通，带阻任意。设计简单(用matlab）<br>
+C. 缺点：运算量大。<br>
+　<span class="Apple-converted-space"> </span><br>
+<br>
+//&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;<span class="Apple-converted-space"> </span><br>
+<br>
+软件滤波的C程序样例<br>
+<br>
+10种软件滤波方法的示例程序<br>
+<br>
+假定从8位AD中读取数据（如果是更高位的AD可定义数据类型为int),子程序为get_ad();<br>
+<br>
+1、限副滤波<br>
+/*&nbsp;&nbsp; A值可根据实际情况调整<br>
+    value为有效值，new_value为当前采样值&nbsp;&nbsp;<br>
+    滤波程序返回有效的实际值&nbsp;&nbsp; */<br>
+#define A 10<br>
+<br>
+char value;<br>
+<br>
+char filter()<br>
+{<br>
+   char&nbsp;&nbsp; new_value;<br>
+   new_value = get_ad();<br>
+   if ( ( new_value - value &gt; A ) || ( value - new_value &gt; A )<br>
+  &nbsp;&nbsp;   return value;<br>
+   return new_value;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   <br>
+}<br>
+<br>
+2、中位值滤波法<br>
+/*&nbsp;&nbsp; N值可根据实际情况调整<br>
+    排序采用冒泡法*/<br>
+#define N&nbsp;&nbsp; 11<br>
+<br>
+char filter()<br>
+{<br>
+   char value_buf[N];<br>
+   char count,i,j,temp;<br>
+   for ( count=0;count<br>
+   {<br>
+  &nbsp;&nbsp;   value_buf[count] = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   for (j=0;j<br>
+   {<br>
+  &nbsp;&nbsp;   for (i=0;i<br>
+  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   if ( value_buf&gt;value_buf[i+1] )<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   temp = value_buf;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   value_buf = value_buf[i+1];<span class="Apple-converted-space"> </span><br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;    value_buf[i+1] = temp;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   }<br>
+  &nbsp;&nbsp;   }<br>
+   }<br>
+   return value_buf[(N-1)/2];<br>
+}  &nbsp;&nbsp;&nbsp;<br>
+<br>
+3、算术平均滤波法<br>
+/*<br>
+*/<br>
+<br>
+#define N 12<br>
+<br>
+char filter()<br>
+{<br>
+   int&nbsp;&nbsp; sum = 0;<br>
+   for ( count=0;count<br>
+   {<br>
+  &nbsp;&nbsp;   sum + = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   return (char)(sum/N);<br>
+}<br>
+<br>
+4、递推平均滤波法（又称滑动平均滤波法）<br>
+/*<br>
+*/<br>
+#define N 12<span class="Apple-converted-space"> </span><br>
+<br>
+char value_buf[N];<br>
+char i=0;<br>
+<br>
+char filter()<br>
+{<br>
+   char count;<br>
+   int&nbsp;&nbsp; sum=0;<br>
+   value_buf[i++] = get_ad();<br>
+   if ( i == N )   i = 0;<br>
+   for ( count=0;count<br>
+  &nbsp;&nbsp;   sum = value_buf[count];<br>
+   return (char)(sum/N);<br>
+}<br>
+<br>
+5、中位值平均滤波法（又称防脉冲干扰平均滤波法）<br>
+/*<br>
+*/<br>
+#define N 12<br>
+<br>
+char filter()<br>
+{<br>
+   char count,i,j;<br>
+   char value_buf[N];<br>
+   int&nbsp;&nbsp; sum=0;<br>
+   for&nbsp;&nbsp; (count=0;count<br>
+   {<br>
+  &nbsp;&nbsp;   value_buf[count] = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   for (j=0;j<br>
+   {<br>
+  &nbsp;&nbsp;   for (i=0;i<br>
+  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   if ( value_buf&gt;value_buf[i+1] )<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   temp = value_buf;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   value_buf = value_buf[i+1];<span class="Apple-converted-space"> </span><br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;    value_buf[i+1] = temp;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   }<br>
+  &nbsp;&nbsp;   }<br>
+   }<br>
+   for(count=1;count<br>
+  &nbsp;&nbsp;   sum += value[count];<br>
+   return (char)(sum/(N-2));<br>
+}<br>
+<br>
+6、限幅平均滤波法<br>
+/*<br>
+*/&nbsp;&nbsp;<br>
+略 参考子程序1、3<br>
+<br>
+7、一阶滞后滤波法<br>
+/* 为加快程序处理速度假定基数为100，a=0~100 */<br>
+<br>
+#define a 50<br>
+<br>
+char value;<br>
+<br>
+char filter()<br>
+{<br>
+   char&nbsp;&nbsp; new_value;<br>
+   new_value = get_ad();<br>
+   return (100-a)*value + a*new_value;<span class="Apple-converted-space"> </span><br>
+}<br>
+<br>
+8、加权递推平均滤波法<br>
+/* coe数组为加权系数表，存在程序存储区。*/<br>
+<br>
+#define N 12<br>
+<br>
+char code coe[N] = {1,2,3,4,5,6,7,8,9,10,11,12};<br>
+char code sum_coe = 1+2+3+4+5+6+7+8+9+10+11+12;<br>
+<br>
+char filter()<br>
+{<br>
+   char count;<br>
+   char value_buf[N];<br>
+   int&nbsp;&nbsp; sum=0;<br>
+   for (count=0,count<br>
+   {<br>
+  &nbsp;&nbsp;   value_buf[count] = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   for (count=0,count<br>
+  &nbsp;&nbsp;   sum += value_buf[count]*coe[count];<br>
+   return (char)(sum/sum_coe);<br>
+}<br>
+<br>
+9、消抖滤波法<br>
+<br>
+#define N 12<br>
+<br>
+char filter()<br>
+{<br>
+   char count=0;<br>
+   char new_value;<br>
+   new_value = get_ad();<br>
+   while (value !=new_value);<br>
+   {<br>
+  &nbsp;&nbsp;   count++;<br>
+  &nbsp;&nbsp;   if (count&gt;=N)   return new_value;<br>
+  &nbsp;&nbsp;    delay();<br>
+  &nbsp;&nbsp;   new_value = get_ad();<br>
+   }<br>
+   return value;   <span class="Apple-converted-space"> </span><br>
+}<br>
+<br>
+10、限幅消抖滤波法<br>
+/*<br>
+*/<br>
+略 参考子程序1、9<br>
+<br>
+11、IIR滤波例子<br>
+<br>
+int&nbsp;&nbsp; BandpassFilter4(int InputAD4)<br>
+{<br>
+    int&nbsp;&nbsp; ReturnValue;<span class="Apple-converted-space"> </span><br>
+    int&nbsp;&nbsp; ii;<br>
+    RESLO=0;<br>
+    RESHI=0;<br>
+    MACS=*PdelIn;<br>
+    OP2=1068; //FilterCoeff4[4];<br>
+    MACS=*(PdelIn+1);<br>
+    OP2=8;    //FilterCoeff4[3];<br>
+    MACS=*(PdelIn+2);<br>
+    OP2=-2001;//FilterCoeff4[2];<br>
+    MACS=*(PdelIn+3);<br>
+    OP2=8;    //FilterCoeff4[1];<br>
+    MACS=InputAD4;<br>
+    OP2=1068; //FilterCoeff4[0];<br>
+    MACS=*PdelOu;<br>
+    OP2=-7190;//FilterCoeff4[8];<br>
+    MACS=*(PdelOu+1);<br>
+    OP2=-1973; //FilterCoeff4[7];<br>
+    MACS=*(PdelOu+2);<br>
+    OP2=-19578;//FilterCoeff4[6];<br>
+    MACS=*(PdelOu+3);<br>
+    OP2=-3047; //FilterCoeff4[5];<br>
+    *p=RESLO;<br>
+    *(p+1)=RESHI;<br>
+    mytestmul&lt;&lt;=2;<br>
+    ReturnValue=*(p+1);<br>
+    for&nbsp;&nbsp; (ii=0;ii&lt;3;ii++)<br>
+    {<br>
+  &nbsp;&nbsp;&nbsp; DelayInput[ii]=DelayInput[ii+1];<br>
+  &nbsp;&nbsp;&nbsp; DelayOutput[ii]=DelayOutput[ii+1];<br>
+  &nbsp;&nbsp;&nbsp; }<span class="Apple-converted-space"> </span><br>
+  &nbsp;&nbsp;&nbsp; DelayInput[3]=InputAD4;<br>
+  &nbsp;&nbsp;&nbsp; DelayOutput[3]=ReturnValue;<br>
+  &nbsp;&nbsp;&nbsp;<br>
+   //&nbsp;&nbsp; if (ReturnValue&lt;0)<br>
+   //&nbsp;&nbsp; {<br>
+   //&nbsp;&nbsp; ReturnValue=-ReturnValue;<br>
+   //&nbsp;&nbsp; }<br>
+    return ReturnValue;&nbsp;&nbsp;<br>
+}</span></span></p></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-28T00:00:00+08:00" pubdate data-updated="true">Jun 28<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/06/28/1/">平均值滤波之鬼斧神工算法（转）</a></h1>
+	<div class="entry-content">
+		<div><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span class="Apple-style-span">
+<div style="text-indent: 2em">采样值 C、累加器 S，平均值 A，采样次数 N</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">传统的平均值滤波算法</font>：</div>
+<div style="text-indent: 2em">S = C(1) + C(2) + &#8230; + C(N)</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">需要用循环来计算累加和，比较耗时，C(1～N）是缓存，随采样数N增大，所需内存量也增大</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">向队列平均值算法推进</font>：</div>
+<div style="text-indent: 2em">S = C(1) + C(2) + &#8230; + C(N) （第一次）</div>
+<div style="text-indent: 2em">C(x) = C(x + 1) （队列前移）</div>
+<div style="text-indent: 2em">C(N) = C</div>
+<div style="text-indent: 2em">S = S - C(1) + C(N)</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">运算量有所改进（用指针维护循环队列，不实际移动数据），占用内存问题不变</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">鬼斧神工算法</font>：</div>
+<div style="text-indent: 2em">初始化：A=初始值，S=A*N</div>
+<div style="text-indent: 2em">S = S - A + C</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">就这么简单，三个变量（N可以是常数），只要 S 的量程足够，N可以任意调整。</div>
+<div style="text-indent: 2em">可以看出，此算法是从队列平均值算法演变而来，因没有了队列，每次计算时不知道该丢弃的最老的一个采样值是多少，这里用了个替代的办法，丢弃上次计算出的平均值。</div>
+<div style="text-indent: 2em">去掉了缓存维护，节省内存空间，同时也将运算量压缩到了最小，执行效率非常高。调试时容易修改采样数。</div>
+</span></span><br class="Apple-interchange-newline"></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-28T00:00:00+08:00" pubdate data-updated="true">Jun 28<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/06/27/1/">Motor Control Pj</a></h1>
+	<div class="entry-content">
+		<div><p><font size="2">最近在学习Servo Control, 所以见了很多废品回来拆。突然有了很多东西可以学，Servo，PID，Hall Sensor，H-Brige Circuit。。。希望有时间把整个过程记录下来，也给这里增加点工程师气息。。。</font></p>
+<p><font size="2">总之，先Show一下最近玩的东西。</font></p>
+<p><font size="2"><span><img src="/rc/legacy/feb3d662fd7980e3e7113a98.jpg" width="800"></span>这是个93年的老光驱，不过马达，齿轮，滑轨，传感器都完好。最左侧的齿轮下面有个+符号，旁边黑色的芯片是霍尔传感器。费了很多时间搞清楚它的细节。</font></p>
+<p><font size="2"><span>Interface 杂志里附带的开发板。SH-2A，Renesas 的处理器。SH72620。这次的所有控制都由这个处理器完成。<br>
+<span><img src="/rc/legacy/f2d881263eb77b298a82a198.jpg" width="800"></span></span></font></p>
+<p><font size="2"><span><span>这是另一个光存储设备。也非常老了，Olympus 的 650M 的名字忘了。设计的很有趣，滑轨不是用马达，而是直接用线圈和磁铁来完成的。还记得么，洛伦磁力，高中知识。。。<br>
+<span><img src="/rc/legacy/e317d316c66fce26972b439f.jpg" width="800"><br>
+</span></span></span></font></p></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-27T00:00:00+08:00" pubdate data-updated="true">Jun 27<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="/" class="prev">Prev</a>
+    
+    
+        <a href="/blog/page/3/" class="next">Next</a>
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav>
+<center> <a href="http://www.freedomain.co.nr/" title="Free Domain Name"><img src="http://ecozooa.imdrv.net/soof62.gif" alt="Free Domain Name" style="width:88px;height:31px;border:0;" /></a></center>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<!-- 
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+ -->
+
+
+</body>
+</html>

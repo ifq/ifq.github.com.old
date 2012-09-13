@@ -1,0 +1,1015 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>一个热爱木工的软件工程师</title>
+	<meta name="author" content="靖天">
+
+	
+	<meta name="description" content="本文全面记述了 Mark A. Smith调试APS驱动,解析出接口,并在linux实现APS驱动的过程.有空试着翻译下.
+The ThinkPad APS Accelerometer Interface In late 2003, IBM announced a feature called &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Geek Woodworker</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:ifq.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		<a class="google" href="https://plus.google.com/115086707443303900229?rel=author" title="Google+">Google+</a>
+		
+		
+		
+		<a class="github" href="https://github.com/ifq" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:ifq.github.com">
+	</form>
+</nav>
+
+
+</header>
+	
+		
+	
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2006/12/03/1/">转载-解析windows下IBM硬盘保护装置APS驱动</a></h1>
+	<div class="entry-content">
+		<div><font face="arial,helv,helvetica" color="#ff9900" size="2"><font face="arial,helv,helvetica">本文全面记述了</font></font><font color="#ff9900" size="2"> </font><font face="arial,helv,helvetica" color="#ff9900" size="2"><font face="arial,helv,helvetica">Mark A. Smith调试APS驱动,解析出接口,并在linux实现APS驱动的过程.有空试着翻译下.</font></font><br>
+<font face="arial,helv,helvetica" color="#000000" size="-1"><font face="arial,helv,helvetica" color="#000000" size="3">The ThinkPad APS Accelerometer Interface</font><br>
+</font>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">In late 2003, IBM announced a feature called the Active Protection System (APS) in some of its line of ThinkPads. This feature is used to &#8220;park&#8221; the hard disk head when sudden motion or acceleration (such as being dropped) is detected. A parked head has much less chance of damaging data than if the head is over sectors containing data when impact occurs. The system proved very valuable and other vendors followed suit. In early 2005, Apple announced their <a href="http://www.kernelthread.com/software/ams/">Sudden Motion Sensor</a> system as an addition to their PowerBook line. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">All of these systems use accelerometers placed on the motherboard to detect motion. A kernel software driver interfaces with the accelerometer and exposes its acceleration readings to interested user-space programs. The Mac OS X system is described in detail by Amit Singh in the previously referenced article. The Windows system on ThinkPads has not been described in detail, and there was no port for Linux. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">I was interested in interfacing with the accelerometer from Linux, mostly for the sake of curiosity, but I also wanted to show Amit that his TT can&#8217;t hold corners as well as my Corolla (and if I could prove it to him using Linux, so much the better). Any such port was certainly to begin with a thorough understanding of the Windows APS. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">Fortunately, I know another crazy Windows kernel hacker, Anurag Sharma. Anu is known for using computer terminology to describe even his inner workings. For example, when the conversation changes topics, he&#8217;ll sometimes announce, &#8220;Just a second, I&#8217;ve got to swap out and page in.&#8221; And, when doing a task without all of the information he would like, he will say &#8220;I&#8217;m performing speculative execution, bear with me.&#8221; We started a kernel debugging session over serial cable using Windbg. We discovered that APS is comprised of two drivers, shockprf.sys and shockmgr.sys. shockprf.sys interfaces with the accelerometer hardware, while shockmgr.sys subscribes to the data from shockprf.sys and must be the component used to initiate parking of the drive head. Since we were primarily interested in the protocol used to get information out of the accelerometer, our debugging focused on shockprf.sys. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">We discovered that shockprf.sys was performing port I/O in the range 0x1600 to 0x162f. We looked at the values that shockmgr.sys was reading out of shockprf.sys and watched for those values to come in through shockprf.sys&#8217; port reads. We discovered a pattern of port writes and reads which repeatedly produced the values that shockmgr.sys was interested in. Armed with the read/write sequence that the accelerometer responded to from Windows, the task was now to produce a Linux driver which did the same thing. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">Since the amount of data that the accelerometer produces is very small, I decided the best way to expose it in Linux was through the /proc filesystem. I wrote a quick kernel module. Behold! Acceleration values! I performed a hard boot to make sure that everything would still work, and unfortunately, it did not. There was a bit of initialization port I/O that we missed. More protocol analysis from the Windows side produced our initialization sequence. After adding that code to the Linux driver, all was well. </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">I could finally prove to Amit that his TT was slow. We strapped the ThinkPad into the passenger seats of both of our cars and drove up our <a href="http://maps.google.com/maps?q=bernal+rd.+95120&amp;ll=37.214856,-121.798253&amp;spn=0.028410,0.038195&amp;t=k&amp;hl=en">&#8220;closed course.&#8221;</a> He destroyed me. Although I refuse to give Amit the pleasure of my posting our comparative graphs, I will post the noteworthy performance of Anu&#8217;s new 350Z.</font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1"><img src="/rc/legacy/anufull.jpg" width="800"> </font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">As far as I could tell, the accelerometer in the ThinkPad has a 5 microsecond refresh rate. This is fast enough for most real-world applications. Although the lateral G values are probably slightly exaggerated due to body roll, it is interesting to note the relative detail in the graph. At time 520, there&#8217;s a stop sign. One can observe Anu&#8217;s acceleration become negative (breaking) approaching the stop sign, and then become sharply positive (forward acceleration). One can also see him shift at times 580 and 620. One can also deduce rough gearbox ratios between 1st, 2nd, and 3rd gears based on his acceleration values in each gear. Whether Anu accelerates through corners is also evident. Further, if one was interested in Anu&#8217;s speed, he would only need to integrate the green curve (assuming a flat course, uphill courses will give slightly higher forward acceleration values than actually achieved, assuming calibration on flat ground). Unfortunately, the ThinkPad accelerometers seem only to expose &#8220;X&#8221; and &#8220;Y&#8221; acceleration values. Unlike the PowerBook, &#8220;Z&#8221; values (or &#8220;up&#8221; and &#8220;down&#8221; acceleration) are not available.</font></p>
+<h2><font face="arial,helv,helvetica" color="#000000" size="-1">Kernel Module</font></h2>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">I am not permitted to release my source code yet, but I am working to make it available. However, I am permitted to describe how it works. Below is a detailed description of how my Linux kernel module communicates with the ThinkPad accelerometer.</font></p>
+<p><font face="arial,helv,helvetica" color="#000000" size="-1">My driver is written as four files: </font></p>
+<ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p style="MARGIN-BOTTOM: 0in">One containing acceleration common functions </p>
+</li>
+    <li>
+<p style="MARGIN-BOTTOM: 0in">One containing proc functionality </p>
+</li>
+    <li>
+<p style="MARGIN-BOTTOM: 0in">One containing thread functions for asynchronous reading </p>
+</li>
+    <li>
+<p>One containing kernel module initialization and entry points </p>
+</li>
+</font></ul>
+    <p><font face="arial,helv,helvetica" color="#000000" size="-1">They rely on a packed accelerometer_data structure which contains: </font></p>
+    <ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned char representing the accelerometer state </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned short representing the X acceleration value </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned short representing the Y acceleration value </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned char representing the temperature of the accelerometer in Celsius. </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned short representing some variation (maybe a weighted average of the previous n readings?) of the X acceleration value </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned short representing some variation (maybe a weighted average of the previous n readings?) of the Y acceleration value </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned char representing the temperature of the accelerometer in Celsius (again?). </p>
+</li>
+        <li>
+<p style="MARGIN-BOTTOM: 0in">an unsigned char of unknown use. </p>
+</li>
+        <li>
+<p>an unsigned char indicating whether the mouse and keyboard are in use. </p>
+</li>
+</font></ul>
+        <p><font face="arial,helv,helvetica" color="#000000" size="-1">Understanding what I mean by a latch is also important for understanding this logic. In this context, a latch is simply an I/O port and a value. To “wait for a latch” is to wait for an inb from that port to produce a specified value by repeatedly performing inb&#8217;s and checking the value. To check a latch is simply to do a single inb from the port and to report whether the value read from that port is the same as a specified value. The accelerometer uses these “latches” for synchronization: reporting data ready, and handshaking.</font></p>
+        <p><font face="arial,helv,helvetica" color="#000000" size="-1">My acceleration common functions file contains functions which perform the following: </font></p>
+        <ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p style="MARGIN-BOTTOM: 0in">A static function which <strong>checks a port latch</strong> for a certain value. <br>
+This function simply takes an unsigned short port value and an unsigned char compare value and returns whether the inb from the specified port (bitwise anded with 0xff) yields the specified value. No waiting is done here. </p>
+</li>
+            <li>
+<p style="MARGIN-BOTTOM: 0in">A static function which <strong>waits for a latch</strong> to have a certain value <br>
+This function also takes an unsigned short port value and an unsigned char compare value. It loops over check_latch 10 times, udelaying 5 microseconds each time, waiting for the check to become true. (A latch seems like it never takes more than 50 microseconds to become set). I return whether the latch value becomes the specified value within the allotted time. </p>
+</li>
+            <li>
+<p style="MARGIN-BOTTOM: 0in">A static function which <strong>checks the refresh state</strong> of the accelerometer data <br>
+This simple issues a latch <strong>check</strong> of port 0x1604 for value 0x50 </p>
+</li>
+            <li>
+<p style="MARGIN-BOTTOM: 0in">A static function which <strong>issues a refresh request</strong> to the accelerometer. <br>
+This function takes a single argument which tells it whether to refresh synchronously or not. This function first issues a refresh state check, if it is already refreshed, it returns success. If not, it does an outb at port 0x1610 of value 0x11, and then an outb at port 0x161f of value 0x1. If the synchronous flag is set, it does a latch wait on port 0x1604 for value 0x50. The function then returns whether the latch wait was successful. </p>
+</li>
+            <li>
+<p style="MARGIN-BOTTOM: 0in">A non-static function which <strong>reads the accelerometer data</strong>. <br>
+This function takes an accelerometer_data structure and returns whether the read was successful. It issues a synchronous accelerometer data refresh request (which is likely to return immediately since the refresh latch is likely already set). If this refresh fails, this function returns the failure. Otherwise, it reads ports 0x1611 through 0x161E, assigning the 13 bytes worth of values to the 13 bytes large accelerometer_data structure. It then tells the accelerometer that it is done reading the data. It then issues an asynchronous refresh request and exits successfully. </p>
+</li>
+            <li>
+<p style="MARGIN-BOTTOM: 0in">A static function which <strong>tells the accelerometer that it is done</strong> reading the data <br>
+This function does two port reads. One art port 0x161f, and the next at port 0x1604, discarding the values it gets. </p>
+</li>
+            <li>
+<p>A non-static function which <strong>initializes the accelerometer.</strong> <br>
+This lengthy function takes a timeout value (in seconds) as the maximum time that it should take to try to initialize itself. I initialize a &#8220;seconds waited so far&#8221; variable to zero. I issue an outb at port 0x1610 of value 0x13, followed by an outb at port 0x161f of value 0x01. I then wait for latch 0x161f for value 0x0, and then wait for latch 0x1611 for value 0x3. Three more outbs at ports 0x1610, 0x1611, and 0x161f of values 0x17, 0x81, and 0x01, respectively follow. Four more waits for latches 0x161f, 0x1611, 0x1612, and 0x1613 for values 0x0, 0x0, 0x60, and 0x0 respectively follow. Then three more outbs at ports 0x1610, 0x1611, and 0x161f of values 0x14, 0x01, and 0x01 respectively follow. Then I wait for latch 0x161f for value 0x0. Then five outbs at ports 0x1610, 0x1611, 0x1612, 0x1613, and 0x161f of values 0x10, 0xc8, 0x00, 0x02, and 0x01 respectively follow. I then wait for latch 0x161f for value 0x0 again. I then issues a synchronous refresh of the accelerometer data, and wait for latch 0x1611 to become 0x0. The next part is a little bit tricky because it can take a long time for the accelerometer to complete. I loop forever until latch 0x1611 becomes 0x02. Inside this loop, I check the timeout value against the &#8220;time waited so far&#8221; variable. If the function has taken too long, we return failure. Otherwise, I call the function which reads the accelerometer data and I throw away the (probably garbage) data (this read somehow seems to kick the accelerometer into being initialized). I set_current_state to TASK_INTERRUPTIBLE, and schedule_timeout for HZ. I then increment our &#8220;seconds waited so far&#8221; variable and continue the loop. If the loop ever exits successfully, the function returns success. A good value to pass for the initialize timeout value is 10 seconds. </p>
+</li>
+</font></ul>
+            <p><font face="arial,helv,helvetica" color="#000000" size="-1">My acceleration proc functions file only implements open, release, and read. </font></p>
+            <ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p style="MARGIN-BOTTOM: 0in">open simply starts the read thread (if it is not already started) in the acceleration thread functions file. </p>
+</li>
+                <li>
+<p style="MARGIN-BOTTOM: 0in">release stops the aforementioned read thread. </p>
+</li>
+                <li>
+<p>read simply spits out the last acceleration_data structure that was read by the read thread. (Of course, this structure is protected by a semaphore). </p>
+</li>
+</font></ul>
+                <p><font face="arial,helv,helvetica" color="#000000" size="-1">My acceleration thread functions file implements a function which is constantly reading. </font></p>
+                <ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p>The read thread first daemonizes, then loops over a volatile variable which is set the the proc release function which tells this thread to stop. It then issues a read of the accelerometer data (of course, protected by a semaphore). It then set_current_state&#8217;s to TASK_INTERRUPTABLE, and schedule_timeout&#8217;s to a value passed in as a module parameter (I made the refresh rate settable at insmod time), or an appropriate default value. </p>
+</li>
+</font></ul>
+                    <p><font face="arial,helv,helvetica" color="#000000" size="-1">My acceleration kernel module initialization and entry points file contains the regular kernel module init stuff. </font></p>
+                    <ul><font face="arial,helv,helvetica" color="#000000" size="-1">
+<li>
+<p style="MARGIN-BOTTOM: 0in">The init function requests region for the specified port range, inits the accelerometer, does an initial read, initializes semaphores, create_proc_entry&#8217;s, and sets the entry&#8217;s proc_fops to a file_operations structure with .open, .read and .release initialized. </p>
+</li>
+                        <li>
+<p>The exit function remove_proc_entry&#8217;s, makes sure the read thread is stopped, and releases region. </p>
+</li>
+</font></ul></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2006-12-03T00:00:00+08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2006</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2006/11/30/2/">转载-在linux下实现基于加速度传感器的&amp;#34;敲打&amp;#34;命令</a></h1>
+	<div class="entry-content">
+		<div><table height="93" cellspacing="0" cellpadding="0" width="642" border="0">
+<tbody>
+    <tr valign="top">
+    <td width="100%">
+<h1 align="left"><font color="#808000" size="4">Linux 笔记本基于 “敲打” 的命令</font></h1>
+    <p><em>在一台启用了 HDAPS 内核、具有加速器和对应的 Perl 脚本的笔记本上进行有意义的敲打</em></p>
+<em><img src="/rc/legacy/c.gif" width="800"></em></td>
+</tr>
+</tbody>
+</table>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr valign="top">
+    <td width="10"><img src="/rc/legacy/c.gif" width="800"></td>
+    <td width="100%">
+<p><a href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#author">Nathan Harrington</a> (<a href="mailto:harrington.nathan@gmail.com?subject=Linux%20%E7%AC%94%E8%AE%B0%E6%9C%AC%E5%9F%BA%E4%BA%8E%20%E2%80%9C%E6%95%B2%E6%89%93%E2%80%9D%20%E7%9A%84%E5%91%BD%E4%BB%A4">harrington.nathan@gmail.com</a>), 程序员, IBM<br>
+</p>
+    <p>2006 年 9 月 14 日</p>
+<blockquote>有 史以来第一次，您可以敲打一下计算机并得到有意义的响应！使用 Linux&reg; 和 Hard Drive Active Protection System（硬盘活动保护系统，HDAPS）内核驱动程序，我们可以访问 Lenovo（以前称为 IBM&reg;）ThinkPads 上的嵌入式加速器，然后处理加速器的数据来读取特定 “敲打” 事件序列（也就是您使用关节敲打笔记本的事件序列），并基于这些敲打事件运行一些命令。双击锁定屏幕，然后敲入密码来解锁。敲打显示屏一次就可以让 MP3 播放器前进一个音轨。这类可能事物是无穷无尽的。</blockquote>
+<p>2003 年，IBM 开始发行集成了加速器和相关软件的 ThinkPad 笔记本，以便在笔记本掉到地上时对硬盘进行保护。来自 IBM 和其他地方的黑客已经为 Linux 内核开发了一些模块来利用这些传感器的优点。屏幕显示方向、桌面切换、甚至是游戏控制和实时的笔记本倾斜度 3D 模块现在都已经可以使用了。本文将展示 “敲打代码” 这种新技术和一个简单程序，该程序在检测到特定的敲打代码时会运行一些命令。</p>
+    <p>使用带有 HDAPS 驱动的已更新的内核，我们就可以用一个简单程序 knockAge 来生成敲打代码了。我们也可以下载并使用一个 Perl 脚本来定制自己的敲打输入环境。请参阅本文最后的 <a href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#download">下载</a> 和 <a href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#resources">参考资料</a> 部分给出的链接，其中包括了解 knockAge 操作的链接。</p>
+    <p><a name="N10072"><span class="atitle">硬件需求</span></a></p>
+    <table cellspacing="0" cellpadding="0" width="40%" align="right" border="0">
+    <tbody>
+        <tr>
+            <td width="10"><img src="/rc/legacy/c.gif" width="800"></td>
+            <td>
+<table cellspacing="0" cellpadding="5" width="100%" border="1">
+            <tbody>
+                <tr>
+                    <td bgcolor="#eeeeee"><a name="N1007A"><strong>容易实现</strong></a><strong><br>
+正如您从展示视频（请参见下面 <a href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#resources">参考资料</a> 中的链接）可以看到的，敲打操作是由一系列指节敲打构成的。尽管 ThinkPad 的加速器是为保护它不受意外事件的影响，但太强力的振荡仍然会对硬盘造成损坏。因此我们必须小心。 </strong></td>
+                </tr>
+            </tbody>
+        </table>
+</td>
+    </tr>
+</tbody>
+</table>
+<p>很多在 2003 年以及这以后生产的 IBM（现在是 Lenovo）的 ThinkPads 中都有 HDAPS 硬件。如果您不确定自己的硬件配置，可以检查 Lenovo 的 Web 站点上关于您自己型号的机器的技术细节。如果您的机器上没有 ThinkPad，那么这段代码可能无法在您的笔记本上正常工作。</p>
+<p>本文是在 x86 体系架构上编写的。本文中的代码是在 ThinkPad T42p 的两个不同模块上进行开发和测试的。有关 ThinkPad 硬件的链接，请参阅 <a href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#resources">参考资料</a> 部分。</p>
+<p>如果您有一台 Apple MacBook，那么您可能也有这种加速器，并且可以使用相同的方法，通过内核访问它们。然而，本文中的代码并没有在 Apple 硬件上进行测试。</p>
+<br>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td><img src="/rc/legacy/blue_rule.gif" width="800"><br>
+<img src="/rc/legacy/c.gif" width="800"></td>
+    </tr>
+</tbody>
+</table>
+<table class="no-print" cellspacing="0" cellpadding="0" align="right">
+<tbody>
+    <tr align="right">
+    <td><img src="/rc/legacy/c.gif" width="800"><br>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td valign="middle"><img src="/rc/legacy/u_bold.gif" width="800"><br>
+</td>
+            <td valign="top" align="right"><a class="fbox" href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#main"><strong>回页首</strong></a></td>
+        </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<br>
+<p><a name="N10091"><span class="atitle">软件要求</span></a></p>
+<p>HDAPS 驱动程序必须包括在内核中才能启用对加速器的访问。试图对现有内核增加补丁也不会获得成功，因此我们建议从自己喜欢的镜像站点上下载最新的内核。新内核发行版中已经包含了对 HDAPS 驱动程序的支持。</p>
+<p>启动内核配置选择程序，并在配置中包含 HDAPS 驱动程序。HDAPS 驱动程序位于 <strong>Device Drivers &gt; Hardware Monitoring Support &gt; IBM Hard Drive Active Protection System (hdaps) 选项中。更多的内核配置和安装过程已经超出了本文的范围，但是在 Web 站点上有很多教程可以提供具体的帮助；有关可以帮助我们入门的链接，请参阅 <a href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#resources">参考资料</a> 一节的内容。</strong></p>
+<strong></strong>
+<p><strong>本文是在 2.6.15.1 版本的内核上进行开发和测试的。</strong></p>
+<strong><br>
+</strong>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td><img src="/rc/legacy/blue_rule.gif" width="800"><br>
+<img src="/rc/legacy/c.gif" width="800"></td>
+    </tr>
+</tbody>
+</table>
+<strong></strong>
+<table class="no-print" cellspacing="0" cellpadding="0" align="right">
+<tbody>
+    <tr align="right">
+    <td><img src="/rc/legacy/c.gif" width="800"><br>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td valign="middle"><img src="/rc/legacy/u_bold.gif" width="800"><br>
+</td>
+            <td valign="top" align="right"><a class="fbox" href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#main"><strong>回页首</strong></a></td>
+        </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<strong><br>
+<br>
+</strong>
+<p><strong><a name="N100A7"><span class="atitle">创建简单的敲打序列</span></a></strong></p>
+<strong></strong>
+<p><strong>从 <a href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#downloads">下载</a> 一节的链接中下载源代码，并从中找到 knockAge.pl 脚本。这就是让我们可以创建敲打序列的主要 Perl 程序，它还允许监听特殊的敲打序列并运行命令。下面让我们来介绍一下这个用户空间程序的用法，以及 knockAge.pl 程序的配置，然后再对这个函数进行回顾。</strong></p>
+<strong></strong>
+<p><strong>使用下面的命令运行 knockAge.pl 程序：</strong></p>
+<strong></strong>
+<p><code><strong>perl knockAge.pl -c</strong></code></p>
+<strong></strong>
+<p><strong>这会启动 Perl 程序来监听敲打事件并记录下它们之间的间距以供将来使用。一旦程序开始运行之后，对笔记本进行的敲打操作就会产生效果。我们并不需要在物理上移动自己的 ThinkPad 来注册敲打事件，如果 ThinkPad 在一个平面上，只要对其进行一些移动和滑行即可。我建议您用左右握住 ThinkPad 左边接近连接轴的地方，同时用右手在距离 LCD 底部 3 英寸的地方敲打显示屏即可。请参阅 <a href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#downloads">下载</a> 部分给出的视频展示，或参阅 <a href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#resources">参考资料</a> 中用来创建敲打序列的例子。</strong></p>
+<strong></strong>
+<p><strong>体验不同的敲打幅度和力度，从而了解 knockAge 程序能够捕获的事件判断率。对于创建复杂的敲打事件来说，这非常重要。</strong></p>
+<strong></strong>
+<p><strong>第一次真正尝试敲打应该非常简单，两次双击之间停留 0.5 秒，然后再次运行 <code>perl knockAge.pl -c</code>，在看到 “enter a knock sequence” 时稳定地敲打 LCD 边上两次，中间停留 0.5 秒。在 4 秒之后会自动超时（这是可以配置的），您所敲打的序列会被打印出来，这类似于下面的例子：</strong></p>
+<strong></strong>
+<p><code><strong>0 540031 _#_ (command here) _#_ &lt;comments here&gt;</strong></code></p>
+<strong></strong>
+<p><strong>让我们来分析一下这一行的内容：敲打序列，分隔符，命令区，分隔符，最后是注释区。我们的下一个步骤是将这行内容复制到 knockAge.pl 程序使用的默认配置文件 {$HOME}/.knockFile 中，该配置文件也可能是 /home/&lt;username&gt;/.knockFile 文件。在使用上面的敲打序列行创建好 .knockFile 文件之后，就可以对这行进行修改来运行程序了。将 <code>(command here)</code> 文本修改成 /bin/echo &#8220;double tap&#8221;，并将注释区的内容修改成更有意义的内容，例如：</strong></p>
+<strong></strong>
+<p><code><strong>0 540031 _#_ /bin/echo "double tap" _#_ Double tap event</strong></code></p>
+<strong></strong>
+<p><strong>现在我们已经修改好这个配置文件，可以打印一条通知了，接下来使用下面的命令在守护模式下运行 knockAge 脚本：</strong></p>
+<strong></strong>
+<p><code><strong>perl knockAge.pl</strong></code></p>
+<strong></strong>
+<p><strong>这个程序会在后台安静地监听 ~/.knockFile 所罗列的事件。请使用相同的间隔再次双击屏幕，您会看到在屏幕上打印出了 “double tap” 消息。如果我们希望更详细地了解 knockAge.pl 脚本是如何工作的，那么我们可以使用下面的命令在守护模式下运行它：</strong></p>
+<strong></strong>
+<p><code><strong>perl knockAge.pl -v</strong></code></p>
+<strong><br>
+</strong>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td><img src="/rc/legacy/blue_rule.gif" width="800"><br>
+<img src="/rc/legacy/c.gif" width="800"></td>
+    </tr>
+</tbody>
+</table>
+<strong></strong>
+<table class="no-print" cellspacing="0" cellpadding="0" align="right">
+<tbody>
+    <tr align="right">
+    <td><img src="/rc/legacy/c.gif" width="800"><br>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td valign="middle"><img src="/rc/legacy/u_bold.gif" width="800"><br>
+</td>
+            <td valign="top" align="right"><a class="fbox" href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#main"><strong>回页首</strong></a></td>
+        </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<strong><br>
+<br>
+</strong>
+<p><strong><a name="N100F3"><span class="atitle">使用 xscreensaver 锁定屏幕或打开屏幕</span></a></strong></p>
+<strong></strong>
+<p><strong><a name="N100F9"><span class="smalltitle">创建 “password” 序列</span></a></strong></p>
+<strong></strong>
+<p><strong>使用下面的命令在 “create” 模式下运行 knockAge.pl 程序：</strong></p>
+<strong></strong>
+<p><code><strong>perl knockAge.pl -c</strong></code></p>
+<strong></strong>
+<p><strong>现在我们需要创建一个解锁的密码序列；我建议使用 “刮脸和理发的动作”。请确保每次您都可以以一贯精确的方式执行这个动作。尽管您可以通过修改参数来控制输入密码敲打操作所需要的精度，但是这仍然很难匹 配精确的时间。“刮脸和理发动作” 除了可以提供稳定的击打顺序之外，其复杂性和简单性对于屏保解锁密码来说也非常适合。下面是一个 “刮脸和理发动作” 的击打序列示例：</strong></p>
+<strong></strong>
+<p><code><strong>0 564025 1185795 621350 516038 960035 444421 _#_ /bin/echo "shave the haircut" _#_ two bits</strong></code></p>
+<strong></strong>
+<p><strong>在进行下一步操作之前，您应该体验一下上面的命令和 ~/.knockFile 配置文件中的双击命令。这可以在屏保运行时提供很好的帮助，它更难检测出敲打是否正确。</strong></p>
+<strong></strong>
+<p><strong><a name="N10112"><span class="smalltitle">xscreensaver 所使用的命令配置</span></a></strong></p>
+<strong></strong>
+<p><strong>以下设置假设您已经登录到了窗口管理器中，并且已经使用您的 userid 启动了xscreensaver 程序。例如，如果您正在运行 Fedora Core 4，并且使用 gdm 登录到 KDE 中，那么 xscreensaver 就会自动启动。因此，要激活它，则需要将双击命令从：</strong></p>
+<strong></strong>
+<p><code><strong>/bin/echo "double tap"</strong></code></p>
+<strong></strong>
+<p><strong>修改为：</strong></p>
+<strong></strong>
+<p><code><strong>xscreensaver-command -activate &amp;</strong></code></p>
+<strong></strong>
+<p><strong>现在，每次识别出有 “双击” 事件发生时，xscreensaver 程序都会使用所指定的内容来激活。一旦 screensaver 被激活，就可以通过输入密码（如果是这样配置的）对屏幕进行解锁。不过我们真正希望的是自己的朋友也可以使用密码解锁代码来解除屏保。因此，我们需要在 ~/.knockFile 文件中将下面的命令：</strong></p>
+<strong></strong>
+<p><code><strong>/bin/echo "shave the haircut"</strong></code></p>
+<strong></strong>
+<p><strong>替换为：</strong></p>
+<strong></strong>
+<p><code><strong>killall xscreensaver ; nohup xscreensaver -nosplash &gt;/dev/null 2&gt;/dev/null &amp;</strong></code></p>
+<strong></strong>
+<p><strong>这个命令会停止当前运行的所有 xscreensaver 程序，然后在后台再重新启动 xscreensaver。现在我们可以通过敲打屏幕边来重复加锁和解锁计算机屏保的过程。这比蓝牙提供的近似度加锁更加安全或更方便吗？答案可能是否定的。它更酷吗？当然！</strong></p>
+<strong><br>
+</strong>
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tbody>
+    <tr>
+        <td><img src="/rc/legacy/blue_rule.gif" width="800"><br>
+<img src="/rc/legacy/c.gif" width="800"></td>
+    </tr>
+</tbody>
+</table>
+<strong></strong>
+<table class="no-print" cellspacing="0" cellpadding="0" align="right">
+<tbody>
+    <tr align="right">
+    <td><img src="/rc/legacy/c.gif" width="800"><br>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tbody>
+        <tr>
+            <td valign="middle"><img src="/rc/legacy/u_bold.gif" width="800"><br>
+</td>
+            <td valign="top" align="right"><a class="fbox" href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#main"><strong>回页首</strong></a></td>
+        </tr>
+    </tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<strong><br>
+<br>
+</strong>
+<p><strong><a name="N1013B"><span class="atitle">更多例子</span></a></strong></p>
+<strong></strong>
+<p><strong>HDAPS 传感器和 knockAge.pl 程序提供了另外一种用户输入设备，我们可以使用它们以独特的方式进行输入。例如：</strong></p>
+<strong></strong>
+<ul><strong></strong>
+<li><strong>如果计划在一个基础上测试新的 X 配置文件，可以将双击条目更改为重新启动配置好的 X 服务器。这样就不需要敲任何其他键来强制重启了。</strong> <strong></strong></li>
+<li><strong>在命令区中可以放上我们喜欢使用的任何 shell 脚本，这样就可以使用双击来查看 e-mail。</strong> <strong></strong></li>
+<li><strong>以最新的组合节拍进行敲打，让 ThinkLight 显示 WWII 代在 Kinakuta 的黄金存储设备的 Morse 密码位置。</strong> <strong></strong></li>
+<li><strong>敲入 Morse 编码，防止键盘输入被记录。</strong> <strong></strong></li>
+</ul>
+<strong></strong>
+<p><strong>请参阅 <a href="http://www-128.ibm.com/developerworks/cn/linux/l-knockage.html#resources">参考资料</a> 部分给出的有关将 ThinkPad 的倾斜度用于游戏、显示工具的例子。或者直接跳过这部分内容，将 Threshold 变量设置为 15，这样您使劲踢一脚 ThinkPad，它就会自动重启了。 </strong></p>
+<strong></strong></td>
+</tr>
+</tbody>
+</table></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2006-11-30T00:00:00+08:00" pubdate data-updated="true">Nov 30<span>th</span>, 2006</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2006/11/30/1/">对IBM笔记本加速度传感器的一点理解和想法</a></h1>
+	<div class="entry-content">
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 一直以来,IBM笔记本都是走在技术的最前沿.回顾历史,许多先在笔记本常用的技术都是IBM率先引入笔记本上的.这也解释了为什么这么一个黑盒子能吸引那么多人,包括我.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 对于计算机来说,最容易损坏且能造成损失最大的就是硬盘了.因为硬盘不同于计算机的其他器件,它机械成分较高.尤其在笔记本这种苛刻的环境下损坏的可能更高.于是各个笔记本厂家都积极的研究硬盘的保护技术.先在比较流行的也比较有效的基于加速度传感器的保护装置也是由IBM率先引入笔记本的.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 这种装置的基本原理是利用加速度传感器感知碰撞,跌落等造成的加速度突然变化,迅速的将磁头返回parking区域,避免磁头对盘面产生损伤.加速度传感器的响应速度一般都在微秒级,能够有效的做出响应.(其最早的应用就是在汽车的安全气囊上)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 查阅了下资料,IBM的硬盘保护装置APS(Active protection System)使用的加速度传感器好像是Analog Devices公司的<span class="productNumberHeading"><a target="_blank" href="http://www.analog.com/en/prod/0,2877,ADXL320,00.html">ADXL320</a>类似的传感器.AD公司的这个电子元件是有部分发放样片的,我之前也申请过一个数字温度传感器,使用DHL给我有机过来,大家有兴趣也可以去找找,如果运气好可以申请到一些很酷的电子元件(我上次申请的还有电子的陀螺仪,不过没有成功).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在windows下的IBM APS技术十分稳定,但是技术也相对封闭,官方没有提供扩展的开发功能. 
+<div forimg="1" align="center">
+<div forimg="1" align="right"><img src="/rc/legacy/61d30ff48c08c0ee7709d77c.jpg" width="800"><br>
+<div align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 但是在Linux下情况则好的多.几位爱好者通过调试windows下的APS驱动得到了相关的硬件接口格式,并在linux下实现的加速度传感器的控制以及监控功能.但是这个驱动仅仅实现了加速度传感器的数据读取,没有做硬盘保护.所以还要配合一些Linux的程序和补丁来实现Disk head parking.不过,由于Linux下极高的开放度,让我们可以做其他更多的事情.如果大家有兴趣的话可以到<a target="_blank" href="http://hdaps.sourceforge.net/index.php?page=1">HDAPS</a>的官网以及<a target="_blank" href="http://www.thinkwiki.org/wiki/HDAPS">WiKi</a>去看看.现在基于APS有很多很酷的应用,比如作为Input device,做一些游戏,做安全防盗应用等(做游戏是不是太废硬盘了?本来是拿来保护硬盘的,结果拿来玩游戏猛摇<img src="/rc/legacy/i_f12.gif" width="800">).其中的防盗应用倒是很吸引我,对我来说有很大的价值.在笔记本锁定的情况下发生大的振动就以声音等形式报警,在一些场合下还是很适用的吧.这里还有一段<a target="_blank" href="http://www.youtube.com/watch?v=0QSX4Bq3Pdw&amp;mode=related&amp;search=">视频</a>可以作为参考,是基于敲打的linux命令输入.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 目前我还没有做过相关的开发,因为我先在一般都是在windows下用虚拟机跑Linux,没有机会体验HDAPS驱动.不过我想这种技术在windows下应该更有利用的价值.我是个Linux的爱好者,但不是一个崇拜者.我认为技术很重要,但技术是为应用服务的.如果做出来的技术没有更多的人能够体验到,那也不能算是成功的技术.linux下固然有很好的技术交流分为,但是试问有多少人的IBM本本整天跑在Linux之下呢.所以我希望能够把这种技术从Linux再挪回到windows上,为更多人所用.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 粗略的查了下网上的资料比较少,基于windows的就更少了.不知道大家有没有对这方面的了解,说不定谁已经在windows下实现了这些.希望大家多多交流,今后我也将持续关注这个技术.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 吃饭去了.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+</div>
+</div>
+</div>
+</span><span class="productNumberHeading"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2006-11-30T00:00:00+08:00" pubdate data-updated="true">Nov 30<span>th</span>, 2006</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2006/11/29/3/">我的baidu处女作日志,总结下最近应聘的情况吧</a></h1>
+	<div class="entry-content">
+		<div><div align="left" >&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 中国人见面打招呼喜欢说:&quot;吃了没?&quot;,中国大四学生见面则喜欢说:&quot;签了没?&quot;.<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 这是我最近的切身体会.不禁让我想到以前一件好笑的事情:一天我走在去实验室的路上,老远碰到一位同学迎面走来.我们互相发现了对方,都say hi示意.但是我俩不是很熟,突然想不到该说什么好,于是四目相对,两人逐渐逼近,场面极为尴尬.终于中国几千年优秀的传统文化对我的熏陶让我鳖出了一句:&quot;吃了么?&quot;.他回了句:&quot;还没&quot;.我明显可以从他的表情看出他也有如负重释感觉&#8230;<img src="/rc/legacy/i_f12.gif" width="800">等我回过神来才意识到自己怎么也会落入这种俗套,不过还是总比面面相觑要好的多.于是&quot;吃了没&quot;也成了我在危机情况下的候补招呼语.<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  不过最近情况不一样了,大家都在找工作了.不管是熟人还是普通同学见面都可以聊很长时间.前段时间我也参加了大大小小7,8个招聘会.整天跑来跑去也来的整理,这两天终于停下来等了,可以把自己的一些体验写下来和大家分享了.(以前尽看别人写这种东东,今年峰回路转终于轮上我了<img src="/rc/legacy/i_f02.gif" width="800">)<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  首先有点可惜的是11月之前我一直在做项目,没有关注过应聘的事情,这让我错过了很多大公司的简历投递,比如华为,联想.这让我郁闷了好几天.天天念叨没有人要了怎么办啊&#8230;<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  11月一开始就狂跑招聘会.几乎天天早上<font color="#ff0000" >7点</font >起床!!!(对我来说比较难)通过一周的应聘让我了解到了目前社会上的需求,也让我安定了不少.先在回想起来,目前重点考虑的几个公司都是我第一,二天参加应聘所投的公司&#8230;首先还是来历数一下我应聘的这几个公司:<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  第一天去面试是一个上海的派遣公司,可能大家都怎么听说过,叫智锐电子什么什么东东.这个公司是要把招的嵌入式工程师送到日本去工作的.本来当时对于日本公司的排斥心理还是很大的,去这个招聘会也只是想了解下应聘的流程.但是先在却是我最主要的考虑对象,应聘这段时间心理变化确实挺大的.本来我一心想要留在成都的,觉得生活安逸之类的.但是发现电子行业在成都还是太少了,不得不扩大了目标.<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 言归正传,这个日本公司的招聘流程比较特别:先笔试,再面试,再发给你一些学习资料,过一个月再笔试,再面试.通过之后签约,签约之后公司培训日语,帮你办签证,到毕业直接去日本.月薪RMB15k左右,这个对于本科生来说还是想到具有诱惑力的.(我几乎是在宣讲会上就对这个公司态度大转变&#8230;有点世俗哈&#8230;不过这么轻易就能有出国锻炼的机会,真是可遇而不可求啊)当时第一轮笔试是英文的嵌入式方面的基础类试题,我做的一般般.然后第二天早上面试,面试官是一个日本人.英文对话了10分钟,大概就是些自我介绍,职业规划之类的.之后也主要HR类型的面试,没有技术面.再后来就是回来学习公司发的资料,等待12月初的第二轮面试了.其间公司给我打过两个电话问我有没有offer,还会不会参加他们的面试之类,我都如实回答了.<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  第二天面试了SiS矽统公司,也是个很难得的机会,不过最后还是没有招我,失落了好几天.跑去电子科大发现SiS在招聘,3个SiS的PLMM坐在那边做接待工作.提前就知道SiS要招聘,但是没想到这么快就来了.高中就知道这个公司,对它的印象还不错,于是拿出简历上去试一试.我靠!台湾MM那叫一个客气啊,而且声音又温柔,听得我身上还真有点痒&#8230;今年SiS是只招硕士的,但是他们还是给了我一个机会.(这和上海一个垃圾公司的做法完全形成鲜明对比,通知我面试去了又说不要本科&#8230;) 首先还是笔试,题量不大,但是英文的,内容还是比较基础,有关于内存,总线之类的问题.面试也很简单,都是把我的项目经验以及基本情况介绍了一遍.最后面试官给我的评价是&quot;相当有竞争力&quot;,&quot;还是十分优秀的&quot;.这给我添加了很多信心,也让我觉得似乎可以到SiS工作了,不过最后他们还是选择了硕士.不过他们的态度还是很让我感动.<br />
+<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  原来可以写很多东西啊&#8230;还有很多今天懒得写了,以后再写吧.<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  </div ></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2006-11-29T00:00:00+08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2006</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2006/11/29/2/">转载.谈谈搜索引擎作弊问题Search Engine Anti-SPAM</a></h1>
+	<div class="entry-content">
+		<div><h3>数学之美 系列十七 闪光的不一定是金子 谈谈搜索引擎作弊问题(Search Engine Anti-SPAM)</h3>
+<p class="byline-timestamp"><span>2006年11月28日 上午 03:18:00</span></p>
+Google 研究员 吴军<br>
+<br>
+自从有了搜索引擎，就有了针对搜索引擎网页排名的作弊(SPAM)。以至于用户发现在搜索引擎中排名靠前的网页不一定就是高质量的，用句俗话说，闪光的不一定是金子。<br>
+<br>
+搜索引擎的作弊，虽然方法很多，目的只有一个，就是采用不正当手 
+<div style="DIRECTION: ltr"><wbr></wbr>段提高自己网页的排名。早期最常见的作弊方法是重复关键词<wbr></wbr>。比如一个卖数码相机的网站，重复地罗列各种数码相机的品牌，如尼康<wbr></wbr>、佳能和柯达等等。为了不让读者看到众多讨厌的关键词<wbr></wbr>，聪明一点的作弊者常用很小的字体和与背景相同的颜色来掩盖这些<wbr></wbr>关键词。其实，这种做法很容易被搜索引擎发现并纠正。<br>
+<br>
+在有了网页排名<wbr></wbr>(page rank)以后，作弊者发现一个网页被引用的连接越多，排名就可能越靠前<wbr></wbr>，于是就有了专门卖链接和买链接的生意。比如，有人自己创建成百<wbr></wbr>上千个网站，这些网站上没有实质的内容，只有到他们的客户网站的<wbr></wbr>连接。这种做法比重复关键词要高明得多，但是还是不太难被发现<wbr></wbr>。因为那些所谓帮别人提高排名的网站，为了维持生意需要大量地卖链<wbr></wbr>接，所以很容易露马脚。（这就如同造假钞票，当某一种假钞票的流通量相当大以后，就容易找到根源了。）再以后，又有了形形色色的作弊方式<wbr></wbr>，我们就不在这里一一赘述了。<br>
+<br>
+几年前，我加入Google做的第一件事就是消除网络作弊<wbr></wbr>。在Google最早发现搜索引擎作弊的是Matt Cutts，他在我加入Google前几个月开始研究这个问题<wbr></wbr>，后来，辛格，马丁和我先后加入进来。我们经过几个月的努力<wbr></wbr>，清除了一半的作弊者。(当然，以后抓作弊的效率就不会有这么高了。<wbr></wbr>）其中一部分网站从此&#8221;痛改前非&#8221;，但是还是有很多网站换一种作弊方法<wbr></wbr>继续作弊，因此，抓作弊成了一种长期的猫捉老鼠的游戏<wbr></wbr>。虽然至今还没有一个一劳永逸地解决作弊问题的方法，但是<wbr></wbr>，Google基本做到了对于任何已知的作弊方法<wbr></wbr>，在一定时间内发现并清除它，从而总是将作弊的网站的数量控制在一<wbr></wbr>个很小的比例范围。<br>
+<br>
+抓作弊的方法很像信号处理中的去噪音的办法。学过信息论和有信号<wbr></wbr>处理经验的读者可能知道这么一个事实，我们如果在发动机很吵的汽<wbr></wbr>车里用手机打电话，对方可能听不清；但是如果我们知道了汽车发动<wbr></wbr>机的频率，我们可以加上一个和发动机噪音相反的信号<wbr></wbr>，很容易地消除发动机的噪音，这样，收话人可以完全听不到汽车的噪音<wbr></wbr>。事实上，现在一些高端的手机已经有了这种检测和消除噪音的功能<wbr></wbr>。消除噪音的流程可以概括如下：<br>
+<img src="/rc/legacy/math-782969.gif" width="800"><br>
+在图中，原始的信号混入了噪音，在数学上相当于两个信号做卷积<wbr></wbr>。噪音消除的过程是一个解卷积的过程。这在信号处理中并不是什么<wbr></wbr>难题。因为第一，汽车发动机的频率是固定的，第二<wbr></wbr>，这个频率的噪音重复出现，只要采集几秒钟的信号进行处理就能做<wbr></wbr>到。从广义上讲，只要噪音不是完全随机的、并且前后有相关性<wbr></wbr>，就可以检测到并且消除。（事实上，完全随机不相关的高斯白噪音<wbr></wbr>是很难消除的。）<br>
+<br>
+搜索引擎的作弊者所作的事，就如同在手机信号中加入了噪音<wbr></wbr>，使得搜索结果的排名完全乱了。但是，这种人为加入的噪音并不难<wbr></wbr>消除，因为作弊者的方法不可能是随机的（否则就无法提高排名了）<wbr></wbr>。而且，作弊者也不可能是一天换一种方法，即作弊方法是时间相关<wbr></wbr>的。因此，搞搜索引擎排名算法的人，可以在搜集一段时间的作弊信<wbr></wbr>息后，将作弊者抓出来，还原原有的排名。当然这个过程需要时间<wbr></wbr>，就如同采集汽车发动机噪音需要时间一样，在这段时间内<wbr></wbr>，作弊者可能会尝到些甜头。因此，有些人看到自己的网站经过所谓<wbr></wbr>的优化（其实是作弊），排名在短期内靠前了，以为这种所谓的优<wbr></wbr>化是有效的。但是，不久就会发现排名掉下去了很多。这倒不是搜索引擎<wbr></wbr>以前宽容，现在严厉了，而是说明抓作弊需要一定的时间<wbr></wbr>，以前只是还没有检测到这些作弊的网站而已。<br>
+<br>
+还要强调一点<wbr></wbr>，Google抓作弊和恢复网站原有排名的过程完全是自动的(并没有个人的好恶）<wbr></wbr>，就如同手机消除噪音是自动的一样。一个网站要想长期排名靠前<wbr></wbr>，就需要把内容做好，同时要和那些作弊网站划清界限。</div></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2006-11-29T00:00:00+08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2006</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2006/11/29/1/">搬家工程-蓝牙协议栈的移植</a></h1>
+	<div class="entry-content">
+		<div><font color="#ff6600" >这是在以前博客上文章,自己手动转载过来..</font ><br />
+近两天在HHARM2410-R3上移植了USB蓝牙设备和 BlueZ 蓝牙协议栈，呵呵，蓝牙果然是个很好的东西，协议栈内容很丰富，挂上去以后可以使用很多功能。我现在就可以用它来接收 GPS 数据以及和用手机上网。我是在做车载的，所以特别有用。积累了一些关于蓝牙的知识，但是算是初步的，把我的经验发上来，各位做过蓝牙的大哥请多指导。<br />
+<br />
+一切版权归bluez的作者－－－同济大学高性能计算中心 Dennis          <br />
+<br />
+欢迎各位发邮件给我和我讨论 dennis.he.2005@gmail.com<br />
+先介绍一下硬件，我用的是电脑卖场里面随便买到的 USB 蓝牙适配器，价格在80元左右，应该是台产的，没有牌子，像一个小一点的U盘。买之前叫卖家在windows下测试一下，带一个带蓝牙的手机过去试试看，确认能用再买。<br />
+linux上的蓝牙协议栈有好几个，官方的蓝牙协议栈是Bluez，在www.bluez.org上能找到所有的说明文档和源代码。我先是在自己的pc上安装了bluez的协议栈，然后又把它移植到了华恒HHARM2410-R3上。<br />
+<br />
+<span class="text_title" >(一) 在Red hat 9上安装Bluez</span ><br />
+在pc上的安装我参考了O&#8217;Reilly的Linux Unwired一书，chapter 7中详细地介绍了linux下的bluetooth的基础知识、安装、配置和使用。安装前必须了解一下bluez的基本结构，直接位于发射传输协议之上的 协议是HCI(host control interface)，我的手机和蓝牙GPS用到的高层协议是服务发现协议SDP和模拟串口的协议RFCOMM，中间那一层协议是L2CAP，应该是处理 逻辑链路的吧，我并不是很清楚，请参考bluez的官方文档。<br />
+HHARM2410-R3上用到内核版本是2.4.18，于是我在pc上安装bluez时也使用了2.4.18的内核。使用bluez必须要对内核打 patch的，于是到www.kernel.org上下载了linux-2.4.18.tar.bz2后到http: //www.bluez.org/patches.html上下载针对2.4.18的patch，patch-2.4.18-mh15.gz。于是，解 压，打patch:<br />
+# tar xjvf linux-2.4.18.tar.bz2<br />
+# cd linux/<br />
+# gzip -dc ../patch-2.4.18-mh15.gz | patch -p1<br />
+注意一下这时的patch的输出，在源代码方面的patch是针对driver/、include/、net/目录下的代码的修改，并没有修改到内核部分的内容，应该没有修改到linux核心的东西，在移植到S3C2410时应该不会有太大的问题。<br />
+下面就是编译内核，在config的时候关于bluez我的配置是这样的:<br />
+#<br />
+# Bluetooth support<br />
+#
+<p >CONFIG_BLUEZ=m<br />
+CONFIG_BLUEZ_L2CAP=m<br />
+CONFIG_BLUEZ_SCO=m<br />
+CONFIG_BLUEZ_RFCOMM=m<br />
+CONFIG_BLUEZ_RFCOMM_TTY=y<br />
+CONFIG_BLUEZ_BNEP=m<br />
+CONFIG_BLUEZ_BNEP_MC_FILTER=y<br />
+CONFIG_BLUEZ_BNEP_PROTO_FILTER=y          </p >
+<p >#<br />
+# Bluetooth device drivers<br />
+#<br />
+CONFIG_BLUEZ_HCIUSB=m<br />
+# CONFIG_BLUEZ_HCIUSB_SCO is not set<br />
+CONFIG_BLUEZ_HCIUART=m<br />
+CONFIG_BLUEZ_HCIUART_H4=m<br />
+CONFIG_BLUEZ_HCIUART_BCSP=m<br />
+# CONFIG_BLUEZ_HCIUART_BCSP_TXCRC is not set<br />
+# CONFIG_BLUEZ_HCIBFUSB is not set<br />
+CONFIG_BLUEZ_HCIDTL1=m<br />
+CONFIG_BLUEZ_HCIBT3C=m<br />
+CONFIG_BLUEZ_HCIBLUECARD=m<br />
+CONFIG_BLUEZ_HCIBTUART=m<br />
+CONFIG_BLUEZ_HCIVHCI=m<br />
+供大家参考，Linux Unwired一书中有详细的说明，注意如果使用make menuconfig，一定要打开一下.config文件看看CONFIG_BLUEZ_RFCOMM_TTY=y，不能为n或者m。还有注意 CONFIG_USB_BLUETOOTH一定不能选(在USB support下)，否则会影响到bluez的运行的。<br />
+内核编译好了就开始准备bluez的库和工具了。到http://www.bluez.org/download.html上下载最新的bluez程 序包，我只下载了bluez-libs-2.20.tar.gz,bluez-utils-2.20.tar.gz,bluez-pin- 0.25.tar.gz三个包，分别是库，工具集和由bluez提供的一个 pin_helper。由于在pc下，安装的过程没什么好说的，解压，./configure，make，make install。<br />
+然后就是注意一下默认配置目录/etc/bluetooth/下的hcid.conf配置文件，这是用来配置后台daemon进程hcid的。如果把 这台pc机器+蓝牙适配器看成是一个蓝牙设备的话，进程hcid就管理这个蓝牙设备的基本配置信息，例如名称，class，地址，feature等等。还 有当设备与其他蓝牙设备Bonding/Pairing即所谓的配对时，处理PIN code的程序也是hcid，而在hcid.conf脚本中比较重要的一项就是pin_helper，默认的配置是pin_helper= /usr/bin/bluepin，这个是python写的用来读取用户输入的PIN code的程序，安装bluez-pin包的时候装在/usr/bin下的。<br />
+这里有必要了解一下配对的过程，我感觉就是两个设备互相通密码建立相互之间连接的过程。我看了hcid部分的代码，了解的大致是这样:比如两个蓝牙设 备A和B，A先发送要求配对的请求给B，B由用户设置好配对的密码即PIN code，然后回一个消息给A，说你想配对可以呀，知道我的密码吗?然后A就发送PIN code过去，B看和自己的密码相符合，就发送一个replyOK的消息给A，这样两者就建立起来了信任关系。<br />
+在pc+蓝牙适配器这个蓝牙设备A上，如果这个设备先发送配对请求给另一个远程设备B，那么当B发送询问密码请求过来时，在A上运行的hcid后台进 程就通过一个pin_helper的程序读取PIN code，并发送回给B；如果远程设备B先发送配对请求给A，hcid上用作验证的PIN code就是/etc/bluetooth/pin的内容，如果读取失败程序在启动的时候会默认地设置一个密码的，代码在bluez- utils/hcid/security.c中的init_security_data函数中，默认的是BlueZ。为了和我的手机相配，我把它改成了 123，手机只能输入数字。 <br />
+关于其他hcid.conf的设置，请man hcid.conf。<br />
+设置好以后，换上新内核，启动linux。插入USB蓝牙适配器，# dmesg | tail会发现有usb.c: USB device 2 (vend/prod 0x1131/0x1001) is not claimed by any active driver.这个问题，不管它，只要有usb.c: registered new driver hci_usb的消息就可以，然后 # lsmod 会发现hci_usb的模块被安装了，再# modprobe rfcomm，这样基本上所有的模块都安装齐了。<br />
+# hciconfig hci0 up<br />
+# hcid -f /etc/bluetooth/hcid.conf<br />
+启动hci设备和hcid精灵进程<br />
+# hciconfig -a<br />
+hci0: Type: USB<br />
+BD Address: 00:11:67:0F:BB:A1 ACL MTU: 678:8 SCO MTU: 48:10<br />
+UP RUNNING PSCAN ISCAN<br />
+RX bytes:115 acl:0 sco:0 events:15 errors:0<br />
+TX bytes:313 acl:0 sco:0 commands:15 errors:0<br />
+Features: 0xff 0xff 0x8d 0x78 0x08 0x18 0x00 0x00<br />
+Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3<br />
+Link policy: RSWITCH HOLD SNIFF PARK<br />
+Link mode: SLAVE ACCEPT<br />
+Name: &#8216;BlueZ (0)&#8217;<br />
+Class: 0x000100<br />
+Service Classes: Unspecified<br />
+Device Class: Computer, Uncategorized<br />
+HCI Ver: 1.2 (0x2) HCI Rev: 0x1ae LMP Ver: 1.2 (0x2) LMP Subver: 0x1ae<br />
+Manufacturer: Integrated System Solution Corp. (57)<br />
+可以看到目前设备的配置情况，有些是从hcid.conf中读取的，有些是从设备中读取的。<br />
+下面，打开手机上的蓝牙，启动蓝牙GPS<br />
+# hcitool scan<br />
+Scanning &#8230;<br />
+00:0E:07:58:1A:33 T628<br />
+00:08:1B:C0:D1:3C HOLUX GR-231<br />
+这样就看到了两个设备了，我用的是索爱的T628和HOLUX的蓝牙GPS，前面的一串应该是蓝牙设备唯一的地址。<br />
+#sdptool browse 可以看到每个设备所提供的服务<br />
+Inquiring &#8230;<br />
+Browsing 00:0E:07:58:1A:33 &#8230;<br />
+Service Name: Dial-up Networking<br />
+Service RecHandle: 0x10000<br />
+Service Class ID List:<br />
+&quot;Dialup Networking&quot; (0x1103)<br />
+&quot;Generic Networking&quot; (0x1201)<br />
+Protocol Descriptor List:<br />
+&quot;L2CAP&quot; (0x0100)<br />
+&quot;RFCOMM&quot; (0x0003)<br />
+Channel: 1<br />
+Profile Descriptor List:<br />
+&quot;Dialup Networking&quot; (0x1103)<br />
+Version: 0x0100</p >
+<p >&#8230;&#8230;&#8230;&#8230;. </p >
+<p >Service Name: Serial Port 1<br />
+Service RecHandle: 0x10003<br />
+Service Class ID List:<br />
+&quot;Serial Port&quot; (0x1101)<br />
+Protocol Descriptor List:<br />
+&quot;L2CAP&quot; (0x0100)<br />
+&quot;RFCOMM&quot; (0x0003)<br />
+Channel: 4<br />
+</p >
+<p >&#8230;&#8230;&#8230;&#8230;           </p >
+<p >Service Name: OBEX Object Push <br />
+Service RecHandle: 0x10005 <br />
+Service Class ID List: <br />
+&quot;OBEX Object Push&quot; (0x1105) <br />
+Protocol Descriptor List: <br />
+&quot;L2CAP&quot; (0x0100) <br />
+&quot;RFCOMM&quot; (0x0003) <br />
+Channel: 10 <br />
+&quot;OBEX&quot; (0x0008) <br />
+Profile Descriptor List: <br />
+&quot;OBEX Object Push&quot; (0x1105) <br />
+Version: 0x0100 <br />
+<br />
+Browsing 00:08:1B:C0:D1:3C &#8230; </p >
+手机上绑定了很多的服务，有拨号服务，音频服务，串口服务，文件交换服务(OBEX)&#8230;在SDP协议下，每个服务绑定到一个Channel上。GPS上没有绑定服务，它只作为虚拟串口设备来使用。<br />
+利用实用工具rfcomm可以把遵循RFCOMM的服务bind到一个类似的串口设备上。在绑定之前，必须确保/dev下有rfcomm*的设备，如果没有，就自己建立:<br />
+# mknod -m 666 /dev/rfcommX c 216 X (X是数字)<br />
+这样就可以绑定了，比如我需要用手机拨号上网的功能，看到它的Channel 1是RFCOMM的Dialup Networking功能，则:<br />
+# rfcomm bind 0 00:0E:07:58:1A:33 1<br />
+即将00:0E:07:58:1A:33设备的Channel 1服务绑定到/dev/rfcomm0上，这样，就相当于建立了一个虚拟的串行连接到一个可以拨号的无线modem上了，打开minicom，设置串口为 /dev/rfcomm0，波特率19200，8N1，键入atz，返回OK。用ppp就可以拨号上网了，第一次连接时手机会弹出个输入框问PIN code，以后就不用了。<br />
+GPS设备只是作为串口来用的，也很简单:<br />
+# rfcomm bind 1 00:08:1B:C0:D1:3C<br />
+打开minicom设置波特率为4800就可以读GPS数据了，大功告成!<br />
+另外，sdpd程序是本设备提供给对外的看到的服务，可以通过sdptool add &#8211;channel=X SP来增加对外的服务，我没有研究过。还有对于文件传输OBEX和个人局域网BNEQ还需要继续学习。<br />
+<br />
+<span class="text_title" >(二)在HHARM2410-R3上的移植</span ><br />
+完成了在普通red hat上的安装，熟悉了蓝牙协议栈一些基本的东西，下面的任务就是把协议栈搬到开发板上了。<br />
+第一步当然是内核了，由于华恒的内核代码改过，我也不知道从bluez上下载的patch能不能使用，试试看了，只好。<br />
+# cd /HHARM2410/kernel<br />
+# gzip -dc ~/patch-2.4.18-mh15.gz | patch -p1<br />
+# find ./ -name &#8216;*rej&#8217;<br />
+./fs/cramfs/inode.c.rej<br />
+不好，有文件不能patch，看看是针对cramfs文件系统的patch，我也不清楚为什么bluez的patch会修改到cramfs，不过我想 问题应该不大。内核源代码关于bluetooth的部分华恒应该没有改过，因此patch的主要部分应该是没有问题的。如果内核编译后发生问题，我想大概 也只有把内核代码翻出来看了。<br />
+先就这样了，用用试试看好了。与普通pc上的类似，只不过有些是m的现在统统为y了。我的配置关于Bluez的部分设置为:<br />
+#<br />
+# Bluetooth support<br />
+#<br />
+CONFIG_BLUEZ=y<br />
+CONFIG_BLUEZ_L2CAP=y<br />
+# CONFIG_BLUEZ_SCO is not set<br />
+CONFIG_BLUEZ_RFCOMM=y<br />
+CONFIG_BLUEZ_RFCOMM_TTY=y<br />
+CONFIG_BLUEZ_BNEP=y<br />
+CONFIG_BLUEZ_BNEP_MC_FILTER=y<br />
+CONFIG_BLUEZ_BNEP_PROTO_FILTER=y<br />
+# CONFIG_BLUEZ_HIDP is not set<br />
+#<br />
+# Bluetooth device drivers<br />
+#<br />
+CONFIG_BLUEZ_HCIUSB=y<br />
+# CONFIG_BLUEZ_HCIUSB_SCO is not set<br />
+# CONFIG_BLUEZ_HCIUART is not set<br />
+# CONFIG_BLUEZ_HCIBFUSB is not set<br />
+# CONFIG_BLUEZ_HCIDTL1 is not set<br />
+# CONFIG_BLUEZ_HCIBT3C is not set<br />
+# CONFIG_BLUEZ_HCIBLUECARD is not set<br />
+# CONFIG_BLUEZ_HCIBTUART is not set<br />
+# CONFIG_BLUEZ_HCIVHCI is not set<br />
+<br />
+device部分就设了个USB的，其他的就不设置了。<br />
+下面继续make dep;make zImage的常规过程，OK，没有发生编译问题，可以稍微舒口气了。
+<p >下面要移植Bluez的基础库了，在Redhat 9下执行<br />
+# ldd /usr/lib/libbluetooth.so.1.0.17<br />
+libc.so.6 =&gt; /lib/libc.so.6 (0x4002c000)<br />
+/lib/ld-linux.so.2 =&gt; /lib/ld-linux.so.2 (0x80000000)<br />
+发现没有依赖什么莫名其妙的库，应该换个编译器就可以了，configure一下就可以了。我的配置命令很简单: <br />
+# ./configure &#8211;host=armv4l &#8211;prefix=/HHARM2410/applications/bluezport/libs CC=/opt/host/armv4l/bin/armv4l-unknown-linux-gcc CPP=/opt/host/armv4l/bin/armv4l-unknown-linux-cpp AR=/opt/host/armv4l/bin/armv4l-unknown-linux-ar STRIP=/opt/host/armv4l/bin/armv4l-unknown-linux-strip RANLIB=/opt/host/armv4l/bin/armv4l-unknown-linux-ranlib<br />
+LD=/opt/host/armv4l/bin/armv4l-unknown-linux-ld<br />
+# make<br />
+# make install<br />
+OK了，到了/HHARM2410/applications/bluezport/libs下看看，我也不清楚为什么，居然只有.a和.la的静态库，没有动态库。只好自己动手，到bluz-libs-2.17/src/下，自己编译动态库:<br />
+# /opt/host/armv4l/bin/armv4l-unknown-linux-gcc -shared -o libbluetooth.so.1.0.17 bluetooth.o hci.o sdp.o<br />
+再做两个符号连接<br />
+# ln -s libbluetooth.so.1.0.17 libbluetooth.so<br />
+# ln -s libbluetooth.so.1.0.17 libbluetooth.so.1<br />
+好了，库交叉编译完毕，mv到/HHARM2410/application/bluezport/libs/lib文件夹下就可以了。<br />
+<br />
+接着移植Bluez的工具集。与库类似，先看一下各个程序需要用到什么库，比如:<br />
+#ldd /usr/sbin/hcid<br />
+libbluetooth.so.1 =&gt; /usr/lib/libbluetooth.so.1 (0x40035000)<br />
+libc.so.6 =&gt; /lib/libc.so.6 (0x40042000)<br />
+/lib/ld-linux.so.2 =&gt; /lib/ld-linux.so.2 (0x40000000)<br />
+挨个试试需要用的工具，发现需要的库华恒和Bluez都提供了，应该换个编译器编译一下就可以了。编译之前我为了到板子上与我自己的手机连接方便修改 了bluez-utils-2.17/hcid/security.c文件，在init_security_data函数中的设置默认的密码，非常简单地 改了两行:<br />
+strcpy(hcid.pin_code, &quot;123&quot;);<br />
+hcid.pin_len = 3;<br />
+然后configure我想就行了，我的configure设置为:<br />
+# ./configure &#8211;prefix=/HHARM2410-R3/applications/bluezport/utils &#8211;includedir=/HHARM2410-R3/applications/bluezport/libs/include &#8211;libdir=/HHARM2410-R3/applications/bluezport/libs/lib &#8211;with-bluez=/HHARM2410-R3/applications/bluezport/libs &#8211;disable-test &#8211;disable-cups &#8211;disable-pcmia &#8211;host=armv4l CC=/opt/host/armv4l/bin/armv4l-unknown-linux-gcc CPP=/opt/host/armv4l/bin/armv4l-unknown-linux-cpp AR=/opt/host/armv4l/bin/armv4l-unknown-linux-ar STRIP=/opt/host/armv4l/bin/armv4l-unknown-linux-strip RANLIB=/opt/host/armv4l/bin/armv4l-unknown-linux-ranlib LD=/opt/host/armv4l/bin/armv4l-unknown-linux-ld<br />
+# make<br />
+我在这步make的时候出现了一点小错误,好像是说PATH_MAX没有定义，这个是LINUX设置的存放路径名缓冲区的最大长度。应该是少包含了一个头文件造成的。我没有去仔细考究，就在当前文件下的config.h中添加了三行:<br />
+#ifndef PATH_MAX<br />
+#define PATH_MAX 4095/* PAGE_SIZE - 1 */<br />
+#endif<br />
+采用简单粗鲁的添加定义的方式。再make，通过。<br />
+# make install<br />
+好了，工具集都在/HHARM2410-R3/applications/bluezport/util下了<br />
+最后，由于在PC的LINUX下的默认pin_helper /usr/bin/bluepin是用python写的代码，在2410上当然不能用了，所以要自己写一个pin_helper的程序。翻翻 /usr/bin/bluepin的代码以及hcid/security.c的代码，事实上hcid进程在验证PIN code的时候开了一个pipe指向pin_helper进程的标准输出，pin_helper进程向用户询问PIN code，如果用户输入密码XXXX就以&quot;PIN:XXXX&quot;的形式写到标准输出中去，如果用户reject就写个&quot;ERR&quot;回去。<br />
+我以一种最简单的方式实现pin_helper程序，即固定地写一个code回去，比如123,牺牲安全性。<br />
+用脚本实现就是:<br />
+#!/bin/sh</p >
+<p >echo &quot;PIN:123&quot;<br />
+用C实现一个就是:<br />
+#include &lt;stdio.h&gt;</p >
+<p >int main(int argc, char* argv[])<br />
+{<br />
+printf(&quot;PIN:123&quot;);<br />
+}<br />
+交叉编译成my_pin_helper再放到板子的/usr/bin下，那么就可以把板子的hcid.conf修改成:<br />
+pin_helper /usr/pin/my_pin_helper<br />
+后来，我在板子上也用MiniGUI写了一个pin_helper，也挺简单的。</p >
+好了，一切准备完毕，做好ramdisk，记得在/dev下mknod几个rfcomm，放到板子上，可以运行!<br />
+插上USB适配器，连模块都不用probe<br />
+# hciconfig hci0 up<br />
+# hcid -f /etc/bluetooth/hcid.conf<br />
+# hciconfig -a<br />
+看到设备了，其他的运行都OK。结合ppp就可以用手机上网了~~</div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2006-11-29T00:00:00+08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2006</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2006/11/28/1/">感觉还不错,准备搬家来baidu了</a></h1>
+	<div class="entry-content">
+		<div>我接触blog也快一年了,之前只是为了找个日记本把自己学习嵌入式的体会记下来,但是后来发现对自己的帮助不仅仅是个日记本,更是我和大家交流我的技术及兴趣爱好的场所,我也认识一些朋友.不过自己比较懒而且CSDN的博客速度真是不敢恭维(不知道是不是我这边的网络问题),所以我在<a target="_blank" href="http://blog.csdn.net/ifq" >csdn的博客</a >更新的不是很多,很多时候想写点东西,结果打不开或者无法保存&#8230;..就放弃了.<br />
+<font color="#ff0000" >所以我发现选博客就象买房子一样,一定要慎重啊!!!<font color="#000000" >不一定要最好的,一定要选最适合你的.不然很恼火.感觉baidu的速度一只比较稳定的,而且功能简洁实用,应该是个不错的选择,再加上我朋友<a target="_blank" href="http://hi.baidu.com/kebing" >kebing</a >的鼓动,所以我决定搬家了.<br />
+但是先在baidu的搬家功能没有提供针对csdn的服务,难道要我一件一件自己扛过来啊&#8230;虽然那边的东西也不多,但是这样未免也太搓了吧&#8230;</font ></font ></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2006-11-28T00:00:00+08:00" pubdate data-updated="true">Nov 28<span>th</span>, 2006</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="/blog/page/28/" class="prev">Prev</a>
+    
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav>
+<center> <a href="http://www.freedomain.co.nr/" title="Free Domain Name"><img src="http://ecozooa.imdrv.net/soof62.gif" alt="Free Domain Name" style="width:88px;height:31px;border:0;" /></a></center>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<!-- 
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+ -->
+
+
+</body>
+</html>

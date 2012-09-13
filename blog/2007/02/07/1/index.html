@@ -1,0 +1,230 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>重力加速度传感器制作完毕 - 一个热爱木工的软件工程师</title>
+	<meta name="author" content="靖天">
+
+	
+	<meta name="description" content="&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 最近两天有点时间了,加上器件什么的都准备妥当了,就自己花了个很简单的PCB板子,把以前在ST申请的重力加速度芯片搭建成开发平台,打算做点什么有意思的东西.
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Geek Woodworker</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:ifq.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		<a class="google" href="https://plus.google.com/115086707443303900229?rel=author" title="Google+">Google+</a>
+		
+		
+		
+		<a class="github" href="https://github.com/ifq" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:ifq.github.com">
+	</form>
+</nav>
+
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">重力加速度传感器制作完毕</h1>
+	<div class="entry-content"><div>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  最近两天有点时间了,加上器件什么的都准备妥当了,就自己花了个很简单的PCB板子,把以前在ST申请的重力加速度芯片搭建成开发平台,打算做点什么有意思的东西.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  本以为成都电子器件都很齐全了,电路上学要的一个放大器TS924转了半天却怎么也买不到,自己对电路又不太熟悉,只会参考官方的电路来做.没办法,从广州邮寄过来,结果宰了我100RMB.<img src="/rc/legacy/i_f12.gif" width="800">本来价值几元钱的的东西啊&#8230;&#8230;..<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  器件准备好了,剩下的就是画图做板子了.学校的条件不是很好,只能用单层的铜板自己腐蚀线路那种方式.不过我这个东西也很简单,不需要多么复杂的走线.之前没有用过Protel,简单学了学,感觉布线是个很复杂的工作,需要很高的技巧.不过似乎其中有很多问题可以用路径问题解决,似乎可以用计算机来自动布线,这方面我没用过,也不知道有没有.但是在许多接口需要互联的时候,判定他们是否能在一层板子上完成,这个功能应该是可以软件实现的吧..<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+<div align="center" forimg="1"><img src="/rc/legacy/12bd7fd922ce20eb38012f36.jpg" width="800"></div>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  板子走线如上图. 很业余,毕竟不是电子系的.不过感觉接触些电子对嵌入式的帮助是很直接的. 比如我现在做的这个东西,如果我自己不做,又想玩玩,那将会比较痛苦.起码学了这些东西,可以把自己的简单想法变为现实.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  现在电路板已经做好了,调试也通过了.加速度传感器能输出X,Y,Z三个方向的加速度的模拟量,通俗点就是通过电压高低来表示加速度大小.通过AD转换把电压值读出,再根据芯片的设定转换为加速度值.<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  我使用NRF9E5来作为处理器.NRF9E5实际是一款无线电收发芯片,是以前一个项目中使用过的.它具有C51的内核,无线电收发功能,还有4路10位AD.完全能够满足我这个系统的需求. 我要求的功能就是AD转换测量加速度的值通过无线方式发送到计算机,再做进一步的处理.<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  以后要做的工作就是数据的采集和分析了.这也是为什么我把这篇文章归入模式识别的原因.我期望通过加速度来识别人的动作.这个应用在模式识别领域应该是十分简单的.相对于图像识别,人脸识别等技术来说,这个应用能采集到的数据是十分准确的,没有那么多的噪声.是一组时间离散的加速度数值.不过对于我来说还是一个很大的挑战.对于数学知识缺乏的我也是个磨练.(大一高数都没有好好学,现在还得自己补这些,看来出来混迟早都得还啊&#8230;哈哈)<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  不过现在时间也不是那么多,这个工作肯定是一个长期而艰巨的工作哈.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  最后补个做好的板子的张片,懒得拿相机,拿手机拍的,不是很清晰.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+<div align="center" forimg="1"><img src="/rc/legacy/99491c30a6de9a9ba8018e0a.jpg" width="800"></div></div></div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-07T00:00:00+08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<!--a class="addthis_counter addthis_pill_style"></a-->
+
+<!-- JiaThis Button BEGIN -->
+<div id="ckepop">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_renren"></a>
+	<a class="jiathis_button_kaixin001"></a>
+	<a href="http://www.jiathis.com/share?uid=1663055" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1344059400115285" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+      
+        
+        // var disqus_developer = 1;
+      //var disqus_identifier = '';
+      //var disqus_url = '';
+      var disqus_identifier = 'http://ifq.github.com/blog/2007/02/07/1/';
+      var disqus_url = 'http://ifq.github.com/blog/2007/02/07/1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<!-- 
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+ -->
+
+
+</body>
+</html>

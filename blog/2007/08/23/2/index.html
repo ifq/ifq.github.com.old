@@ -1,0 +1,275 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>SIP数据包解析（转） - 一个热爱木工的软件工程师</title>
+	<meta name="author" content="靖天">
+
+	
+	<meta name="description" content="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Geek Woodworker</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/blog/archives">目录</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:ifq.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		<a class="google" href="https://plus.google.com/115086707443303900229?rel=author" title="Google+">Google+</a>
+		
+		
+		
+		<a class="github" href="https://github.com/ifq" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:ifq.github.com">
+	</form>
+</nav>
+
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">SIP数据包解析（转）</h1>
+	<div class="entry-content"><div><p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><font color="#99ccff" style="background-color: rgb(153, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </font><br>
+</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span>一</span> <span>概述</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>SIP</span><span>协议是一个基于应用层的会话控制协议。它可以创建、修改、终止多媒体会话</span><span>(</span><span>会议</span><span>)</span><span>，也可以邀请参与者加入到一个现有的会话。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span></span><span>因为</span><span>SIP</span><span>是一个基于应用层的协议，所以它不是一套完整的通讯系统方案，它需要和其它的方案或者协议结合起来实现整套系统。例如，实时传输协议</span><span>(RTP)(RFC1889)</span><span>用来传输音视频等实时的流媒体数据。实时流协议</span><span>(RTSP)(RFC2326)</span><span>用来控制媒体流的传递。媒体网关控制协议</span><span>(MEGACO)(RFC3015)</span><span>用来控制</span><span>PSTN</span><span>网关。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span></span><span>由此可见，</span><span>SIP</span><span>协议应该用来组合其它协议，从而实现完整的服务。但是，</span><span>SIP</span><span>基础的功能和操作不依赖于其它协议。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3" face="宋体, MS Song"> </font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span>二</span> <span>第一个例子</span></font></font> </p>
+<p align="center" style="margin: 0cm 0cm 0pt;" class="MsoNormal"><img src="/rc/legacy/sip-f1.bmp" width="800"></p>
+<p align="center" style="margin: 0cm 0cm 0pt;" class="MsoNormal">图1<br clear="all">
+</p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span></span><span>下面引用</span><span>RFC3261</span><span>的例子来说明</span><span>sip</span><span>的基本功能，包括：定位终端，发送通讯请求，协商会话参数，建立会话和撤销建立的会话。图</span><span>1</span><span>显示了用户</span><span>Alice</span><span>和</span><span>Bob</span><span>使用</span><span>SIP</span><span>交换信息的一个典型的例子</span><span>(</span><span>每一个消息用字母</span><span>F</span><span>和一个数字来标号，标号的前面有一个简短的消息类型说明</span><span>)</span><span>。在这个例子中，</span><span>Alice</span><span>使用一个在她的</span><span>PC</span><span>机中的</span><span>SIP</span><span>应用程序呼叫</span><span>Bob</span><span>，</span><span>Bob</span><span>使用他的</span><span>SIP</span><span>电话，这个</span><span>SIP</span><span>电话登录了互联网。同时，请注意两个</span><span>SIP</span><span>代理服务器在</span><span>Alice</span><span>和</span><span>Bob</span><span>的会话的建立中起到的作用。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>Alice</span><span>呼叫</span><span>Bob</span><span>是使用他的</span><span>SIP</span><span>标识符。</span><span>SIP</span><span>标识符是一种</span><span>URI(Uniform Resource Identifier)</span><span>，称之为</span><span>SIP URI</span><span>。</span><span>SIP URI</span><span>格式很象</span><span>email</span><span>地址，包含一个用户名和一个主机名，如：</span><span>sip:<a href="mailto:bob@biloxi.com"><font color="#000080">bob@biloxi.com</font></a></span><span>。</span><span>这里</span><span>biloxi.com</span><span>是</span><span>Bob</span><span>的</span><span>SIP</span><span>服务提供者的域名。</span><span>Alice</span><span>的</span><span>SIP URI</span><span>是：</span><span>sip:</span><span><a href="mailto:alice@atlanta.com"><span><font color="#000080">alice@atlanta.com</font></span></a></span><span>。</span><span>SIP</span><span>也支持安全</span><span>URI</span><span>，叫做</span><span>SIPS URI</span><span>，例如，</span><span>sips:</span><span><a href="mailto:bob@biloxi.com"><span><font color="#000080">bob@biloxi.com</font></span></a></span><span>。</span><span>一个向</span><span>SIPS URI</span><span>的呼叫使用加密传输</span><span>(</span><span>也就是</span><span>TLS)</span><span>来携带从呼叫者到被呼叫者所有的</span><span>SIP</span><span>消息。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>SIP</span><span>是一个与</span><span>HTTP</span><span>协议很像的，请求／应答式的事务模型。每一个事务最少由一个要完成特定方法或功能的请求，和服务器端的一个应答组成。在这个例子中，这个事务从</span><span>Alice</span><span>的软电话发送一个</span><span>INVITE</span><span>请求到</span><span>Bob</span><span>的</span><span>SIP URI</span><span>开始。</span><span>INVITE</span><span>是一个</span><span>SIP</span><span>消息，它表示请求者</span><span>Alice</span><span>想与</span><span>Bob</span><span>通话。</span><span>INVITE</span><span>请求包含一些头域。头域被称为属性，可以提供关于这个消息的额外信息。关于头域我们一会儿将会详细说明它们。图</span><span>1</span><span>中的</span><span>INVITE</span><span>信息</span><span>(F1)</span><span>可能像这样：</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>INVITE sip:bob@biloxi.com SIP/2.0</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>Via: SIP/2.0/UDP pc33.atlanta.com;branch=z9hG4bK776asdhds</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>Max-Forwards: 70</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>To: Bob &lt;sip:bob@biloxi.com&gt;</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>From: Alice &lt;sip:alice@atlanta.com&gt;;tag=1928301774</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>Call-ID: a84b<st1:chmetcnv unitname="C" sourcevalue="4" hasspace="False" negative="False" numbertype="1" tcsc="0">4c</st1:chmetcnv>76e66710@pc33.atlanta.com</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>CSeq: 314159 INVITE</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>Contact: &lt;sip:alice@pc33.atlanta.com&gt;</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>Content-Type: application/sdp</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>Content-Length: 142</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3" face="宋体, MS Song"> </font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>(<st1:city><st1:place>Alice</st1:place></st1:city>&#8217;s SDP not shown)</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><span><font size="3" face="宋体, MS Song"> </font></span></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span></span><span>第一行文本是这个请求的方法名</span><span>(INVITE)</span><span>。后面的行是多个头域。这里只列出了最少需要的头域。先在这里对这些头域做一个简要的介绍：</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>Via</span><span>头域包含</span><span>Alice</span><span>希望收到对于这个请求的应答的地址。也就是她告诉请求的接收者，应答应该发送到</span><span> pc33.atlanta.com</span><span>。后面的</span><span>branch</span><span>参数是这个事务的标识符。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>To</span><span>头域包含一个显示名</span><span>(Bob)</span><span>和一个</span><span>SIP URI</span><span>或者</span><span>SIPS URI</span><span>，这里是使用的</span><span>SIP URI(sip:<a href="mailto:bob@biloxi.com"><font color="#000080">bob@biloxi.com</font></a>)</span><span>。这个</span><span>SIP URI</span><span>就是这个请求要发送的目标。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>From</span><span>头域也包含一个显示名</span><span>(Alice)</span><span>和一个</span><span>SIP URI</span><span>或者</span><span>SIPS URI</span><span>，这里是使用的</span><span>SIP URI(sip:<a href="mailto:alice@atlanta.com"><font color="#000080">alice@atlanta.com</font></a>)</span><span>来指出请求的发起人。这个头域还包含了一个</span><span>tag</span><span>参数，这个参数包含了一个随机字符串</span><span>(1928301774)</span><span>，这个字符串的数字会被软电话自动增加，它主要起到鉴别的作用，后面还会说明它。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>Call-ID</span><span>头域包含一个全局唯一标识符来标识这次呼叫。这个标识符使用一个随即字符串和软电话所在的主机名</span><span>(</span><span>或者</span><span>IP</span><span>地址</span><span>)</span><span>一起生成。这样，</span><span>To</span><span>头域、</span><span>From</span><span>头域和</span><span>Call-ID</span><span>这三个头域就可以唯一的确定了</span><span>Alice</span><span>和</span><span>Bob</span><span>的这条点对点的通信关系，并且将这个通信关系交给一个对话</span><span>(dialog)</span><span>来处理了。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>Cseq</span><span>头域</span><span>(</span><span>命令序列</span><span>)</span><span>包含一个整数和一个方法名字。在这个对话中每一个新的请求都会增加这个整数的值，保证这个数值是有序的。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>Contact</span><span>头域包含一个</span><span>SIP URI</span><span>或者</span><span>SIPS URI</span><span>指出一个能够接触到</span><span>Alice</span><span>的直接路由，一般这个</span><span>SIP URI</span><span>由用户名和一个完全限定域名</span><span>(FQDN)</span><span>构成。因为许多终端系统没有注册域名，所以也可以使用</span><span>IP</span><span>地址代替</span><span>FQDN</span><span>。</span><span>Via</span><span>头域向对方指出了这个请求的应答应该发送到哪里，而</span><span>Contact</span><span>头域向对方指出了将来的请求应该发送到哪里。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>Max-Forwards</span><span>头域限制了在这个请求传送到目的地的时候最多可以有多少跳。它包含一个整数，在每一跳这个整数都会被减少。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>Content-Type</span><span>头域描述消息体的类型</span><span>(</span><span>在这个例子里消息体采用了</span><span>SDP</span><span>描述，但是消息体内容没有给出</span><span>)</span><span>。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>Content-Length</span><span>头域指出了消息体的字节数。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span></span><span>在后面我们将完整的介绍</span><span>SIP</span><span>头域</span><span>(RFC3261</span><span>第</span><span>20</span><span>节</span><span>)</span><span>。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span></span><span>在会话中像媒体类型、编码方式、采样率等信息都不使用</span><span>SIP</span><span>描述，而是在消息体中使用其它会话描述协议的格式。这个例子中采用了</span><span>SDP</span><span>描述</span><span>(RFC2327)</span><span>。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span></span><span>软电话不知道</span><span>Bob</span><span>或者拥有</span><span>biloxi.com</span><span>域名的</span><span>SIP</span><span>服务器，它将</span><span>INVITE</span><span>请求发送给为</span><span>Alice</span><span>提供服务的域名为</span><span>atlanta.com</span><span>的</span><span>SIP</span><span>服务器。关于</span><span>Alice</span><span>如何获得</span><span>atlanta.com SIP</span><span>服务器的地址，可以使用由</span><span>Alice</span><span>的软电话指定，或者使用</span><span>DHCP</span><span>探测到等方式。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>atlanta.com SIP</span><span>服务器是一个</span><span>SIP</span><span>代理服务器。一个代理服务器接收</span><span>SIP</span><span>请求，为请求的发送者转发请求。在这个例子中，代理服务器接收到</span><span>INVITE</span><span>请求后发送一个</span><span>100</span><span>应答</span><span>(Trying)</span><span>给</span><span>Alice</span><span>的软电话。</span><span>100</span><span>应答</span><span>(Trying)</span><span>指出这个</span><span>INVITE</span><span>请求已经被代理服务器接收到，并且已被经进一步向目的地路由。</span><span>SIP</span><span>中的应答使用</span><span>3</span><span>位数字表示，每一个编号都表示一个描述短语。</span><span>这个</span><span>100</span><span>应答</span><span>(Trying)</span><span>也同样包含和</span><span>INVITE</span><span>请求一样的</span><span>To</span><span>、</span><span>From</span><span>、</span><span>Call</span><span>－</span><span>ID</span><span>、</span><span>CSeq</span><span>和</span><span>Via</span><span>以及</span><span>branch</span><span>参数，这样可以使</span><span>Alice</span><span>的软电话知道这个应答是对应发送的</span><span>INVITE</span><span>请求的。</span><span>atlanta.com</span><span>代理服务器定位出</span><span>biloxi.com</span><span>代理服务器</span><span>(</span><span>这可能需要通过域名解析服务器</span><span>(DNS)</span><span>等实现，后面还会详细讲解</span><span>)</span><span>获得了它的</span><span>IP</span><span>地址，并且准备把</span><span>INVITE</span><span>请求转发给</span><span>biloxi.com</span><span>代理服务器。在转发请求之前，</span><span>atlanta.com</span><span>代理服务器增加了一个额外的</span><span>Via</span><span>头域，这个</span><span>Via</span><span>头域包含自己的地址</span><span>(</span><span>这时候这个</span><span>INVITE</span><span>请求的第一个</span><span>Via</span><span>头域包含</span><span>Alice</span><span>的软电话的地址</span><span>)</span><span>。</span><span>biloxi.com</span><span>代理服务器接收到这个</span><span>INVITE</span><span>请求，并且也发送一个</span><span>100(Trying)</span><span>应答给</span><span>atlanta.com</span><span>代理服务器指出它已经接收到这个</span><span>INVITE</span><span>请求，并正在处理这个请求。</span><span>biloxi.com</span><span>代理服务器知道</span><span>Bob</span><span>的</span><span>IP</span><span>地址</span><span>(</span><span>这可能需要定位服务</span><span>)</span><span>，它又在这个</span><span>INVITE</span><span>请求中加入了一个新的</span><span>Via</span><span>头域，值为自己的地址，然后它把这个</span><span>INVITE</span><span>请求发送给</span><span>Bob</span><span>的</span><span>SIP</span><span>电话。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span>Bob</span><span>的</span><span>SIP</span><span>电话接收到这个</span><span>INVITE</span><span>请求，发送一个</span><span>180(Ringing)</span><span>应答，同时使用铃声通知</span><span>Bob</span><span>有一个来自</span><span>Alice</span><span>的呼叫，让</span><span>Bob</span><span>决定是否接听。这个</span><span>180(Ringing)</span><span>应答反向经过这两个代理服务器被发送到</span><span>Alice</span><span>。每一个代理服务器使用</span><span>Via</span><span>头域决定向哪里发送这个应答，并且把移除它自己添加的</span><span>Via</span><span>头域。这样，虽然只有初始的</span><span>INVITE</span><span>请求发送的时候使用了</span><span>DNS</span><span>服务和定位服务，而这个</span><span>180(Ringing)</span><span>应答没有使用，同时代理服务器也不需要记录整个通讯的状态，但是这个应答还是能够成功的发送给请求的发送者</span><span>Alice</span><span>。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span><span>&nbsp;&nbsp;&nbsp;  </span></span><span>当</span><span>alice</span><span>的软电话接收到</span><span>180(Ringing)</span><span>应答后，它将这个消息告诉给</span><span>Alice</span><span>，也许使用一个声音</span><span>(</span><span>彩铃</span><span>)</span><span>或者在</span><span>Alice</span><span>的屏幕上显示一个消息。</span></font></font></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><font size="3"><font face="宋体, MS Song"><span>在这个例子中，</span><span>Bob</span><span>决定接听电话，当他按下接听按钮时，他的</span><span>SIP</span><span>电话发送</span><span>200(OK)</span><span>应答表示接受了这个呼叫。这个</span><span>200(OK)</span><span>应答包含一个消息体，消息体使用</span><span>SDP</span><span>描述</span><span>Bob</span><span>准备和</span><span>Alice</span><span>建立的会话的媒体类型等信息。</span><span>这样，</span><span>Alice</span><span>和</span><span>Bob</span><span>交换了一次</span><span>SIP</span><span>信息：</span><span>Alice</span><span>用</span><span>INVITE</span><span>请求发送一次给</span><span>Bob</span><span>，</span><span>Bob</span><span>用</span><span>200(OK)</span><span>应答发送一次给</span><span>Alice</span><span>。</span><span>这个交换实现了基本的协商能力和简单的</span><span>offer/answer</span><span>模型。如果</span><span>Bob</span><span>不希望接听电话，或者他现在正忙</span><span>(</span><span>接听其它电话</span><span>)</span><span>，那么他会发送一个错误应答而不是</span><span>200(OK)</span><span>应答。一个错误应答将不会建立会话。</span><span></span></font></font></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><font size="3"><span><font face="宋体, MS Song">Bob</font></span><span>发送的</span><span><font face="宋体, MS Song">200(OK)</font></span><span>应答可能是这样的：</span><span></span></font></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3" face="宋体, MS Song"> </font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 36pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song">SIP/2.0 200 OK</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>Via: SIP/2.0/UDP server10.biloxi.com</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;  </span>;branch=z9hG4bKnashds8;received=192.0.2.3</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>Via: SIP/2.0/UDP bigbox3.site3.atlanta.com</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;  </span>;branch=z9hG4bK77ef<st1:chmetcnv unitname="C" sourcevalue="4" hasspace="False" negative="False" numbertype="1" tcsc="0">4c</st1:chmetcnv>2312983.1;received=192.0.2.2</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>Via: SIP/2.0/UDP pc33.atlanta.com</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>&nbsp;&nbsp;&nbsp;&nbsp;  </span>;branch=z9hG4bK776asdhds ;received=192.0.2.1</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>To: Bob &lt;sip:bob@biloxi.com&gt;;tag=a<st1:chmetcnv unitname="C" sourcevalue="6" hasspace="False" negative="False" numbertype="1" tcsc="0">6c</st1:chmetcnv>85cf</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>From: Alice &lt;sip:alice@atlanta.com&gt;;tag=1928301774</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>Call-ID: a84b<st1:chmetcnv unitname="C" sourcevalue="4" hasspace="False" negative="False" numbertype="1" tcsc="0">4c</st1:chmetcnv>76e66710@pc33.atlanta.com</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>CSeq: 314159 INVITE</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>Contact: &lt;sip:bob@192.0.2.4&gt;</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>Content-Type: application/sdp</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>Content-Length: 131</font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span></font></font></span></p>
+<p style="margin: 0cm 0cm 0pt; text-indent: 24pt;" class="MsoNormal"><span><font size="3"><font face="宋体, MS Song"><span>  </span>(Bob&#8217;s SDP not shown</font></font></span></p>
+<font size="3"><span></font></div></div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-23T00:00:00+08:00" pubdate data-updated="true">Aug 23<span>rd</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<!--a class="addthis_counter addthis_pill_style"></a-->
+
+<!-- JiaThis Button BEGIN -->
+<div id="ckepop">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_renren"></a>
+	<a class="jiathis_button_kaixin001"></a>
+	<a href="http://www.jiathis.com/share?uid=1663055" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1344059400115285" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+      
+        
+        // var disqus_developer = 1;
+      //var disqus_identifier = '';
+      //var disqus_url = '';
+      var disqus_identifier = 'http://ifq.github.com/blog/2007/08/23/2/';
+      var disqus_url = 'http://ifq.github.com/blog/2007/08/23/2/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<!-- 
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33860711-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+ -->
+
+
+</body>
+</html>

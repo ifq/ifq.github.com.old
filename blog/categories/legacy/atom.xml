@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: legacy | Geek Woodworker]]></title>
+  <link href="http://ifq.github.com/blog/categories/legacy/atom.xml" rel="self"/>
+  <link href="http://ifq.github.com/"/>
+  <updated>2012-09-11T18:29:04+08:00</updated>
+  <id>http://ifq.github.com/</id>
+  <author>
+    <name><![CDATA[靖天]]></name>
+    <email><![CDATA[ifqqfi凹凸gmail刀com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[回国了！换博了！]]></title>
+    <link href="http://ifq.github.com/blog/2010/10/20/1/"/>
+    <updated>2010-10-20T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/10/20/1</id>
+    <content type="html"><![CDATA[<div><p> </p>
+<p>如题！终于把东西都扛回来了。累死了。。所以懒得打字了，以后没特殊情况就去微博了~</p>
+<p><a target="_blank" href="http://t.qq.com/Jingtianwang">t.qq.com/Jingtianwang</a></p></div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[越来越懒了，换微博吧。]]></title>
+    <link href="http://ifq.github.com/blog/2010/10/10/1/"/>
+    <updated>2010-10-10T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/10/10/1</id>
+    <content type="html"><![CDATA[<div>http://t.qq.com/Jingtianwang  </div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[IFQ原创]函数时间测量之iPhone篇]]></title>
+    <link href="http://ifq.github.com/blog/2010/08/20/1/"/>
+    <updated>2010-08-20T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/08/20/1</id>
+    <content type="html"><![CDATA[<div><p>函数时间测量之iPhone篇</p>
+<p>关键字：<br>
+iPhone OS (or Mac OS) Time Measure in nano second or micro sec IFQ IF.Q ifqqfi.<br>
+时间测量 测速</p>
+<p>在 iPhone （or MacOS）上以微秒或者纳秒单位来测量程序的执行时间，<br>
+我想应该是很常用的功能吧。一年前做iPhone程序的时候就出现了这个需求，当时花了一个晚上才找到相应的方法。往往在这些意想不到的小地方耗费很多时间。一年后的今天我google了下相关的关键字，还是没有相关的文章，所以我就举手之劳，帮大家省点时间吧。</p>
+<p>其实很简单，下面的这段程序就可以搞定：</p>
+<p><font color="#38761d" size="2" face="Times New Roman">-----------------------------------------------------<br>
+#import &lt;mach/mach.h&gt;<br>
+#import &lt;mach/mach_time.h&gt;</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">static uint64_t start;<br>
+static uint64_t end;<br>
+static mach_timebase_info_data_t&nbsp;&nbsp;&nbsp;  sTimebaseInfo;</font></p>
+<p><br>
+<font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountStart {<br>
+<br>
+if ( sTimebaseInfo.denom == 0 ) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  (void) mach_timebase_info(&amp;sTimebaseInfo);<br>
+&nbsp;&nbsp;&nbsp;  }<br>
+<br>
+start = mach_absolute_time();<br>
+}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountEnd {<br>
+<br>
+end = mach_absolute_time();</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQShowCount {<br>
+uint64_t diff;<br>
+uint64_t diffnano;<br>
+<br>
+diff = end - start;<br>
+<br>
+diffnano = diff * sTimebaseInfo.numer / sTimebaseInfo.denom;<br>
+<br>
+NSLog(@&quot;Nano sec : %qu&quot;, diffnano);<br>
+}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">-----------------------------------------------------</font></p>
+<p>用尻想也知道了，要测量的代码段前后放上Start，End函数，完事后 Show 一下就可以了。</p>
+<p>关于测量的精度是否真的能达到nano,现在有点不确定了。一年前的东西了，能翻出代码就不错了。。我现在用过的其他平台都是和CPU速度相同频率来计数来计时的，精度都还没到1 nano sec的。不过微秒单位的计时肯定是么有问题了。我想一般情况下微秒已经足够了吧～</p>
+<p>最后给出个参考链接。是MacOS下的官方的说明。（其实我就是把这个搬到iPhone来用而已）<br>
+<a href="http://developer.apple.com/mac/library/qa/qa2004/qa1398.html">http://developer.apple.com/mac/library/qa/qa2004/qa1398.html</a></p>
+<p><br>
+下次讲讲 VxWorks 下的计时方法～</p></div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[通知]]></title>
+    <link href="http://ifq.github.com/blog/2010/08/06/1/"/>
+    <updated>2010-08-06T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/08/06/1</id>
+    <content type="html"><![CDATA[<div>本人将于10月17日离开日本回国工作。望各单位做好迎接准备。特此通知。</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[一段关于路径搜索的题目]]></title>
+    <link href="http://ifq.github.com/blog/2010/08/04/1/"/>
+    <updated>2010-08-04T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2010/08/04/1</id>
+    <content type="html"><![CDATA[<div><p>帮WK做的题，Memo一下。</p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span"><font size="1">長さnの文字列を、m個のノードで構成されるグラフを探索し、<wbr></wbr>以下のルールで文字列を生成する時、<wbr></wbr>生成される文字列のパターン数を求めてください。<br>
+(1 &lt;= m, n &lt;= 20)<br>
+<br>
+グラフのルール：<br>
+２個以上の複数のノードがある<br>
+各ノードは、a,b,c三つのアクションにより、<wbr></wbr>他のノードに遷移する。<br>
+各ノードのa,b,cのアクションは、<wbr></wbr>自分自身への遷移となる場合もある。<br>
+<br>
+文字列生成のルール：<br>
+スタートノードから始まり、<wbr></wbr>n回アクションをたどりノードを遷移し、<wbr></wbr>n回目にゴールノードにたどり着くようにする。<br>
+その際のアクションの履歴により文字列を生成する（例：<wbr></wbr>abaabcbca）<br>
+1番目のノードがスタートノード、<wbr></wbr>番号の最も大きなノードがゴールノード。<br>
+<br>
+例えば、添付された画像ファイルのようなグラフが与えられ、<wbr></wbr>n=4と指定された場合は、<br>
+a b a c<br>
+a a a c<br>
+a c a c<br>
+a c b c<br>
+上記4つが生成されるので、解は4となります。<br>
+<br>
+グラフ構造は、<wbr></wbr>下記のようなフォーマットの配列で渡すように実装してください。<br>
+{<br>
+1(ノード番号), aのジャンプ先ノード番号, bのジャンプ先ノード番号, cのジャンプ先ノード番号,<br>
+2(ノード番号), aのジャンプ先ノード番号, bのジャンプ先ノード番号, cのジャンプ先ノード番号,<br>
+.....<br>
+}<br>
+<br>
+例(C言語)：<br>
+#include &lt;stdio.h&gt;<br>
+#include &lt;stdlib.h&gt;<br>
+<br>
+int graph1[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 4,<br>
+3, 3, 3, 3,<br>
+4, 1, 2, 2<br>
+};<br>
+<br>
+int graph2[32] = {<br>
+1, 2, 3, 4,<br>
+2, 1, 5, 6,<br>
+3, 1, 5, 7,<br>
+4, 1, 6, 7,<br>
+5, 2, 3, 8,<br>
+6, 2, 4, 8,<br>
+7, 3, 4, 8,<br>
+8, 5, 6, 7<br>
+};<br>
+<br>
+int graph3[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 2,<br>
+3, 3, 1, 3,<br>
+4, 1, 2, 2<br>
+};<br>
+<br>
+//ここを実装する<br>
+int solve(int graph[], int n, int m){<br>
+return 0;<br>
+}<br>
+<br>
+int main(void){<br>
+printf(&quot;%d\n&quot;, solve(graph1, 4, 4)); //4<br>
+printf(&quot;%d\n&quot;, solve(graph2, 9, 8)); //4920<br>
+printf(&quot;%d\n&quot;, solve(graph3, 19, 4)); //0<br>
+return 0;<br>
+}</font></span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">以下是解答：</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">------------------------------------------------------------------------------------------------------------------------</span></span></p>
+<p> </p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">#include &lt;stdio.h&gt;<br>
+#include &lt;stdlib.h&gt;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">int graph1[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 4,<br>
+3, 3, 3, 3,<br>
+4, 2, 2, 2<br>
+};</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">int graph2[32] = {<br>
+1, 2, 3, 4,<br>
+2, 1, 5, 6,<br>
+3, 1, 5, 7,<br>
+4, 1, 6, 7,<br>
+5, 2, 3, 8,<br>
+6, 2, 4, 8,<br>
+7, 3, 4, 8,<br>
+8, 5, 6, 7<br>
+};</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">int graph3[16] = {<br>
+1, 2, 3, 3,<br>
+2, 2, 1, 2,<br>
+3, 3, 1, 3,<br>
+4, 1, 2, 2<br>
+};</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">//ここを実装する</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">#define ACTION_NUM 3<br>
+#define ARRAY_COL (ACTION_NUM + 1)</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">static int g_count = 0;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">void search_dst(int graph[], int n, int m, int num)<br>
+{<br>
+int i, row, pos;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span"><br>
+for(row = 0; row &lt; m; row++) {<br>
+&nbsp;&nbsp;  for(i = 1; i &lt;= ACTION_NUM; i++) {<br>
+&nbsp;&nbsp;&nbsp;  pos = row * ARRAY_COL + i;</span></span></p>
+<p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">&nbsp;&nbsp;&nbsp;  if(graph[pos] == num) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;  if(n &gt; 1) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  search_dst(graph, n - 1, m, row+1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;  } else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  if(row == 0) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  g_count++;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;  }<br>
+&nbsp;&nbsp;&nbsp;  }<br>
+&nbsp;&nbsp;  }<br>
+}<br>
+}</span></span></p>
+<span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="border-collapse: collapse; font-size: 13px" class="Apple-style-span">
+<p><br>
+int solve(int graph[], int n, int m) {</p>
+<p>g_count = 0;<br>
+search_dst(graph, n, m, m);</p>
+<p>return g_count;</p>
+<p>}</p>
+<p>int main(void){<br>
+printf(&quot;%d\n&quot;, solve(graph1, 4, 4)); //4<br>
+printf(&quot;%d\n&quot;, solve(graph2, 9, 8)); //4920<br>
+printf(&quot;%d\n&quot;, solve(graph3, 19, 4)); //0<br>
+return 0;<br>
+}</p>
+</span></span></div>
+
+]]></content>
+  </entry>
+  
+</feed>

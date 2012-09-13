@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: cool | Geek Woodworker]]></title>
+  <link href="http://ifq.github.com/blog/categories/cool/atom.xml" rel="self"/>
+  <link href="http://ifq.github.com/"/>
+  <updated>2012-09-11T18:29:04+08:00</updated>
+  <id>http://ifq.github.com/</id>
+  <author>
+    <name><![CDATA[靖天]]></name>
+    <email><![CDATA[ifqqfi凹凸gmail刀com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[各种 Big Machine]]></title>
+    <link href="http://ifq.github.com/blog/2012/09/04/really-big-machines/"/>
+    <updated>2012-09-04T00:00:00+08:00</updated>
+    <id>http://ifq.github.com/blog/2012/09/04/really-big-machines</id>
+    <content type="html"><![CDATA[<p>
+在youtube上看到的视频，各种庞然大物。各种挖矿的，运火箭的。
+</p>
+
+
+<ul>
+<li>2：00位置的那个钻洞的大家伙，每部电影中生活在地下的反派角色都应该攒钱
+  买一个。哥谭镇的贝恩是不是也有一个啊～
+</li>
+<li>运火箭那个，以前电视里见过，原来它的牛B之处是可以保证表面的平稳，晃动
+  都在1/6度以内！！
+</li>
+</ul>
+
+
+<p>   <div class="video-container">
+   <video width='' height='' preload='none' controls poster='  /rc/cool-big-machine.JPG'><source src='/video/really-big-machines-ifq.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/></video>
+   </div></p>
+
+<p>
+源视频地址：<a href="http://www.youtube.com/watch?v=iE-3awHYsG8&amp;list=UUqmugCqELzhIMNYnsjScXXw&amp;index=33&amp;feature=plcp">http://www.youtube.com/watch?v=iE-3awHYsG8&amp;list=UUqmugCqELzhIMNYnsjScXXw&amp;index=33&amp;feature=plcp</a>
+</p>
+
+]]></content>
+  </entry>
+  
+</feed>
