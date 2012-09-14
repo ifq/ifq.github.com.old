@@ -7,7 +7,8 @@
 	<meta name="author" content="靖天">
 
 	
-	<meta name="description" content="看美国《信息周刊》,发现正在评选有史以来最伟大的12款软件,这12款软件排名依次是: (很老的文章了) 1. Unix操作系统 2. IBM System R－1983年以DB2的形式进入商业市场 3. 基因排序软件－美国基因组研究所(IGR) 4. IBM System 360系统 5. &hellip;">
+	<meta name="description" content="&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 最近两天有点时间了,加上器件什么的都准备妥当了,就自己花了个很简单的PCB板子,把以前在ST申请的重力加速度芯片搭建成开发平台,打算做点什么有意思的东西.
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -94,6 +95,58 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/02/07/1/">重力加速度传感器制作完毕</a></h1>
+	<div class="entry-content">
+		<div>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  最近两天有点时间了,加上器件什么的都准备妥当了,就自己花了个很简单的PCB板子,把以前在ST申请的重力加速度芯片搭建成开发平台,打算做点什么有意思的东西.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  本以为成都电子器件都很齐全了,电路上学要的一个放大器TS924转了半天却怎么也买不到,自己对电路又不太熟悉,只会参考官方的电路来做.没办法,从广州邮寄过来,结果宰了我100RMB.<img src="/rc/legacy/i_f12.gif" width="800">本来价值几元钱的的东西啊&#8230;&#8230;..<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  器件准备好了,剩下的就是画图做板子了.学校的条件不是很好,只能用单层的铜板自己腐蚀线路那种方式.不过我这个东西也很简单,不需要多么复杂的走线.之前没有用过Protel,简单学了学,感觉布线是个很复杂的工作,需要很高的技巧.不过似乎其中有很多问题可以用路径问题解决,似乎可以用计算机来自动布线,这方面我没用过,也不知道有没有.但是在许多接口需要互联的时候,判定他们是否能在一层板子上完成,这个功能应该是可以软件实现的吧..<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+<div align="center" forimg="1"><img src="/rc/legacy/12bd7fd922ce20eb38012f36.jpg" width="800"></div>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  板子走线如上图. 很业余,毕竟不是电子系的.不过感觉接触些电子对嵌入式的帮助是很直接的. 比如我现在做的这个东西,如果我自己不做,又想玩玩,那将会比较痛苦.起码学了这些东西,可以把自己的简单想法变为现实.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  现在电路板已经做好了,调试也通过了.加速度传感器能输出X,Y,Z三个方向的加速度的模拟量,通俗点就是通过电压高低来表示加速度大小.通过AD转换把电压值读出,再根据芯片的设定转换为加速度值.<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  我使用NRF9E5来作为处理器.NRF9E5实际是一款无线电收发芯片,是以前一个项目中使用过的.它具有C51的内核,无线电收发功能,还有4路10位AD.完全能够满足我这个系统的需求. 我要求的功能就是AD转换测量加速度的值通过无线方式发送到计算机,再做进一步的处理.<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  以后要做的工作就是数据的采集和分析了.这也是为什么我把这篇文章归入模式识别的原因.我期望通过加速度来识别人的动作.这个应用在模式识别领域应该是十分简单的.相对于图像识别,人脸识别等技术来说,这个应用能采集到的数据是十分准确的,没有那么多的噪声.是一组时间离散的加速度数值.不过对于我来说还是一个很大的挑战.对于数学知识缺乏的我也是个磨练.(大一高数都没有好好学,现在还得自己补这些,看来出来混迟早都得还啊&#8230;哈哈)<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  不过现在时间也不是那么多,这个工作肯定是一个长期而艰巨的工作哈.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  最后补个做好的板子的张片,懒得拿相机,拿手机拍的,不是很清晰.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+<div align="center" forimg="1"><img src="/rc/legacy/99491c30a6de9a9ba8018e0a.jpg" width="800"></div></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-07T00:00:00+08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2007/02/07/1//blog/page/26/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -775,65 +828,6 @@ Google Mini 2.2不会直接对企业应用软件的数据进行索引，而是�
 </div>
 	
 		<span class="comments"><a href="/blog/2007/01/24/1//blog/page/26/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2007/01/14/1/">相關係數的小故事</a></h1>
-	<div class="entry-content">
-		<div><table height="592">
-    <tbody>
-        <tr height="110" style="height: 82.5pt;">
-            <td width="700" height="85" class="xl24" style="width: 525pt;"><font color="#ff6600">转载</font>
-            <p style="text-indent: 32px;">相關係數的發展大約是在十九世紀末期的時候，當時的人們還不太清楚要如何去描述在一群樣本中，兩個隨機變項之間的關係。但是在十九世紀中期的時候，許多的數 學家，像是Pascal， Bernoulli， De Moivre ，Simpson ，Laplace ，Gauss ，還有Quetelet等人，已經發展出來機率的概念，集中趨勢指標的測量，誤差值呈現常態分配，中央極限定理，以及可能的誤差概念等，促成了 Galton發展出相關係數的概念。</p>
-            </td>
-        </tr>
-        <tr height="220" style="height: 165pt;">
-            <td width="700" height="177" class="xl24" style="width: 525pt;">
-            <p style="text-indent: 32px;"><span>Galton 會開始研究統計上的問題，是源自於他對遺傳學上的興趣。他在達爾文的「物種原始」一書中提到他對於遺傳的看法：「這些新的觀念激勵了我去從事研究我有興趣 的遺傳學和人類種族的進化。」由於之前已經有人發現誤差值呈現一個常態分配的定理在實際的情況中也可以觀察到，所以Galton就在想，這個定理可能可以 用來描述人類在身體和心理特徵上的差異。在1884年的時候，Galton成立了人體測量實驗室，透過了測量數百人身體的特徵後，證實了人的身體特徵的確 符合了誤差值呈常態分配的理論。但是，Galton不僅僅對身體上的特徵有興趣而已，他認為智力也是經由遺傳而來的。因此，他需要一個方法來描述這一個世 代的智力，與前一個世代的智力是&rdquo;相關&rdquo;的。幸運的，Galton知道這種方法在科學上的重要性必需要跟人類的心理特質的研究分開，因為人類的心理特質並 不容易用量化的方式來測量。所以他就藉著研究香豌豆的特徵，和人類身體上的特徵，而發展出了相關和迴歸的概念。</span></p>
-            </td>
-        </tr>
-        <tr height="88" style="height: 66pt;">
-            <td width="700" height="84" class="xl24" style="width: 525pt;">
-            <p style="text-indent: 32px;"><span>Galton 在1888年的論文中定義了相關係數：有兩個隨機變項（X,Y），其中一個變項（X）的變化，或多或少的跟隨著另一個變項（Y）的變化。而且是相同方向的 變化時，這兩個變項(X,Y)被定義為&rdquo;相關的&rdquo;。&hellip;&hellip;而在這兩個變項中必定有部份相同的因素同時影響著它們，如果兩者間沒有相同的因素的話，那這兩個變 項就不可能有相關。</span></p>
-            </td>
-        </tr>
-        <tr height="154" style="height: 115.5pt;">
-            <td width="700" height="117" class="xl24" style="width: 525pt;">
-            <p style="text-indent: 32px;">在Galton 的定義中，顯示了相關係數的特性。相關係數是用來表示線性關係的強度，強度越大，相關係數越靠近1；並且可以藉由一條線性公式互相作預測。另外，相關係數 也具有方向性：如果相關係數為正，表示當其中一個變項增加的時候，另一個變項會跟著增加；而當相關係數為負的時候，其中一個變項的增加會導致另一個變項減 少。但要注意的是，在Galton的定義中，相關係數並沒有代表著因果關係。Galton計算相關係數的方法是請統計學家把資料點畫出來，然後再去畫出與 這些點最適合的直線，最後再去計算這條直線的斜率。Galton並沒有發展出特殊的公式來計算出這條直線，計算相關係數的公式，則是由Karl Pearson所發展出來的。</p>
-            </td>
-        </tr>
-    </tbody>
-</table></div>
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-01-14T00:00:00+08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2007</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/legacy/'>legacy</a>
-
-
-</div>
-	
-		<span class="comments"><a href="/blog/2007/01/14/1//blog/page/26/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

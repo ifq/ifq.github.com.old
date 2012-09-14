@@ -7,8 +7,11 @@
 	<meta name="author" content="靖天">
 
 	
-	<meta name="description" content=" 今天回到学校了~
-好好学习,天天向上! Mar 6th, 2007 legacy Comments ">
+	<meta name="description" content=" 广告啊~谁要Mini SD卡啊?谁要Sony 512记忆棒啊?便宜卖拉~
+SD卡是手机用了半年的,记忆棒是相机的基本没有用过~
+有需要的同志请留言哈~
+最好是成都的~
+完毕~ Mar 7th, 2007 legacy Comments ">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +98,46 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/03/07/1/">广告啊~谁要Mini SD卡啊?谁要Sony 512记忆棒啊?便宜卖拉~</a></h1>
+	<div class="entry-content">
+		<div>广告啊~谁要Mini SD卡啊?谁要Sony 512记忆棒啊?便宜卖拉~<br>
+SD卡是手机用了半年的,记忆棒是相机的基本没有用过~<br>
+有需要的同志请留言哈~<br>
+最好是成都的~<br>
+完毕~</div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-03-07T00:00:00+08:00" pubdate data-updated="true">Mar 7<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2007/03/07/1//blog/page/25/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -664,58 +707,6 @@ WaitCommEvent</div>
 </div>
 	
 		<span class="comments"><a href="/blog/2007/02/12/1//blog/page/25/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2007/02/07/1/">重力加速度传感器制作完毕</a></h1>
-	<div class="entry-content">
-		<div>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  最近两天有点时间了,加上器件什么的都准备妥当了,就自己花了个很简单的PCB板子,把以前在ST申请的重力加速度芯片搭建成开发平台,打算做点什么有意思的东西.<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  本以为成都电子器件都很齐全了,电路上学要的一个放大器TS924转了半天却怎么也买不到,自己对电路又不太熟悉,只会参考官方的电路来做.没办法,从广州邮寄过来,结果宰了我100RMB.<img src="/rc/legacy/i_f12.gif" width="800">本来价值几元钱的的东西啊&#8230;&#8230;..<br>
-<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  器件准备好了,剩下的就是画图做板子了.学校的条件不是很好,只能用单层的铜板自己腐蚀线路那种方式.不过我这个东西也很简单,不需要多么复杂的走线.之前没有用过Protel,简单学了学,感觉布线是个很复杂的工作,需要很高的技巧.不过似乎其中有很多问题可以用路径问题解决,似乎可以用计算机来自动布线,这方面我没用过,也不知道有没有.但是在许多接口需要互联的时候,判定他们是否能在一层板子上完成,这个功能应该是可以软件实现的吧..<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-<div align="center" forimg="1"><img src="/rc/legacy/12bd7fd922ce20eb38012f36.jpg" width="800"></div>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  板子走线如上图. 很业余,毕竟不是电子系的.不过感觉接触些电子对嵌入式的帮助是很直接的. 比如我现在做的这个东西,如果我自己不做,又想玩玩,那将会比较痛苦.起码学了这些东西,可以把自己的简单想法变为现实.<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  现在电路板已经做好了,调试也通过了.加速度传感器能输出X,Y,Z三个方向的加速度的模拟量,通俗点就是通过电压高低来表示加速度大小.通过AD转换把电压值读出,再根据芯片的设定转换为加速度值.<br>
-<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  我使用NRF9E5来作为处理器.NRF9E5实际是一款无线电收发芯片,是以前一个项目中使用过的.它具有C51的内核,无线电收发功能,还有4路10位AD.完全能够满足我这个系统的需求. 我要求的功能就是AD转换测量加速度的值通过无线方式发送到计算机,再做进一步的处理.<br>
-<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  以后要做的工作就是数据的采集和分析了.这也是为什么我把这篇文章归入模式识别的原因.我期望通过加速度来识别人的动作.这个应用在模式识别领域应该是十分简单的.相对于图像识别,人脸识别等技术来说,这个应用能采集到的数据是十分准确的,没有那么多的噪声.是一组时间离散的加速度数值.不过对于我来说还是一个很大的挑战.对于数学知识缺乏的我也是个磨练.(大一高数都没有好好学,现在还得自己补这些,看来出来混迟早都得还啊&#8230;哈哈)<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  不过现在时间也不是那么多,这个工作肯定是一个长期而艰巨的工作哈.<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  最后补个做好的板子的张片,懒得拿相机,拿手机拍的,不是很清晰.<br>
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-<div align="center" forimg="1"><img src="/rc/legacy/99491c30a6de9a9ba8018e0a.jpg" width="800"></div></div>
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-02-07T00:00:00+08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2007</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/legacy/'>legacy</a>
-
-
-</div>
-	
-		<span class="comments"><a href="/blog/2007/02/07/1//blog/page/25/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

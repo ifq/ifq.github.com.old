@@ -7,9 +7,11 @@
 	<meta name="author" content="靖天">
 
 	
-	<meta name="description" content="最近在学习Servo Control, 所以见了很多废品回来拆。突然有了很多东西可以学，Servo，PID，Hall Sensor，H-Brige Circuit。。。希望有时间把整个过程记录下来，也给这里增加点工程师气息。。。
-总之，先Show一下最近玩的东西。
-这是个93年的老光驱，不过马达 &hellip;">
+	<meta name="description" content="采样值 C、累加器 S，平均值 A，采样次数 N 传统的平均值滤波算法：
+S = C(1) + C(2) + &#8230; + C(N)
+A = S / N
+需要用循环来计算累加和，比较耗时，C(1～N）是缓存，随采样数N增大，所需内存量也增大 向队列平均值算法推进：
+S = C(1) + C &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -96,6 +98,65 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2010/06/28/1/">平均值滤波之鬼斧神工算法（转）</a></h1>
+	<div class="entry-content">
+		<div><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span class="Apple-style-span">
+<div style="text-indent: 2em">采样值 C、累加器 S，平均值 A，采样次数 N</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">传统的平均值滤波算法</font>：</div>
+<div style="text-indent: 2em">S = C(1) + C(2) + &#8230; + C(N)</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">需要用循环来计算累加和，比较耗时，C(1～N）是缓存，随采样数N增大，所需内存量也增大</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">向队列平均值算法推进</font>：</div>
+<div style="text-indent: 2em">S = C(1) + C(2) + &#8230; + C(N) （第一次）</div>
+<div style="text-indent: 2em">C(x) = C(x + 1) （队列前移）</div>
+<div style="text-indent: 2em">C(N) = C</div>
+<div style="text-indent: 2em">S = S - C(1) + C(N)</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">运算量有所改进（用指针维护循环队列，不实际移动数据），占用内存问题不变</div>
+<div style="text-indent: 2em"> </div>
+<div><font color="#ff0000">鬼斧神工算法</font>：</div>
+<div style="text-indent: 2em">初始化：A=初始值，S=A*N</div>
+<div style="text-indent: 2em">S = S - A + C</div>
+<div style="text-indent: 2em">A = S / N</div>
+<div style="text-indent: 2em">就这么简单，三个变量（N可以是常数），只要 S 的量程足够，N可以任意调整。</div>
+<div style="text-indent: 2em">可以看出，此算法是从队列平均值算法演变而来，因没有了队列，每次计算时不知道该丢弃的最老的一个采样值是多少，这里用了个替代的办法，丢弃上次计算出的平均值。</div>
+<div style="text-indent: 2em">去掉了缓存维护，节省内存空间，同时也将运算量压缩到了最小，执行效率非常高。调试时容易修改采样数。</div>
+</span></span><br class="Apple-interchange-newline"></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-28T00:00:00+08:00" pubdate data-updated="true">Jun 28<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2010/06/28/1//blog/page/3/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -739,59 +800,6 @@ NND</span>，车没了</span><span >……</span><span > <br>
 </div>
 	
 		<span class="comments"><a href="/blog/2010/01/07/1//blog/page/3/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2009/12/24/1/">跋山涉水，翻山越岭</a></h1>
-	<div class="entry-content">
-		<div><p> </p>
-<p><span>回家。</span></p>
-<p><span>坐。</span></p>
-<p><span><img src="/rc/legacy/b0983a01056b173e7bec2c92.jpg" width="800"><br>
-</span></p>
-<p><span>坐。。</span></p>
-<p><span><span><img src="/rc/legacy/15b37e1ea84da1c41bd5769c.jpg" width="800"><br>
-</span></span></p>
-<p><span><span>坐。。。</span></span></p>
-<p><span><span><span><img src="/rc/legacy/c7b7a4effa4c3226fdfa3c9d.jpg" width="800"><br>
-</span></span></span></p>
-<p><span><span><span>坐。。。。</span></span></span></p>
-<p><span><span><span><span><img src="/rc/legacy/cda88e1023b39631213f2e98.jpg" width="800"><br>
-</span></span></span></span></p>
-<p><span><span><span><span>到家~</span></span></span></span></p>
-<p><span><span><span><span><span><img src="/rc/legacy/7a624a5441787264564e0099.jpg" width="800"><br>
-</span></span></span></span></span><span><span><span><span><span><span><img src="/rc/legacy/3444e6ddd74d3fdf76c6389a.jpg" width="800"><br>
-</span></span></span></span></span></span></p></div>
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-12-24T00:00:00+08:00" pubdate data-updated="true">Dec 24<span>th</span>, 2009</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/legacy/'>legacy</a>
-
-
-</div>
-	
-		<span class="comments"><a href="/blog/2009/12/24/1//blog/page/3/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

@@ -7,7 +7,7 @@
 	<meta name="author" content="靖天">
 
 	
-	<meta name="description" content=" 猪你生日快乐 Aug 31st, 2007 legacy Comments ">
+	<meta name="description" content=" 此车甚爽～！更多图片见相册！ Sep 2nd, 2007 legacy Comments ">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -94,6 +94,59 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/09/02/1/">Toyota FJ Cruiser更多照片</a></h1>
+	<div class="entry-content">
+		<div><font color="#993366">此车甚爽～！更多图片见相册！</font><br>
+<div align="center" forimg="1"><img src="/rc/legacy/0d405f60ceb4a6d68db10dfc.jpg" width="800"></div>
+<div align="center">
+<div align="center" forimg="1"><br>
+</div>
+<div align="center" forimg="1"><img src="/rc/legacy/b98b523db6b5a1e73d6d97fa.jpg" width="800"></div>
+<div align="center" forimg="1"><img src="/rc/legacy/636a0df428fb5567ddc474cd.jpg" width="800"></div>
+<div align="center" forimg="1"><img src="/rc/legacy/e04c2597c8d6c56455fb96d0.jpg" width="800"></div>
+<div align="center" forimg="1"><img src="/rc/legacy/7f6a9e1610c05758f3de32d2.jpg" width="800"></div>
+<div align="center" forimg="1"><img src="/rc/legacy/2e4cfbdcf04042a8cd1166df.jpg" width="800"></div>
+<div class="tmpDiv"> </div>
+<div class="tmpDiv"> </div>
+<div class="tmpDiv"> </div>
+<div class="tmpDiv"> </div>
+<div class="tmpDiv"> </div>
+<div class="tmpDiv"> </div>
+</div>
+<div class="tmpDiv"> </div></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-09-02T00:00:00+08:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2007/09/02/1//blog/page/18/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -549,60 +602,6 @@
 </div>
 	
 		<span class="comments"><a href="/blog/2007/08/24/1//blog/page/18/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2007/08/23/4/">VOIP与SIP</a></h1>
-	<div class="entry-content">
-		<div>&nbsp;&nbsp;&nbsp;   这2个月一直在使用朋友给的一个VOIP软件打电话，这里简称P。P是他公司的一个产品，主要是面向企业用户的软件，我拿来打免费电话，十分爽。但是这两天手机上网有问题了，wap网连上只有上传数据却没有下行数据，很是恼火。因此P软件也用不成了。不过好像手机直接上网却可以，所以就想自己在手机上模拟下这个软件，方便打电话。<br>
-&nbsp;&nbsp;&nbsp;   昨天开始抓包，把数据分离出来。P软件使用的是UDP方式传送文本数据的形式进行通信。<br>
-<font color="#808080" style="background-color: rgb(255, 255, 255);">MESSAGE sip:ifq.q@10.43.255.57 SIP/2.0<br>
-Via: SIP/2.0/UDP 10.43.255.57:5063;branch=z9hG4bK-2141912560877303042<br>
-Max-Forwards: 70<br>
-From: sip:app@10.43.255.57;tag=9222785866845604187<br>
-To: sip:shenjh.xc@10.43.255.57<br>
-Call-ID: ZXUP9222785866845604187@10.43.255.57<br>
-CSeq: 100 MESSAGE<br>
-Content-Type: text/plain<br>
-Content-Length: 120<br>
-&lt;iq id=&quot;123456_APP&quot; type=&quot;error&quot;&gt;&lt;query xmlns=&quot;ifq.qq:iq:auth&quot;&gt;&lt;error code=&quot;400&quot;&gt;Wrong password&lt;/error&gt;&lt;/query&gt;&lt;/iq&gt;</font><br>
-&nbsp;&nbsp;&nbsp;   起初觉得如果只是文本形式的话应该很好模拟。但是仔细看可以发现其中有几处地方并没有那么简单。tag，branch，Call-ID这些标识符应该都和认证有关。我也尝试了把从软件打开到结束的会话截取到的数据包再发过去，模拟一个客户端，就得到了上边的错误回馈。可以推测其中的认证就是通过这些标识符辅助完成的。<br>
-&nbsp;&nbsp;&nbsp;   没有办法只有转向另外的方法。注意到每个数据包上都有SIP的标识。于是google一下发现了另外的天地。原来这种数据格式叫SIP: Session Initiation Protocol。SIP协议是一个用于建立、更改和终止多媒体会话或呼叫的应用层协议。下边是网上找到的一篇对于一个数据包的简单解释。<br>
-&nbsp;&nbsp;   <br>
-<span style="background-color: rgb(204, 255, 204);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </span><br>
-<font size="3" color="#000080"><span>。。文章太长，贴不上来。只有重贴在文章里了。<br>
-</span></font><span style="background-color: rgb(255, 255, 153);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </span><br>
-看来像模拟这个东东也并非一两下可以搞定的。万一过两天手机上网搞好了，就没有模拟P软件的需求了。。。。不过弄这个东东又了解了不少知识。抓包啊、各种 工具啊、SIP啊等等还是很有用的。仔细想想自己掌握的技术都是由一个很单纯的初衷开始学习的哦。。简单而快乐的技术者？</div>
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-08-23T00:00:00+08:00" pubdate data-updated="true">Aug 23<span>rd</span>, 2007</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/legacy/'>legacy</a>
-
-
-</div>
-	
-		<span class="comments"><a href="/blog/2007/08/23/4//blog/page/18/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

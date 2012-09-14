@@ -4,7 +4,7 @@
   <title><![CDATA[Category: other | Geek Woodworker]]></title>
   <link href="http://ifq.github.com/blog/categories/other/atom.xml" rel="self"/>
   <link href="http://ifq.github.com/"/>
-  <updated>2012-09-14T12:29:14+08:00</updated>
+  <updated>2012-09-14T18:38:30+08:00</updated>
   <id>http://ifq.github.com/</id>
   <author>
     <name><![CDATA[靖天]]></name>
@@ -28,7 +28,7 @@
 
 </dd>
 <dt><a href="http://hi.baidu.com/ifqq">http://hi.baidu.com/ifqq</a></dt><dd>离开csdn，来到baidu，少了许多专业气氛，大家的互动也增加了，慢慢的随着后来工作后身在异乡，也懒得写技术的东西了。开始传照片，show在异国的生活，表达对伟大祖国的思念(哈哈)。后期有一些猫猫的照片，喜欢猫的同志可以去参观下。最终离开，可能是对网页里写博客的厌倦吧。。
-     <img src="/rc/219e75c61d06e65b9c163dff.jpg" width="600" title="haru猫" alt="外边捉来的猫，当时好兴奋，中文名字哈鲁，陪我度过了在日本的最后一段时光。">
+     {% img /rc/219e75c61d06e65b9c163dff.jpg 600 'haru猫' '外边捉来的猫，当时好兴奋，中文名字哈鲁，陪我度过了在日本的最后一段时光。'%}
 
 </dd>
 <dt><a href="http://t.qq.com/Jingtianwang">http://t.qq.com/Jingtianwang</a></dt><dd>离开baidu，被朋友邀请来到微博。（好像三次转移都是同一个人邀请的。。@kebing）那是不知道国内微博行情，以为腾讯会比新浪牛一些，结果现在发现好像不是了&ndash;。
@@ -80,7 +80,7 @@
 
 
 <p>
-<img src="/rc/P6142136-001.JPG" width="380" title="薄薄的刨花" alt="木工让人感觉到真实的存在，也许我应该另开一题讲讲为什么喜欢木工">
+{% img /rc/P6142136-001.JPG 380 '薄薄的刨花' '木工让人感觉到真实的存在，也许我应该另开一题讲讲为什么喜欢木工' %}
 </p>
 
 
@@ -130,7 +130,7 @@
 
 <p>
 忍不住贴张emacs的图给大家看看。
-<img src="/rc/20120804-1.JPG" title="emacs写博客的样子" alt="看似单调的界面，其实暗藏玄机～">
+{% img /rc/20120804-1.JPG 'emacs写博客的样子' "看似单调的界面，其实暗藏玄机～" %}
 </p>
 
 
