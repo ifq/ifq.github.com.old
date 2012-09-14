@@ -17,11 +17,11 @@ comments: true
 #查看
 enca filename
 
-# 将当前目录下所有的代码文件转换到gb2312格式
+# 将当前目录下所有的代码文件转换到gb2312格式 IFQ
 # enca方便之处是可以自动识别输入文件的编码，iconv则必须手动指定
 for i in `find . -name "*.[ch]"`; echo $i; do enconv -x gb2312 $i; done
 
-# 之后用sed将换行符全部转换为unix
+# 之后用sed将换行符全部转换为unix IFQ
 sed -i 's/\x0D//' *.c
 
 #这个是看到的一个更改文件名的方法，mark一下
@@ -29,3 +29,4 @@ find . -name "*.new" | sed 's/\(.*\).new$/mv "&" "\1"/' | sh
 ```
 #+end_html
 
+(E59VZJWGQVZE for http://technorati.com)
