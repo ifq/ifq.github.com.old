@@ -119,18 +119,20 @@
 </pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#查看</span>
 </span><span class='line'>enca filename
 </span><span class='line'>
-</span><span class='line'><span class="c"># 将当前目录下所有的代码文件转换到gb2312格式</span>
+</span><span class='line'><span class="c"># 将当前目录下所有的代码文件转换到gb2312格式 IFQ</span>
 </span><span class='line'><span class="c"># enca方便之处是可以自动识别输入文件的编码，iconv则必须手动指定</span>
 </span><span class='line'><span class="k">for </span>i in <span class="sb">`</span>find . -name <span class="s2">&quot;*.[ch]&quot;</span><span class="sb">`</span>; <span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">do </span>enconv -x gb2312 <span class="nv">$i</span>; <span class="k">done</span>
 </span><span class='line'>
-</span><span class='line'><span class="c"># 之后用sed将换行符全部转换为unix</span>
+</span><span class='line'><span class="c"># 之后用sed将换行符全部转换为unix IFQ</span>
 </span><span class='line'>sed -i <span class="s1">&#39;s/\x0D//&#39;</span> *.c
 </span><span class='line'>
 </span><span class='line'><span class="c">#这个是看到的一个更改文件名的方法，mark一下</span>
 </span><span class='line'>find . -name <span class="s2">&quot;*.new&quot;</span> | sed <span class="s1">&#39;s/\(.*\).new$/mv &quot;&amp;&quot; &quot;\1&quot;/&#39;</span> | sh
 </span></code></pre></td></tr></table></div></figure>
 
-</div>
+<p>
+(E59VZJWGQVZE for <a href="http://technorati.com">http://technorati.com</a>)
+</p></div>
 
 
 <div class="meta">
