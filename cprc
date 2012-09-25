@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SRCDIR="/mnt/hgfs/temp"
+SRCDIR="$HOME/picasa-export"
 RCDIR="./source/rc"
 
 cp -rf $SRCDIR/$1 $RCDIR
