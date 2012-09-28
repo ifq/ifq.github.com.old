@@ -1,6 +1,12 @@
 #!/bin/bash
 
-datestr=$(date +%Y-%m-%d)
+datestr=$1
+
+if [ -z $1 ]
+then
+	datestr=$(date +%Y-%m-%d)
+fi
+
 echo "isolate $datestr"
 
 rake isolate[$datestr]
