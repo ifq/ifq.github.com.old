@@ -2,7 +2,7 @@
 ---
 layout: post
 title: Roubo Style workbench - 靖天木工桌 1/5
-categories: [woodworking, handtool, practice]
+categories: [woodworking, workbench]
 comments: true
 ---
 #+END_HTML

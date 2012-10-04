@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SRCDIR="$HOME/picasa-export"
+SRCDIR="$HOME/temp"
 RCDIR="./source/rc"
 
 cp -rf $SRCDIR/$1 $RCDIR
