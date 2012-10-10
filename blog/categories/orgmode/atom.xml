@@ -4,7 +4,7 @@
   <title><![CDATA[Category: orgmode | Geek Woodworker]]></title>
   <link href="http://ifq.github.com/blog/categories/orgmode/atom.xml" rel="self"/>
   <link href="http://ifq.github.com/"/>
-  <updated>2012-09-14T18:38:30+08:00</updated>
+  <updated>2012-10-10T21:45:53+08:00</updated>
   <id>http://ifq.github.com/</id>
   <author>
     <name><![CDATA[靖天]]></name>
@@ -97,7 +97,7 @@ git push
 
 
 
-  {% img /rc/emacs.png 800 600 ' ' 'emacs 启动界面' %}
+  <img src="/rc/emacs.png" width="800" height="600" title=" " alt="emacs 启动界面">
 
 <p>
   既然emacs这么好，如果熟悉它的话，自然写博客的时候也想用它了。单纯用emacs来写markdown格式的文本固然也可以，也有相应的emacs模式配合。但是寡人不熟悉markdown格式，相反对同类型的功能更强大的org-mode略知一二，所以就想用org格式来写博客。
@@ -116,41 +116,66 @@ git push
 <p>  <a href="http://orgmode.org/">org-mode</a> 是emacs的一种扩展模式，是在 <a href="http://emacswiki.org/emacs/OutlineMode">outline mode</a> 基础上发展出来的一种文本编辑辅助模式。适合在编写大纲（outline）组织结构的文档时使用。orgmode拥有丰富的快捷键由于编辑文档，支持url link，有强大的TODO、Agenda功能用于组织计划、有方便的表格功能、可以快捷的将org文档导出成html、pdf、laTex等格式的文档。
 </p>
 <p>
-  {% img /rc/orgmode.jpg  800 600 ' ' '简单的org模式的界面' %}
+  <img src="/rc/orgmode.jpg" width="800" height="600" title=" " alt="简单的org模式的界面">
 </p>
 <p>
   这里重点说一下org模式下的html导出功能。org模式可以通过配置，将指定文件夹下的所有org文件导出到一个指定文件夹内（包括子文件的层级关系），org文件之间的link也会转化为html的link，因此直接使用这个功能就可以很方便的用org模式维护一个简单的静态网站。
 </p>
 
 
-{% codeblock org模式publish配置示例 %}
-(setq org-publish-project-alist
-      '(("note-org"
-         :base-directory "~/org/"
-         :publishing-directory "~/pub/"
-         :base-extension "org"
-         :recursive t
-         :publishing-function org-publish-org-to-html
-     :headline-levels 3
-     :html-extension "html"
-     :table-of-contents t
-     :link-home "/index.html"
-     :section-numbers t
-     :style "<link rel=\"stylesheet\" href=\"/org.css\" type=\"text/css\"/>"
-     )
-
-        ("note-static"
-         :base-directory "~/org/"
-         :publishing-directory "~/pub/"
-         :recursive t
-         :base-extension "css\\|js\\|bmp\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|swf\\|zip\\|gz\\|txt\\|el\\|pl\\|mht\\|log\\|bin_\\|bat\\|tst\\|doc\\|docx\\|gz"
-         :publishing-function org-publish-attachment
-     )
-        ("note" 
-         :components ("note-org" "note-static")
-         :author "wangjingtian@xxx.com.cn"
-         )))
-{% endcodeblock %}
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>org模式publish配置示例 </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>(setq org-publish-project-alist
+</span><span class='line'>      '(("note-org"
+</span><span class='line'>         :base-directory "~/org/"
+</span><span class='line'>         :publishing-directory "~/pub/"
+</span><span class='line'>         :base-extension "org"
+</span><span class='line'>         :recursive t
+</span><span class='line'>         :publishing-function org-publish-org-to-html
+</span><span class='line'>     :headline-levels 3
+</span><span class='line'>     :html-extension "html"
+</span><span class='line'>     :table-of-contents t
+</span><span class='line'>     :link-home "/index.html"
+</span><span class='line'>     :section-numbers t
+</span><span class='line'>     :style "&lt;link rel=\"stylesheet\" href=\"/org.css\" type=\"text/css\"/>"
+</span><span class='line'>     )
+</span><span class='line'>
+</span><span class='line'>        ("note-static"
+</span><span class='line'>         :base-directory "~/org/"
+</span><span class='line'>         :publishing-directory "~/pub/"
+</span><span class='line'>         :recursive t
+</span><span class='line'>         :base-extension "css\\|js\\|bmp\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|swf\\|zip\\|gz\\|txt\\|el\\|pl\\|mht\\|log\\|bin_\\|bat\\|tst\\|doc\\|docx\\|gz"
+</span><span class='line'>         :publishing-function org-publish-attachment
+</span><span class='line'>     )
+</span><span class='line'>        ("note" 
+</span><span class='line'>         :components ("note-org" "note-static")
+</span><span class='line'>         :author "wangjingtian@xxx.com.cn"
+</span><span class='line'>         )))</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>
   通过上边的设置我只需要一个快捷键就可以将 <code>~/org/</code> 下的org文件全部导成 html 存在 <code>~/pub</code> 下。

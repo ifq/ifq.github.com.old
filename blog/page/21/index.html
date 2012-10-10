@@ -7,8 +7,7 @@
 	<meta name="author" content="靖天">
 
 	
-	<meta name="description" content="我家红烧肉的制作方法.本来今天在朋友家去做来练练手,去日本后好自己丰衣足食.结果这周太忙,要写3个报告,只好放弃.先把这个记在这里,免得忘记了.这是老妈给我打的.
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 例如3斤至4斤肉的做法:先将洗好的猪肉切片或者一公分见方的块肥瘦分开 &hellip;">
+	<meta name="description" content="很牛哈 爹对儿子说，我想给你找个媳妇。儿子说，可我愿意自己找！爹说，但这个女孩子是比尔盖茨的女儿！儿子说，要是这样，可以。然后他爹找到比尔盖茨，说，我给你女儿找了一个老公。比尔盖茨说，不行，我女儿还小！爹说，可是这个小伙子是世界银行的副总裁！比尔盖茨说，啊，这样，行！最后，爹找到了世界银行的总裁 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +94,301 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/08/09/1/">生意就是这样做成的</a></h1>
+	<div class="entry-content">
+		<div><font color="#800000">很牛哈</font><br>
+<br>
+爹对儿子说，我想给你找个媳妇。儿子说，可我愿意自己找！爹说，但这个女孩子是比尔盖茨的女儿！儿子说，要是这样，可以。然后他爹找到比尔盖茨，说，我给你女儿找了一个老公。比尔盖茨说，不行，我女儿还小！爹说，可是这个小伙子是世界银行的副总裁！比尔盖茨说，啊，这样，行！最后，爹找到了世界银行的总裁，说，我给你推荐一个副总裁！总裁说，可是我有太多副总裁了，多余了！爹说，可是这个小伙子是比尔盖茨的女婿！总裁说，这样呀，行！<br></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-09T00:00:00+08:00" pubdate data-updated="true">Aug 9<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2007/08/09/1//blog/page/21/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/08/08/2/">IC卡模拟</a></h1>
+	<div class="entry-content">
+		<div><font color="#ff6600">整理硬盘备份的时候发现了这篇文章，是在学习SMARTCARD的时候搜集的。现在看来虽然还有点意思，但是已经没有使用价值了，也就没有做他的激情了。要是97年左右我有这个技术并且看到这篇文章的话，就好了。<br>
+文章里有些时序图在这里显示错位了，如果谁还感兴趣可以找我要。<br>
+&nbsp;&nbsp;<font color="#808080">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#333333">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   IC电话卡彻底解密<br>
+声明：本资料仅从技术的角度全面探讨IC卡、IC电话卡及其安全性，由此引发的各种争议或个人、集体利用本资料做任何不正当用途本人概不负责。<br>
+目录<br>
+Ⅰ）第一类卡（德国、西班牙、中国、香港、澳门等）<br>
+Ⅰ-1）介绍：<br>
+Ⅰ-2）引脚：<br>
+Ⅰ-3）主要特性：<br>
+Ⅰ-4）时序图：<br>
+Ⅰ-5）内存数据：<br>
+Ⅱ）第二类卡（法国、墨西哥、捷克、瑞典、爱尔兰等）<br>
+&nbsp;&nbsp;   Ⅱ-1）介绍：<br>
+&nbsp;&nbsp;   Ⅱ-2）引脚：<br>
+&nbsp;&nbsp;   Ⅱ-3）主要特性：<br>
+&nbsp;&nbsp;   Ⅱ-4）时序图：<br>
+&nbsp;&nbsp;   Ⅱ-5）内存数据：<br>
+&nbsp;&nbsp;   Ⅱ-6）电气参数：<br>
+Ⅰ) 第一类卡<br>
+Ⅰ-1）介绍<br>
+自从80年代中期出现IC电话卡后，基本已取代了原来流行的电话磁卡，磁卡存在存在严重的安全问题，已逐步淘汰。<br>
+即使IC电话卡，也不能算很安全，卡内所有数据只要有简单的读写装置并按时序操作都能读取，事实上电话卡和信用卡一样内部没有什么秘密信息，仅仅是带串行输出的128位EPROM而已（对二类卡是256位PROM),不要以为弄懂了它是怎么工作你就有办法重新对卡内数据重新填充，其开始的64位是带写保护的，在出厂时其熔丝位已被编程，你已无法对其更改，其后的40位计数单元受内部逻辑控制在写时只能减少不能增加直至到0为止，因此你想用一般的IC电话卡打免费电话是不可能的，除非你能用单片机仿真它(如果你能读懂本文介绍的所有内容）。IC电话卡是一种一次性使用的计数卡，以一次性的计数方式，从写满的计数器中减&ldquo;1&rdquo;，直至存储单元减为空为止。<br>
+卡片每次消费计数的&ldquo;单位价值&rdquo;根据各种应用系统的实际需要而定。例如：对于中国IC电话卡，如30元卡对应内部计数值为300，每单位值对应0.1元，IC 卡电话机每分钟产生一次扣费信号，扣费值由当地IC电话管理系统设定，一般是价值0.5元或1元，卡片被计数5次和10次。对于其它国家属于第一类IC电话卡而言也是如此，只是内部初始计数值不同，每次扣除额度不一样罢了。其他对于公用加油卡，IC卡计费加油机每一公升（或一加仑）产生一次扣费操作，卡片被操作一次扣2.5元等等，均属于等同原理。事实上，这类卡内部为128位（16字节） NMOS存储器，按如下规律分布：<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   64 位 EPPOM（8字节） 写保护区（芯片数据代码区、发行数据代码区）<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   40 位 EEPROM(5字节)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   24 位 为全&ldquo;1&rdquo;(3字节）<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   共16字节数据。<br>
+Ⅰ-2）引脚：<br>
+&#8212;&#8212;&#8212;&#8212;-+&#8212;&#8212;&#8212;&#8212;-<br>
+|&nbsp;&nbsp;   1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   5&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   引  脚:<br>
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   &#8212;&#8212;-<br>
++&#8212;&#8212;-\&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   /&#8212;&#8212;-+<br>
+|&nbsp;&nbsp;   2&nbsp;&nbsp;&nbsp;   +&#8212;-+&nbsp;&nbsp;&nbsp;   +&nbsp;&nbsp;&nbsp;   6&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   1 : Vcc = 5V&nbsp;&nbsp;&nbsp;   5 : Gnd<br>
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   2 : Reset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   6 : NC<br>
++&#8212;&#8212;&#8211;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&#8212;&#8212;&#8211;+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   3 : Clock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   7 : I/O<br>
+|&nbsp;&nbsp;   3&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;   7&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   4 : NC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   8 : NC<br>
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   +&#8212;-+&#8212;-+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |<br>
++&#8212;&#8212;-/&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   &#45;&#8212;&#8212;+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Vcc：电源 Gnd：地脚 Reset：复位<br>
+|&nbsp;&nbsp;   4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   8&nbsp;&nbsp;   |<br>
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Clock：时钟  I/O：数据 NC: 空脚<br>
+&#8212;&#8212;&#8212;&#8212;-+&#8212;&#8212;&#8212;&#8212;-<br>
+因有三个脚为空脚，目前一般有采用8脚和6脚封装的，6脚封装的无最下一排两个空脚<br>
+<br>
+Ⅰ-3）主要特性：<br>
+-采用单一5V电源供电<br>
+-遵循ISO/IEC7816-3同步协议进行双向数据传输<br>
+-低功耗<br>
+-NMOS技术<br>
+-高可靠性，抗静电干扰能力&gt;4KV<br>
+<br>
+Ⅰ-4）时序图<br>
+复位：<br>
+为使地址计数器复位到0，先让Reset端变高。紧跟着一个Clock脉冲（从低到高再降到0），Reset重新变低，把Clock脉冲包住。随着Reset端变低，地址0单元的数据从I/O上输出。对应 Clock端的每个脉冲，其上升沿使地址计数器增加。其下降沿使被选通地址单元的数据从I/O上输出。地址计数器增加到127后返回到0。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   __________________<br>
+_____|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |_____________________________________________ Reset<br>
+&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _____&nbsp;&nbsp;&nbsp;&nbsp;   :  _____&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _____&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _____&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _____<br>
+_____:_______|&nbsp;&nbsp;&nbsp;&nbsp;   |____:_|&nbsp;&nbsp;&nbsp;&nbsp;   |_____|&nbsp;&nbsp;&nbsp;&nbsp;   |_____|&nbsp;&nbsp;&nbsp;&nbsp;   |_____|&nbsp;&nbsp;&nbsp;&nbsp;   |_ Clk<br>
+&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   : :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+_____:_______:__________:_:_____:_____:_____:_____:_____:_____:_____:_<br>
+_____:___n___|_____0____:_|_____1_____|_____2_____|_____3_____|___4_:_ (Address)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+_____:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :_______:___________:___________:___________:_<br>
+_____XXXXXXXXXXXXXXXXXXXX_______|___________|___________|___________|_ Data<br>
+Bit n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Bit 0&nbsp;&nbsp;&nbsp;   Bit 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Bit2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Bit3<br>
+写位：<br>
+在Reset和Clk端均为低的情况下，如果某地址单元允许写操作（64-103位，且该位必需为1），则Reset端上的一个脉冲（即从低到高再回低）将允许芯片进行位写操作。在紧跟着的时钟脉冲期间执行写操作，调整写操作维持时间至少10ms,在这个CLK脉冲期间，地址计数器不会增加，在CLK写脉冲下降沿，数据0从I/O端输出。从Reset脉冲的上升沿到CLK写脉冲的下降沿期间，I/O端的数据是无效的。在下一个才CLK脉冲，且Reset为低时，地址计数器又增1，并在下降沿时，把选通的地址单元的数据送到I/O端。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _____&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _____<br>
+_____________|&nbsp;&nbsp;&nbsp;&nbsp;   |______________________________|&nbsp;&nbsp;&nbsp;&nbsp;   |_______________  Reset<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+&nbsp;&nbsp;&nbsp;&nbsp;   ___&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _____&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   ___&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _____<br>
+____|&nbsp;&nbsp;   |____:__________|&nbsp;&nbsp;&nbsp;&nbsp;   |_________|&nbsp;&nbsp;   |_____:__________|&nbsp;&nbsp;&nbsp;&nbsp;   |____  Clk<br>
+&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+____:________:__________:_____:_________:___:_____:__________:_____:_____<br>
+n  |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   n+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   n+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;   n+3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   (Address)<br>
+&#8212;-&#8216;&#8212;&#8212;&#8211;:&#8212;&#8212;&#8212;-&#8216;&#8212;&#8211;:&#8212;&#8212;&#8212;&#8217;&#8212;:&#8212;&#8211;:&#8212;&#8212;&#8212;-&#8216;&#8212;&#8211;:&#8212;&#8211;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+_________&nbsp;&nbsp;   _:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   : ____________:  ___:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+_________XXX_XXXXXXXXXXXXXXXXXXX____________ XX___XXXXXXXXXXXXXXXXXXXXXXX  I/O<br>
+&nbsp;&nbsp;   n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   n+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   n+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   n+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   write&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   write<br>
+借位写后的字节擦除：<br>
+对位地址72-103的字节单元来说，只要在每个字节的前面一位进行一次正常的写操作，就可以对此字节后一字节进行字节擦除操作。也就是说，每向高一字节进行借位（即写一位0），紧接着的擦除时序可以对后一字节按字节擦除（即整个字节写1）。被擦除的字节总是比借位写的字节低一字节。从以下时序图可以看出，首先，完成一个&ldquo;位写&rdquo;操作，在CLK的写脉冲结束后，在CLK为低电平时，在发一个Reset脉冲即启动字节擦除操作。在第二个CLK脉冲完成字节擦除，脉冲维持时间整定为擦除周期时间（至少1ms)。芯片逻辑控制电路验证了借位写确已完成从&ldquo;1&rdquo;写&ldquo;0&rdquo;后，才擦除其低位字节。从Reset的上升沿到擦除操作的CLK脉冲的下降沿，I/O脚上的数据无效。地址计数器仍然停留在借位写的地址上。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _____&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _____<br>
+______|&nbsp;&nbsp;&nbsp;&nbsp;   |____________________|&nbsp;&nbsp;&nbsp;&nbsp;   |_________________________________  Rst<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _______&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   _______&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   ___<br>
+______:___________|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |______:_____________|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |______|&nbsp;&nbsp;   |______  Clk<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;   :<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;   :<br>
+&lt;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- address n &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&gt;:&lt;&#8212; n+1 &#8212;&#8212;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+______:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :______:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :__________: _____<br>
+______XXXXXXXXXXXXXXXXXXXXX______XXXXXXXXXXXXXXXXXXXXXXX__________XX_____  I/O<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :  n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;   n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   n+1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   :<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Write&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Erase<br>
+计数方法：<br>
+在67-103地址单元中分为5个不可重置8单元计数器，芯片初始化时，72-103地址单元所对应的4个较低的8单元计数器中可以放0到8个&ldquo;1&rdquo;而67-71地址单元所对应的第5个计数器可以放0到5个&ldquo;1&rdquo;。所谓计数一次，就是将一个单元从&ldquo;1&rdquo;写成&ldquo;0&rdquo;。一个计数器中8位全为&ldquo;0&rdquo;后，要计数，需借位操作，即将高位计数器的一位从&ldquo;1&rdquo;写成&ldquo;0&rdquo;而相应其低位计数器整个字节从&ldquo;0&rdquo;擦除成&ldquo;1&rdquo;。可见4个8单元计数器如此逐一递减，其最大计数为8的4次方=4096。第5个计数器中5个单元因处在最高位只能被写&ldquo;0&rdquo;无法擦成&ldquo;1&rdquo;。因此只能计数5次。故芯片总计数为5X4096=20480。当全部计数单元（地址67-103）都被写成&ldquo;0&rdquo;时，卡片就用完了，不过，芯片出厂初始化时，初置的计数值由国家不同和卡片面值不同而不同，如100元卡初置计数值为1000。<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   举例:&nbsp;&nbsp;&nbsp;   100元（1000计数单元预置初始值）.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   &#8212;&#8212;&#8211;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Byte9&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Byte10&nbsp;&nbsp;&nbsp;&nbsp;   Byte11&nbsp;&nbsp;&nbsp;&nbsp;   Byte12&nbsp;&nbsp;&nbsp;&nbsp;   Byte13<br>
+&nbsp;&nbsp;&nbsp;   &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   000000 - 00000001 - 01111111 - 00011111 - 00000000<br>
+&nbsp;&nbsp;&nbsp;   &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   (3)octal&nbsp;&nbsp;   (6)octal&nbsp;&nbsp;   (7)octal&nbsp;&nbsp;   (1)octal&nbsp;&nbsp;   (2)octal<br>
+&nbsp;&nbsp;&nbsp;   &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;   Value = 0*8^4&nbsp;&nbsp;   +  1*8^3&nbsp;&nbsp;   +  7*8^2&nbsp;&nbsp;   +  5*8^1&nbsp;&nbsp;   +  0*8^<br>
+&nbsp;&nbsp;&nbsp;   &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;   总值 = 1000 Units<br>
+Ⅰ-5）内存数据：<br>
+字节&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   位&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   二进制&nbsp;&nbsp;   十六进制 <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   +&#8212;&#8212;&#8212;&#8211;+&#8212;&#8211;+<br>
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   1 &#8211;&gt;&nbsp;&nbsp;   8 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   | <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   +&#8212;&#8212;&#8212;&#8211;+&#8212;&#8211;+<br>
+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   9 &#8211;&gt;  16 | 0010 1111 | $2F | &#8212;&gt; 德国<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | 0011 0111 | $37 | &#8212;&gt; 西班牙<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   | 0011 1011 | $3B | &#8212;&gt; 希腊<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   +&#8212;&#8212;&#8212;&#8211;+&#8212;&#8211;+ <br>
+3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   17 &#8211;&gt;  24 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   |<br>
+4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   25 &#8211;&gt;  32 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   | &#8212;&gt; 出厂编号(写保护)<br>
+5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   33 &#8211;&gt;  40 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   | <br>
+6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   41 &#8211;&gt;  48 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   |<br>
+7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   49 &#8211;&gt;  56 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   | <br>
+8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   57 &#8211;&gt;  64 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   +&#8212;&#8212;&#8212;&#8211;+&#8212;&#8211;+<br>
+9&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   65 &#8211;&gt;  72 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   | &#8212;&gt; c4096  )<br>
+10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   73 &#8211;&gt;  80 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   | &#8212;&gt;  c512  )<br>
+11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   81 &#8211;&gt;  88 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   | &#8212;&gt;&nbsp;&nbsp;   c64  ) 5个8进制计数区<br>
+12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   89 &#8211;&gt;  96 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   | &#8212;&gt;&nbsp;&nbsp;&nbsp;   c8  )<br>
+13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   97 &#8211;&gt; 104 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   |&nbsp;&nbsp;&nbsp;&nbsp;   | &#8212;&gt;&nbsp;&nbsp;&nbsp;   c0  )<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   +&#8212;&#8212;&#8212;&#8211;+&#8212;&#8211;+ <br>
+14&nbsp;&nbsp;&nbsp;&nbsp;   105 &#8211;&gt; 112 | 1111 1111 | $FF |<br>
+15&nbsp;&nbsp;&nbsp;&nbsp;   113 &#8211;&gt; 120 | 1111 1111 | $FF | &#8212;&gt; 所有位都为&quot;1&quot;<br>
+16&nbsp;&nbsp;&nbsp;&nbsp;   120 &#8211;&gt; 128 | 1111 1111 | $FF |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   +&#8212;&#8212;&#8212;&#8211;+&#8212;&#8211;+<br>
+如需某一国家卡内数据详细数据请与作者联系。<br>
+</font></font></font></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-08T00:00:00+08:00" pubdate data-updated="true">Aug 8<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2007/08/08/2//blog/page/21/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/08/08/1/">重要更正！！！</a></h1>
+	<div class="entry-content">
+		<div><font size="5" face="Arial" color="#ff0000">22<br>
+<br>
+<br>
+<font size="2"><br>
+</font> <font size="2" color="#c0c0c0" style="background-color: rgb(0, 0, 0);">原来我是22，难怪自己觉得有点突然。。。</font></font></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-08T00:00:00+08:00" pubdate data-updated="true">Aug 8<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2007/08/08/1//blog/page/21/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/08/07/1/">23</a></h1>
+	<div class="entry-content">
+		<div><strong><font size="5" color="#ff0000">23</font></strong></div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-07T00:00:00+08:00" pubdate data-updated="true">Aug 7<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2007/08/07/1//blog/page/21/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -333,191 +627,6 @@ A distinguished young woman on a flight from Switzerland asked the  Priest  besi
 </div>
 	
 		<span class="comments"><a href="/blog/2007/07/30/1//blog/page/21/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2007/07/29/1/">史上最独一无二的各人logo!!都不准学!!!</a></h1>
-	<div class="entry-content">
-		<div>世界<br>
-上还有谁<br>
-的&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
-logo能&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
-和我是重复&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
-的<br>
-不&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
-会了吧&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
-这要是再重复&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
-了<br>
-就是你太&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
-厚颜无耻偷<br>
-了我&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
-的&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>
-logo!!<br>
-<div align="left" forimg="1"><img src="/rc/legacy/c2fcaa77c4f0d213b151b939.jpg" width="800"></div>
-原来我的本本上的指纹扫描可以把图像截取出来的.</div>
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-29T00:00:00+08:00" pubdate data-updated="true">Jul 29<span>th</span>, 2007</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/legacy/'>legacy</a>
-
-
-</div>
-	
-		<span class="comments"><a href="/blog/2007/07/29/1//blog/page/21/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2007/07/28/1/">变形金刚IBM</a></h1>
-	<div class="entry-content">
-		<div>&nbsp;&nbsp;&nbsp;   7月11日是变形金刚在中国的首映日，我专门请了假去奢侈了一把。幸好在学校办离校手续的时候没有退学生证，还可以看半价电影，两个人65。在华联超市买了一袋毛豆边吃边看感觉很爽。这部片子确实没有让我失望，绝对值了。电影里威震天还是有那句：你再一次让我失望，红蜘蛛。也隐约记起小时候看的情景。<br>
-<div align="center" forimg="1">
-<div align="center" forimg="1"><img src="/rc/legacy/08499850ca21836a84352439.jpg" width="800"></div>
-<div align="center" forimg="1"><img src="/rc/legacy/87a2d639ede56cfb3b87ce3b.jpg" width="800"></div>
-<br>
-</div>
-<br>
-&nbsp;&nbsp;&nbsp; 
-<div align="center" forimg="1"><br>
-</div>
-&nbsp;&nbsp;&nbsp;  看完电影在门口看到这个纪念品感觉不错，买了一个。手机拍的效果有点差。<br>
-&nbsp;&nbsp;&nbsp;  希望我的本本也能跟我变个形。</div>
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-28T00:00:00+08:00" pubdate data-updated="true">Jul 28<span>th</span>, 2007</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/legacy/'>legacy</a>
-
-
-</div>
-	
-		<span class="comments"><a href="/blog/2007/07/28/1//blog/page/21/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2007/07/27/1/">MindManager7可以用啦</a></h1>
-	<div class="entry-content">
-		<div>&nbsp;&nbsp;&nbsp;   几个月前MindManager7就已经推出了，但是由于没有Serial code，一直没能试用。这两天千辛万苦终于搞到了，试用了一下，果然没有让我失望。<br>
-&nbsp;&nbsp;&nbsp;   界面很亲和，使用很方便，好像多了个Text Marker，还挺实用的。最重要的是！！最重要的是：中文支持好多了，而且处理速度也变快了。<br>
-&nbsp;&nbsp;&nbsp;   强力推荐了。需要key的同志们可以找我。求我的话我会给的。下面是个界面图：
-<div align="center" forimg="1"><img src="/rc/legacy/7dce6f81364452d0bc3e1eac.jpg" width="800"></div></div>
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-27T00:00:00+08:00" pubdate data-updated="true">Jul 27<span>th</span>, 2007</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/legacy/'>legacy</a>
-
-
-</div>
-	
-		<span class="comments"><a href="/blog/2007/07/27/1//blog/page/21/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2007/07/25/1/">转_农民对于猪肉问题的讨论</a></h1>
-	<div class="entry-content">
-		<div><div style="font-size: 14px;" >
-<p><font size="7" face="#ce_temp_font#" color="#ff0000" style="font-size: 18pt;">猪肉涨价了才发现,猪肉是个男人都很关心的问题.</font></p>
-<p><font size="7" face="#ce_temp_font#" style="font-size: 18pt;"><br>
-</font></p>
-<p><font size="7" face="#ce_temp_font#" style="font-size: 18pt;">&nbsp;&nbsp;&nbsp;  无意间看了条新闻，一些城市人说猪肉涨价已经影响到了他们的生活。说实话，我还没有这样的感觉。我觉得他们说这些话有些骄情，肉那必竟不是馒头、白面，一顿不吃心害慌。所以初听到猪肉涨价，我的第一反应就是高兴，甚至兴高采烈。</font></p>
-<p><font size="7" face="#ce_temp_font#" style="font-size: 18pt;">也该涨价了！前 两年，随着玉米价格的不断上涨，农民养猪的效益也因之下滑，一些农民开始退出这个行当。或许这是这次猪肉价格突涨的主要原因，而猪肉给国人全国性的突然发 难，却是所有人始料未及的。而猪肉价格的暴涨也惊动了高层，总理确实是体恤民情，专程前往陕西调研猪肉生产供应的情况。看了新闻，作为陕西人我真感到荣幸 和高兴，总理也随之做了七点指示。记得总理来陕西还是三年前渭河的那次大水，那次是为了水，这次是为了什么？当然是为了老百姓的肉盘子。看了总理的七点指 示，总觉得有些缺憾，只有有一条是关于农民的，那就是要对饲养母猪的给予适当的补贴。尽管只有一条，我都觉得好感动。必竟有人想起那些苦苦挣扎的养殖户 了。尽管这条补贴在实施起来困难重重，也不会对时下疯涨的猪肉价格起到丝毫作用，但它必竟让养猪的农户心中泛起了丝丝甜意。试想，有多少养猪户不是在这暴 涨暴跌的轮回中倾家荡产，暴涨、暴跌的轮回始终都是众多养殖户的摆脱不了心悸。前多年，几乎每三年左右就一个轮回，没有人问过，也没有人想过那些在一次次 轮回中受伤的农民。</font><font size="7" face="#ce_temp_font#" style="font-size: 18pt;">所 以我感动，感动之后是我深深的担忧，这会不会又是一场风？其实这些问题，严格意义上说是市场中的问题，本该由那个看不见的手来解决，但我们似乎更习惯于看 领导，领导亲民是无错的，但会使那个市场的手消于无形，而这才是最可怕的。如何习惯用市场的手段解决市场中的问题，才是我们要习惯的。不过我们的有关部门 面对暴涨，学会了用市场的手段解决，那就是想到了平抑，云云要动用贮备库猪肉。似乎他们是天蓬大元帅猪哥哥，来个变变，变得肉肉无限。但时至今日，也不见 猪肉价格下跌，不知是库里没有还是说说大话吓市场，只是好长时间再也不见有关部门的声音了。所以，市场经济不是说说大话，就如股市一样，跌的时候政府再说 也不见涨，而涨的时候政府稍一开口就一泄千里。这个也怕是股民为什么不关心股却关心猪肉价格的原因吧。而这更是掀起了学界、媒体的关注，一时间猪猪满天 飞，而五大三粗的屠夫也在镁光灯的闪烁下频频亮相各级政府的电视新闻之中。经济学家关心暴涨的猪肉价格会不会引发通货膨胀，社会学家担心暴涨的猪肉会不会 加剧贫富阶层的对立，而各级领导想的是如何做出样子，来彰显爱民形象，而惶惶不安的股民则把猪看成了股，认为猪涨股也涨。但就是没有人想到养猪户，因为他 们都认为农民可发了，但他们可能不知道，这是农民在付出惨重代价后才显现的不正常现象。他们可能得到了些，但暴涨后引发的全民皆养可能就是他们的下一轮梦 魇。因为各级领导肯定会在总理要切实抓好生猪生产的指示下大抓特抓，出台许多刺激养猪的&ldquo;好政策&rdquo;、&ldquo;好办法&rdquo;，一哄而上，全哄而上，大干快干的养猪事业 轰轰烈烈的就开始了。我估计，不出两年就是猪肉价格的大跳水，而首先跳下深水的就是那最容易受伤的农民了。所以，我真的不愿看到总理那样的劳心费神，这 样，他真的是太累了。</font></p>
-<p><font size="7" face="#ce_temp_font#" style="font-size: 18pt;">我留意了各方给 出猪肉价格暴涨的原因。不外有两条：一是受疫情影响，存栏降低，导致市场供应减少；二是饲料价格上涨，养殖成本提高，农民养殖的积极性不高。归根结底一个 原因：供给不足。而为什么会突然上涨且无先兆？为什么会席卷全国？显然这个答案是不确切的，更是有些泛市场化，谁都知道市场本身就是由供求组成的，所以说 供应不足这个答案地球人都知道。其实这次猪肉暴涨，更多的暴露了我们社会中长期存在的深层次的问题。突然上涨，说明市场中出现了突发事件，而只有突发性的 事件才会导致市场的供给突然断档。是什么突发事件呢？只有大面积的疫病！但在我们的生活当中，并没有感到过这种事件的发生。其实在去年，南方就发生了大规 模的疫情，但没有人知道。由于前年年低市场猪肉价格的低迷，一些养殖户自然就做出了缩小养殖规模决策。而由于南方疫情造成的市场供给缺少已悄然形成，但由 于没有这方面的信息，在天灾和人为因素的相互作用下，猪一夜间悄然不见了，暴涨自然起风了。作为疫情农民应该不应该早知道？应该在多大的范围内发布？我查 了一下资料，好象在今年的六月初，新华社才发布了来自农业部的消息，去年南方爆发的高致病性猪蓝耳病给农民造成了较大的经济损失，但并未说明发病死亡的有 多少。看来我们的信息披露不但严重致后，而且极不准确。试想一下，如果农民早早得到这些信息，做出扩大养殖规模的决定，是不是会大大的缓解这一涨价风暴的 到来。这也同时反映了一个隐性的问题，如何给农民提供一个获得真实市场信息的环境。现在可以说是没有一个系统一个平台能真实、准确、快捷的给农民提供可用 的信息，农民获取信息的渠道可以说是五花八门，相当散乱，有报纸的、电视台的、也有网络的，但好象更多的是从广告、熟人那里获取。比如你现在要调查全国的 生猪数量，有农业部门的，有多经部门的，有统计部门的，有产业结构调整部门的，可以说是数出多门，但你无法确定那个数据真实。试想，这又如何让农民获取信 息呢，所以尽快整合各类信息，打造一个权威的农业信息系统和平台，让农民及时撑握第一手资料，获取有用的信息。</font></p>
-<p><font size="7" face="#ce_temp_font#" style="font-size: 18pt;">而为什么会席卷 全国呢？说明不是点上的问题，而是面上的问题，从全国性的猪慌来看，出现了全局性的问题。而我们又如何看待这个问题?这说明农业在整个国民经济发展中遇到 了新问题。什么新问题呢？那就是农业的比较利益进一步下降，与工业品的反差进一步拉大，其脆弱的行业本质在现代市场中越来越明显。我们还没有真正建立起来 一条顺畅的农产品供给链，市场好时就忘了农民，市场紧时就想起了农民。如这次猪肉风暴，如此的让领导们上心，主要原由还是城市的低收入者的呼声。而前年的 猪肉价格下跌，又有谁想到了农民？缺失了农民的和谐社会是偏面的和谐，是不长久的和谐，只能进一步拉大二者之间的差距。这又牵出了一个问题，那就是农民的 涣散，农民的没有组织性。如果农民组成有效的协会，就会通过协会传达呼声，也能够通过协会呼吁政府关怀。</font></p>
-<p><font size="7" face="#ce_temp_font#" style="font-size: 18pt;">涨价了是好事。 农民用农产品的涨价来对应农业比较效益下降，你不涨价，农民就选择离开，众多农民说的最多的就是养猪的效益下降，一头猪一百元的利润，真不如去打工。农民 终于在残酷市场的不断打击下清醒了，那就是选择了离开。离开土地，粮食涨价了，离开猪场了，猪肉涨价了。其实这是好事，随着农民不断的离开，是不是城市化 进程就会大大加快？或许吧，但引发的农村破败会不会出现？</font></p>
-<p><font size="7" face="#ce_temp_font#" style="font-size: 18pt;">我问一个养猪 户，涨价了，现在要多养呀。他是一个有着多年养猪经历的老户了。他说由于猪病，他把十几头母猪卖了，谁知猪涨价了。现在想在村外建个小区，上规模，但就是 没有猪可养。没有那么多的母猪，也一时买不到那么多的仔猪。是的，我国历来是养猪大国，但对于突然没有猪可养还是个有趣的问题。而到底如何养猪呢？美国的 养猪方法倒时值得我们学习。首先是遍及全美国的养猪协会，协会主要推广新品种，并协调有关政策，组织各种技术培训，更重要的是能给养猪户提供可靠的信息。 其次是政府建立了一套严格的种猪培育体系，将各个种猪场的信息进行登记，育种值进行汇编统一上网，便于农民查找，并进行信息共享；另外他们有很好的防疫体 系，这是我们的短处。这其实说明猪不光是农民在养，更是政府在养。政府要做的就是为农民提供一个好的养猪环境，让农民安心的养猪。使农民既养猪有利，城乡 居民又不因猪肉价格太高而远离肉香。若这样，也不至于累得我们的总理为难，不涨价，农民收入不增加，最让总理睡不安的就是农民的增收问题；涨价吧，又引发 物价飞涨，加居城市低收入者的生活困难，手心手背都是肉呀！</font></p>
-<p><font size="7" face="#ce_temp_font#" style="font-size: 18pt;">要回老家了，回去买些什物，还是割点肉吧。果真回家时老娘说，肉贵得不忍心割，几十天都没有问到肉味了，唉！好贵的肉、好香的肉呀！</font></p>
-</div></div>
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-07-25T00:00:00+08:00" pubdate data-updated="true">Jul 25<span>th</span>, 2007</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/legacy/'>legacy</a>
-
-
-</div>
-	
-		<span class="comments"><a href="/blog/2007/07/25/1//blog/page/21/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
