@@ -7,12 +7,8 @@
 	<meta name="author" content="靖天">
 
 	
-	<meta name="description" content="出门倒垃圾,又闻到了夏天的气味.那是小时候的味道,感觉十分的快乐,十分的轻松.好怀念啊.还是做小孩比较好啊,连闻到的空气都要舒服些.
-唉..学习了. ..
-&#8230;
-&#8230;.
-&#8230;..
-我好伤感呀.果然看点技术的书就不伤感了哈. Apr 11th, 2007 legacy &hellip;">
+	<meta name="description" content="&nbsp;&nbsp;&nbsp; 人在江湖身不由己,这话一点都没错啊.在学校的什么想做什么做什么,不感兴趣的东西可以不去关心,但是已进入公司就不一样了.现在公司要求我必须做他们指定的题目作为毕业设计.题目是&quot;检纠错技术在嵌入式系统中的应用&quot;.
+&nbsp;&nbsp;& &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -99,6 +95,63 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h1 class="title"><a href="/blog/2007/04/15/1/">R-S纠错码学习</a></h1>
+	<div class="entry-content">
+		<div>&nbsp;&nbsp;&nbsp;   人在江湖身不由己,这话一点都没错啊.在学校的什么想做什么做什么,不感兴趣的东西可以不去关心,但是已进入公司就不一样了.现在公司要求我必须做他们指定的题目作为毕业设计.题目是&quot;检纠错技术在嵌入式系统中的应用&quot;.<br>
+&nbsp;&nbsp;&nbsp;   检纠错技术目前很成熟啊,在加上我算是个烂了一块板的木桶&#8211;数学那块板,既没有兴趣有没有基础,算是比较不情愿吧.不过再想想,做嵌入式不就是这样么?什么技术都会有涉及,技术积累的越多做起东西更得心应手啊.而且检纠错技术在嵌入式里应该是经常需要使用的.虽然现在现成的东东很多,不过能搞清楚它的原理不是更好么.所以还是积极一点,赶紧做完算了.<br>
+&nbsp;&nbsp;&nbsp;   毕设题目要求中R-S编码最为陌生,就从它开始.<br>
+<br>
+&nbsp;&nbsp;&nbsp;   R-S编码全程是&quot;REED-SOLOMON CODE&quot;,就是R和S这两位仁兄发现的.目前应用的十分广泛.存储设备,DVD,无线网络,卫星通信,数字电视,ADSL等领域都有应用(原来这么有用啊..) IFQ.<br>
+&nbsp;&nbsp;&nbsp;   我想光碟表面花掉也能保证数据正确性,肯定是和这个有密切关系的.试想没有纠错码的光碟,不小心划了一点点地方就不能完整读取了,那光碟的推广也就不太可能了.再如卫星通信领域,要传回从火星或者更远位置的数据,更离不开纠错码的保驾护航了.现在NASA所使用的纠错码好像就是以卷积码做内码,R-S码作为外码的组合方式,被称为&quot;NASA码&quot;.R-S码属于BCH码的一种特例,想要学习R-S码就得先了解BCH码.<br>
+<br>
+&nbsp;&nbsp;&nbsp;   BCH编码是一种线性循环码.手头只有英文的教材,看了半天才明白.其中最主要的就是模运算.有几个概念需要搞清楚:<br>
+&nbsp;&nbsp;&nbsp;   GF(q) &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   是指一个域,在BCH中是指从1至q这个范围.<br>
+&nbsp;&nbsp;&nbsp;   Primitive Element &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   是指一个元素a,在GF(q)内任何元素都可以描述成a的幂的形式.注意是在GF(q)这个域的范围,所以超出范围的数是要以q为模进行运算的.<br>
+&nbsp;&nbsp;&nbsp;   Primitive  Polynomial&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   生成表达式.解释不清楚,放弃.<br>
+&nbsp;&nbsp;&nbsp;   Minimal Polynomial  &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   最小表达式.放弃.<br>
+&nbsp;&nbsp;&nbsp;   Conjugate&nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    共轭.. 懒得说了.<br>
+&nbsp;&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;&nbsp;   直接说下如何确定能够进行t位纠错的BCH编码的生成表达式:<br>
+&nbsp;&nbsp;&nbsp;   在生成块长度为:n=qm-1.(q的m次-1)的时候:<br>
+&nbsp;&nbsp;&nbsp;   (1) 选择一个最高次为m的Prime Polynomial,生成GF(qm);<br>
+&nbsp;&nbsp;&nbsp;   (2) 在GF(qm)范围内找出所有的Minimal Polynomial,即fi(x),(i=1,&#8230;,n).<br>
+&nbsp;&nbsp;&nbsp;   (3) t位error的BCH码的生成表达式为:g(x)=LCM[f1(x),f2(x),&#8230;f2t(x)].  LCM为最小公倍数表达式.<br>
+<br>
+&nbsp;&nbsp;&nbsp;   这样生成表达式就确定了.就先写到这里吧,手困了.肯定有很多错误,个人理解,仅供参考.如果发现什么错误请帮我纠正出来,感谢:)<br>
+&nbsp;&nbsp;&nbsp;</div>
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-04-15T00:00:00+08:00" pubdate data-updated="true">Apr 15<span>th</span>, 2007</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/legacy/'>legacy</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2007/04/15/1//blog/page/25/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -454,63 +507,6 @@ SD卡是手机用了半年的,记忆棒是相机的基本没有用过~<br>
 </div>
 	
 		<span class="comments"><a href="/blog/2007/02/17/1//blog/page/25/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2007/02/16/1/">全球首台商用量子计算机登场亮相</a></h1>
-	<div class="entry-content">
-		<div><p>加拿大公司D-Wave Systems今天揭开了&ldquo;全球第一台商用实用型量子计算机&rdquo;的神秘面纱，展示了这台新型计算机&ldquo;Orion&rdquo;如何运行商用程序，及其在解决特定问题上相比传统电子计算机的巨大优势。</p>
-<p align="center">
-<div align="center" forimg="1"><img src="/rc/legacy/3357ccfcf192e280b901a09e.jpg" width="800"></div>
-<br>
-</p>
-<p align="center">承载16个量子位的硅芯片</p>
-<p>演示是在美国加州山景城的计算机历史博物馆里进行的，不过量子计算机本身并不在现场，而是在D-Wave公司总部，加拿大温哥华本那比 (Burnaby)。在那里，量子计算机被液氮冷冻在5mK(毫开)温度下，也就是-273.145℃，只比绝对温度-273.15℃高0.005℃，比 星际空间还要冷。</p>
-<p align="center">
-<div align="center" forimg="1"><img src="/rc/legacy/6cb552da464d51d9b6fd489e.jpg" width="800"></div>
-<br>
-</p>
-<div align="center">负责为硅芯片制冷的超低温设备&ldquo;Leiden Cryogenics&rdquo;</div>
-<p>量子计算机依赖的自然是量子机制来加速计算的，而这种机制决定了所有物质和能量的行为表现。人们早就知道，即使能利用量子机制的一些简单特性，所构 造的计算机就能远远超出任何超级电子计算机的表现，不过D-Wave表示，他们的&ldquo;Orion&rdquo;只是现有电子计算机的补充和增强，并非要取而代之。这也就 是说，量子计算机还远没有成熟到可以独立&ldquo;统治世界&rdquo;的地步。</p>
-<p>为了实现量子计算机的商用，D-Wave在基础构造和生产工艺上借鉴了现有半导体产业的成果。&ldquo;Orion&rdquo;基于一块硅芯片，包含16个量子位 (qubit)，可以同时表示0和1两个二元位(电子计算里不是0就是1)，而每一个量子位都能模拟其他量子位的值，从而提高计算能力。D-Wave称， 这一系统可以在今后加入更多的量子位，计划在今年底达到32个，明年底增至1024个，计算能力则会呈指数级增长。</p>
-<p align="center">
-<div align="center" forimg="1"><img src="/rc/legacy/d3a8f1d342ab79dda9ec9a9f.jpg" width="800"></div>
-<br>
-</p>
-<div align="center">硅芯片上16个量子位的光学照片</div>
-<p>&ldquo;Orion&rdquo;的拿手好戏就是需要处理海量复杂数据和变量的问题，比如生命科学、生物测定学、后勤学、变量数据库搜索、计量金融等等科学和商业领域。</p>
-<p>D- Wave在此之前举了NP空间里最困难的&ldquo;NP-Complete&rdquo;问题的例子，这里我们看看另一个。如果使用电子计算机处理药物分子的&ldquo;薛定谔方程&rdquo;， 那么每增加一个电子，问题难度就要翻一番还多，这就是所谓的指数级爆炸式增长，导致电子计算机最多只能处理含有30个电子的系统，而一个简单的咖啡因分子 就有100多个电子，其问题难度是30个电子系统的大约10^50倍，任何超级计算机都无法胜任。量子计算机则简单多了，因为它处理薛定谔方程时的难度增 加只是线性的固定速度，因此最原始的量子计算机也要比最快的超级电子计算机(蓝色基因/L)出色得多。</p>
-<p>一如展示中的情形，D-Wave将通过一个安全的互联网连接提供量子计算机的对外访问和使用，最终开始销售这种系统，不过具体时间和价格问题没有披露。</p></div>
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-02-16T00:00:00+08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2007</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/legacy/'>legacy</a>
-
-
-</div>
-	
-		<span class="comments"><a href="/blog/2007/02/16/1//blog/page/25/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
