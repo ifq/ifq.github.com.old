@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>相關係數的小故事 - Geek Woodworker</title>
+  <meta name="author" content="靖天">
+  <meta name="Generator" content="Jekyll & Octopress (http://octopress.org)">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ifq.github.com/2007/01/14/1/">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/octopress.min.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+  
+
+<!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<!-- 9jBDGwX2G-7pQ39zs-wElUxm5Tg -->
+<meta name="alexaVerifyID" content="9jBDGwX2G-7pQ39zs-wElUxm5Tg" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33860711-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+   
+  <link href="/octopress-favicon.png" rel="icon">
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Geek Woodworker</a></h1>
+  
+    <h2>一个热爱木工的软件工程师</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ifq.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/archives">所有文章</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+
+
+
+
+
+
+
+
+
+
+
+<article class="hentry " role="article">
+  
+  <header>
+    <h1 class="entry-title">
+
+相關係數的小故事
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-14T00:00:00+08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/2007/01/14/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div><table height="592">
+    <tbody>
+        <tr height="110" style="height: 82.5pt;">
+            <td width="700" height="85" class="xl24" style="width: 525pt;"><font color="#ff6600">转载</font>
+            <p style="text-indent: 32px;">相關係數的發展大約是在十九世紀末期的時候，當時的人們還不太清楚要如何去描述在一群樣本中，兩個隨機變項之間的關係。但是在十九世紀中期的時候，許多的數 學家，像是Pascal， Bernoulli， De Moivre ，Simpson ，Laplace ，Gauss ，還有Quetelet等人，已經發展出來機率的概念，集中趨勢指標的測量，誤差值呈現常態分配，中央極限定理，以及可能的誤差概念等，促成了 Galton發展出相關係數的概念。</p>
+            </td>
+        </tr>
+        <tr height="220" style="height: 165pt;">
+            <td width="700" height="177" class="xl24" style="width: 525pt;">
+            <p style="text-indent: 32px;"><span>Galton 會開始研究統計上的問題，是源自於他對遺傳學上的興趣。他在達爾文的「物種原始」一書中提到他對於遺傳的看法：「這些新的觀念激勵了我去從事研究我有興趣 的遺傳學和人類種族的進化。」由於之前已經有人發現誤差值呈現一個常態分配的定理在實際的情況中也可以觀察到，所以Galton就在想，這個定理可能可以 用來描述人類在身體和心理特徵上的差異。在1884年的時候，Galton成立了人體測量實驗室，透過了測量數百人身體的特徵後，證實了人的身體特徵的確 符合了誤差值呈常態分配的理論。但是，Galton不僅僅對身體上的特徵有興趣而已，他認為智力也是經由遺傳而來的。因此，他需要一個方法來描述這一個世 代的智力，與前一個世代的智力是&rdquo;相關&rdquo;的。幸運的，Galton知道這種方法在科學上的重要性必需要跟人類的心理特質的研究分開，因為人類的心理特質並 不容易用量化的方式來測量。所以他就藉著研究香豌豆的特徵，和人類身體上的特徵，而發展出了相關和迴歸的概念。</span></p>
+            </td>
+        </tr>
+        <tr height="88" style="height: 66pt;">
+            <td width="700" height="84" class="xl24" style="width: 525pt;">
+            <p style="text-indent: 32px;"><span>Galton 在1888年的論文中定義了相關係數：有兩個隨機變項（X,Y），其中一個變項（X）的變化，或多或少的跟隨著另一個變項（Y）的變化。而且是相同方向的 變化時，這兩個變項(X,Y)被定義為&rdquo;相關的&rdquo;。&hellip;&hellip;而在這兩個變項中必定有部份相同的因素同時影響著它們，如果兩者間沒有相同的因素的話，那這兩個變 項就不可能有相關。</span></p>
+            </td>
+        </tr>
+        <tr height="154" style="height: 115.5pt;">
+            <td width="700" height="117" class="xl24" style="width: 525pt;">
+            <p style="text-indent: 32px;">在Galton 的定義中，顯示了相關係數的特性。相關係數是用來表示線性關係的強度，強度越大，相關係數越靠近1；並且可以藉由一條線性公式互相作預測。另外，相關係數 也具有方向性：如果相關係數為正，表示當其中一個變項增加的時候，另一個變項會跟著增加；而當相關係數為負的時候，其中一個變項的增加會導致另一個變項減 少。但要注意的是，在Galton的定義中，相關係數並沒有代表著因果關係。Galton計算相關係數的方法是請統計學家把資料點畫出來，然後再去畫出與 這些點最適合的直線，最後再去計算這條直線的斜率。Galton並沒有發展出特殊的公式來計算出這條直線，計算相關係數的公式，則是由Karl Pearson所發展出來的。</p>
+            </td>
+        </tr>
+    </tbody>
+</table></div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">靖天</span></span>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-01-14T00:00:00+08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2007</time>
+
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/legacy/'>legacy</a>
+  
+</span>
+
+
+
+      
+
+    </p>
+    
+      <div class="sharing">
+<!-- JiaThis Button BEGIN -->
+<div id="ckepop">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_renren"></a>
+	<a class="jiathis_button_kaixin001"></a>
+	<a href="http://www.jiathis.com/share?uid=1663055" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1344059400115285" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+  
+    
+      <a href="http://twitter.com/share" title="Tweet this" class="twitter-share" target="_blank">Tweet</a>
+    
+  
+  
+    
+      <a title="+1 on Google Plus" class="googleplus-share" href="https://plusone.google.com/_/+1/confirm?hl=en&url=http://ifq.github.com/2007/01/14/1/" target="_blank">+1</a>
+    
+  
+  
+    
+    <a title="Share on Facebook" class="facebook-share" href="http://www.facebook.com/sharer.php?u=http://ifq.github.com/2007/01/14/1/" target="_blank">Share</a>
+    
+  
+  
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2007/01/11/1/" title="Previous Post: 千呼万唤始出来!iPhone终于要出来了">&laquo; 千呼万唤始出来!iPhone终于要出来了</a>
+      
+      
+        <a class="basic-alignment right" href="/2007/01/24/1/" title="Next Post: 终于得到iPhone了!哇哈哈哈哈">终于得到iPhone了!哇哈哈哈哈 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+<section>
+  <h1>Comments</h1>
+  
+
+  
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  
+</section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/20/roubo-workbench-4/">Roubo Style Workbench - 靖天木工桌 4/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/04/roubo-workbench-2/">Roubo Style Workbench - 靖天木工桌 2/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/09/28/ifq-roubo-workbench-1/">Roubo Style workbench - 靖天木工桌 1/5</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+
+
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="category-list">
+    <li><a href='/blog/categories/binary'>binary (4)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (1)</a></li><li><a href='/blog/categories/orgmode'>orgmode (1)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+  </ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+			var disqus_developer = '0';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ifq.github.com/2007/01/14/1/';
+        var disqus_url = 'http://ifq.github.com/2007/01/14/1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+</body>
+</html>

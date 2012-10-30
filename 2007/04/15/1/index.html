@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>R-S纠错码学习 - Geek Woodworker</title>
+  <meta name="author" content="靖天">
+  <meta name="Generator" content="Jekyll & Octopress (http://octopress.org)">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ifq.github.com/2007/04/15/1/">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/octopress.min.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+  
+
+<!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<!-- 9jBDGwX2G-7pQ39zs-wElUxm5Tg -->
+<meta name="alexaVerifyID" content="9jBDGwX2G-7pQ39zs-wElUxm5Tg" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33860711-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+   
+  <link href="/octopress-favicon.png" rel="icon">
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Geek Woodworker</a></h1>
+  
+    <h2>一个热爱木工的软件工程师</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ifq.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/archives">所有文章</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+
+
+
+
+
+
+
+
+
+
+
+<article class="hentry " role="article">
+  
+  <header>
+    <h1 class="entry-title">
+
+R-S纠错码学习
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-04-15T00:00:00+08:00" pubdate data-updated="true">Apr 15<span>th</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/2007/04/15/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div>&nbsp;&nbsp;&nbsp;   人在江湖身不由己,这话一点都没错啊.在学校的什么想做什么做什么,不感兴趣的东西可以不去关心,但是已进入公司就不一样了.现在公司要求我必须做他们指定的题目作为毕业设计.题目是&quot;检纠错技术在嵌入式系统中的应用&quot;.<br>
+&nbsp;&nbsp;&nbsp;   检纠错技术目前很成熟啊,在加上我算是个烂了一块板的木桶&#8211;数学那块板,既没有兴趣有没有基础,算是比较不情愿吧.不过再想想,做嵌入式不就是这样么?什么技术都会有涉及,技术积累的越多做起东西更得心应手啊.而且检纠错技术在嵌入式里应该是经常需要使用的.虽然现在现成的东东很多,不过能搞清楚它的原理不是更好么.所以还是积极一点,赶紧做完算了.<br>
+&nbsp;&nbsp;&nbsp;   毕设题目要求中R-S编码最为陌生,就从它开始.<br>
+<br>
+&nbsp;&nbsp;&nbsp;   R-S编码全程是&quot;REED-SOLOMON CODE&quot;,就是R和S这两位仁兄发现的.目前应用的十分广泛.存储设备,DVD,无线网络,卫星通信,数字电视,ADSL等领域都有应用(原来这么有用啊..) IFQ.<br>
+&nbsp;&nbsp;&nbsp;   我想光碟表面花掉也能保证数据正确性,肯定是和这个有密切关系的.试想没有纠错码的光碟,不小心划了一点点地方就不能完整读取了,那光碟的推广也就不太可能了.再如卫星通信领域,要传回从火星或者更远位置的数据,更离不开纠错码的保驾护航了.现在NASA所使用的纠错码好像就是以卷积码做内码,R-S码作为外码的组合方式,被称为&quot;NASA码&quot;.R-S码属于BCH码的一种特例,想要学习R-S码就得先了解BCH码.<br>
+<br>
+&nbsp;&nbsp;&nbsp;   BCH编码是一种线性循环码.手头只有英文的教材,看了半天才明白.其中最主要的就是模运算.有几个概念需要搞清楚:<br>
+&nbsp;&nbsp;&nbsp;   GF(q) &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   是指一个域,在BCH中是指从1至q这个范围.<br>
+&nbsp;&nbsp;&nbsp;   Primitive Element &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   是指一个元素a,在GF(q)内任何元素都可以描述成a的幂的形式.注意是在GF(q)这个域的范围,所以超出范围的数是要以q为模进行运算的.<br>
+&nbsp;&nbsp;&nbsp;   Primitive  Polynomial&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   生成表达式.解释不清楚,放弃.<br>
+&nbsp;&nbsp;&nbsp;   Minimal Polynomial  &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   最小表达式.放弃.<br>
+&nbsp;&nbsp;&nbsp;   Conjugate&nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    &nbsp;&nbsp;    共轭.. 懒得说了.<br>
+&nbsp;&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;&nbsp;   直接说下如何确定能够进行t位纠错的BCH编码的生成表达式:<br>
+&nbsp;&nbsp;&nbsp;   在生成块长度为:n=qm-1.(q的m次-1)的时候:<br>
+&nbsp;&nbsp;&nbsp;   (1) 选择一个最高次为m的Prime Polynomial,生成GF(qm);<br>
+&nbsp;&nbsp;&nbsp;   (2) 在GF(qm)范围内找出所有的Minimal Polynomial,即fi(x),(i=1,&#8230;,n).<br>
+&nbsp;&nbsp;&nbsp;   (3) t位error的BCH码的生成表达式为:g(x)=LCM[f1(x),f2(x),&#8230;f2t(x)].  LCM为最小公倍数表达式.<br>
+<br>
+&nbsp;&nbsp;&nbsp;   这样生成表达式就确定了.就先写到这里吧,手困了.肯定有很多错误,个人理解,仅供参考.如果发现什么错误请帮我纠正出来,感谢:)<br>
+&nbsp;&nbsp;&nbsp;</div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">靖天</span></span>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-04-15T00:00:00+08:00" pubdate data-updated="true">Apr 15<span>th</span>, 2007</time>
+
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/legacy/'>legacy</a>
+  
+</span>
+
+
+
+      
+
+    </p>
+    
+      <div class="sharing">
+<!-- JiaThis Button BEGIN -->
+<div id="ckepop">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_renren"></a>
+	<a class="jiathis_button_kaixin001"></a>
+	<a href="http://www.jiathis.com/share?uid=1663055" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1344059400115285" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+  
+    
+      <a href="http://twitter.com/share" title="Tweet this" class="twitter-share" target="_blank">Tweet</a>
+    
+  
+  
+    
+      <a title="+1 on Google Plus" class="googleplus-share" href="https://plusone.google.com/_/+1/confirm?hl=en&url=http://ifq.github.com/2007/04/15/1/" target="_blank">+1</a>
+    
+  
+  
+    
+    <a title="Share on Facebook" class="facebook-share" href="http://www.facebook.com/sharer.php?u=http://ifq.github.com/2007/04/15/1/" target="_blank">Share</a>
+    
+  
+  
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2007/04/11/1/" title="Previous Post: 我伤感了.">&laquo; 我伤感了.</a>
+      
+      
+        <a class="basic-alignment right" href="/2007/04/15/2/" title="Next Post: Party小记">Party小记 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+<section>
+  <h1>Comments</h1>
+  
+
+  
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  
+</section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/20/roubo-workbench-4/">Roubo Style Workbench - 靖天木工桌 4/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/10/04/roubo-workbench-2/">Roubo Style Workbench - 靖天木工桌 2/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/09/28/ifq-roubo-workbench-1/">Roubo Style workbench - 靖天木工桌 1/5</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+
+
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="category-list">
+    <li><a href='/blog/categories/binary'>binary (4)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (1)</a></li><li><a href='/blog/categories/orgmode'>orgmode (1)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+  </ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+			var disqus_developer = '0';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ifq.github.com/2007/04/15/1/';
+        var disqus_url = 'http://ifq.github.com/2007/04/15/1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+</body>
+</html>
