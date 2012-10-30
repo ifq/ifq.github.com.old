@@ -2,7 +2,7 @@
 ---
 layout: post
 title: 纱门制作专题-3（完结）
-categories: [woodworking, practice, handtool]
+categories: [woodworking, handtool]
 comments: true
 ---
 #+END_HTML

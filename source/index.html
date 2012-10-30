@@ -2,18 +2,30 @@
 layout: default
 ---
 
-{% assign index = true %}
-{% for post in paginator.posts %}
-{% assign content = post.content %}
-    <article class="post">{% include article.html %}</article>
-{% endfor %}
-<nav id="pagenavi">
-    {% if paginator.previous_page %}
-        <a href="{{paginator.previous_page}}" class="prev">Prev</a>
-    {% endif %}
+<div class="blog-index">
+  {% for post in paginator.posts %}
+    {% include post/variables.html %}
+    <article {% if linklog %}class="linklog"{% endif %}>
+      {% include article.html %}
+    </article>
+  {% endfor %}
+  <div class="pagination">
     {% if paginator.next_page %}
-        <a href="{{paginator.next_page}}" class="next">Next</a>
+      <a class="prev" href="{{paginator.next_page}}">&larr; Older</a>
     {% endif %}
-    <div class="center"><a href="{{ root_url }}/blog/archives">Blog Archives</a></div>
-</nav>
-<center> <a href="http://www.freedomain.co.nr/" title="Free Domain Name"><img src="http://ecozooa.imdrv.net/soof62.gif" alt="Free Domain Name" style="width:88px;height:31px;border:0;" /></a><a href='http://www.urlfan.com/?via=b' ><img src='http://i.urlfan.com/?r=7ec49' border=0></a><a href="https://plus.google.com/115086707443303900229" rel="publisher">在 Google+ 上关注我们</a></center>
+    <a href="/archives/">Blog Archives</a>
+    {% if paginator.previous_page %}
+    <a class="next" href="{{paginator.previous_page}}">Newer &rarr;</a>
+    {% endif %}
+  </div>
+</div>
+{% unless page.sidebar == false or site.default_sidebar == false %}
+<aside class="sidebar">
+  {% if page.sidebar == nil or page.sidebar == 'collapse' %}
+    {% include_sidebar site.blog_index_sidebar %}
+  {% else %}
+    {% include_sidebar %}
+  {% endif %}
+</aside>
+{% endunless %}
+<center><a href="http://www.freedomain.co.nr/" title="Free Domain Name"><img src="http://ecozooa.imdrv.net/soof62.gif" alt="Free Domain Name" style="width:88px;height:31px;border:0;" /></a><a href='http://www.urlfan.com/?via=b' ><img src='http://i.urlfan.com/?r=7ec49' border=0></a><a href="https://plus.google.com/115086707443303900229" rel="publisher">在 Google+ 上关注我们</a></center>

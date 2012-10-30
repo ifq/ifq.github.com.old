@@ -39,7 +39,7 @@ rake _deploy
   2. baidu导出数据里没有tag，所以之前的tag也没有了。不过陈年的东西了，大多只是垫在下面让网站看起来不那么单薄。对于我来说是这样了，如果真要找东西，用搜索比tag要快些。
 
 以下奉上脚本，欢迎留言交流～ 
-{% include_code "baidu blog trans2octo script" lang:perl trans2octo.pl %}
+{% include_code lang:perl trans2octo.pl  "baidu blog trans2octo script" %}
 
 博客里多一些废话也感觉厚重了一点，各位没事可以看看类别legacy的内容，有一些我以前在日本的照片游记之类。
 

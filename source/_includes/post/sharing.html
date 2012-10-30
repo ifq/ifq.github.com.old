@@ -1,16 +1,4 @@
-<div class="share">
-	<div class="addthis_toolbox addthis_default_style ">
-	{% if site.facebook_like %}
-	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-	{% endif %}
-	{% if site.twitter_tweet_button %}
-	<a class="addthis_button_tweet"></a>
-	{% endif %}
-	{% if site.google_plus_one %}
-	<a class="addthis_button_google_plusone" g:plusone:size="{{ site.google_plus_one_size }}"></a>
-	{% endif %}
-	<!--a class="addthis_counter addthis_pill_style"></a-->
-
+<div class="sharing">
 <!-- JiaThis Button BEGIN -->
 <div id="ckepop">
 	<span class="jiathis_txt">分享到：</span>
@@ -26,6 +14,26 @@
 <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1344059400115285" charset="utf-8"></script>
 <!-- JiaThis Button END -->
 
-	</div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid={{ site.addthis_profile_id }}"></script>
+  {% if site.twitter_tweet_button %}
+    {% if site.respectfully_social %}
+      <a href="http://twitter.com/share" title="Tweet this" class="twitter-share" target="_blank">Tweet</a>
+    {% else %}
+      <a href="http://twitter.com/share" title="Tweet this" class="twitter-share-button" data-url="{{ site.url }}{{ page.url }}" data-via="{{ site.twitter_user }}" data-counturl="{{ site.url }}{{ page.url }}" target="_blank" >Tweet</a>
+    {% endif %}
+  {% endif %}
+  {% if site.google_plus_one %}
+    {% if site.respectfully_social %}
+      <a title="+1 on Google Plus" class="googleplus-share" href="https://plusone.google.com/_/+1/confirm?hl=en&url={{site.url}}{{page.url}}" target="_blank">+1</a>
+    {% else %}
+      <div class="g-plusone" data-size="{{ site.google_plus_one_size }}"></div>
+    {% endif %}
+  {% endif %}
+  {% if site.facebook_like %}
+    {% if site.respectfully_social %}
+    <a title="Share on Facebook" class="facebook-share" href="http://www.facebook.com/sharer.php?u={{site.url}}{{page.url}}" target="_blank">Share</a>
+    {% else %}
+      <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+    {% endif %}
+  {% endif %}
+  {% include custom/sharing.html %}
 </div>
