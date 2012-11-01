@@ -8,11 +8,19 @@ comments: true
 #+END_HTML
 
 
-~
+- upgrade octopress \\
+  如果你使用 =git pull octopress master= 更新时，提
+  示没有相应的 repo，那么说明你和我一样，需要以下的命令首先把octopress
+  添加到remote的repo列表。
+  #+begin_html
+```
 git remote add octopress https://github.com/imathis/octopress.git
-~
+```
+#+end_html
 
-git reset --hard ORIG_HEAD
+- 回退错误的 git pull
+  #+begin_quote
+  git reset --hard ORIG_HEAD
 
 git pull will do two things: it does a git fetch and then a git merge
 where it merges branches that have been setup to be merged in your
@@ -25,5 +33,11 @@ To do that you can try using git reset --hard to reset to a previous
 state. Use the git-reflog command to find the SHA-1 of the previous
 state and then reset to it.
 
+  #+end_quote
 
-git clean -f
+- 删除未commit的不想要的git改动
+  #+begin_html
+  ```
+  git clean -f
+  ```
+  #+end_html
