@@ -1,0 +1,672 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>几种经典的滤波算法(转) - Geek Woodworker</title>
+  <meta name="author" content="靖天">
+  <meta name="Generator" content="Jekyll & Octopress (http://octopress.org)">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ifq.github.com/blog/2010/06/28/2/">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/octopress.min.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+  
+
+<!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<!-- 9jBDGwX2G-7pQ39zs-wElUxm5Tg -->
+<meta name="alexaVerifyID" content="9jBDGwX2G-7pQ39zs-wElUxm5Tg" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33860711-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+   
+  <link href="/octopress-favicon.png" rel="icon">
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Geek Woodworker</a></h1>
+  
+    <h2>一个热爱木工的软件工程师</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ifq.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/archives">所有文章</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+
+
+
+
+
+
+
+
+
+
+
+<article class="hentry " role="article">
+  
+  <header>
+    <h1 class="entry-title">
+
+几种经典的滤波算法(转)
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-28T00:00:00+08:00" pubdate data-updated="true">Jun 28<span>th</span>, 2010</time>
+         &bull; <a rel="bookmark" href="/blog/2010/06/28/2/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div><p><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span style="line-height: 25px; color: rgb(142,104,96); font-size: 14px" class="Apple-style-span"><span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">1、限幅滤波法（又称程序判断滤波法）</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">    A、方法：</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 根据经验判断，确定两次采样允许的最大偏差值（设为A）</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 每次检测到新值时判断：</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果本次值与上次值之差&lt;=A,则本次值有效</span><br>
+<span style="display: inline !important" class="goog_qs-tidbit goog_qs-tidbit-0">  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果本次值与上次值之差&gt;A,</span>则本次值无效,放弃本次值,用上次值代替本次值<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 能有效克服因偶然因素引起的脉冲干扰<br>
+    C、缺点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 无法抑制那种周期性的干扰<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 平滑度差<br>
+   <span class="Apple-converted-space"> </span><br>
+2、中位值滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 连续采样N次（N取奇数）<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 把N次采样值按大小排列<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 取中间值为本次有效值<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 能有效克服因偶然因素引起的波动干扰<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对温度、液位的变化缓慢的被测参数有良好的滤波效果<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对流量、速度等快速变化的参数不宜<br>
+<br>
+3、算术平均滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 连续取N个采样值进行算术平均运算<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值较大时：信号平滑度较高，但灵敏度较低<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值较小时：信号平滑度较低，但灵敏度较高<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值的选取：一般流量，N=12；压力：N=4<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于对一般具有随机干扰的信号进行滤波<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 这样信号的特点是有一个平均值，信号在某一数值范围附近上下波动<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于测量速度较慢或要求数据计算速度较快的实时控制不适用<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;<br>
+4、递推平均滤波法（又称滑动平均滤波法）<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 把连续取N个采样值看成一个队列<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 队列的长度固定为N<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 每次采样到一个新数据放入队尾,并扔掉原来队首的一次数据.(先进先出原则)<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 把队列中的N个数据进行算术平均运算,就可获得新的滤波结果<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值的选取：流量，N=12；压力：N=4；液面，N=4~12；温度，N=1~4<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对周期性干扰有良好的抑制作用，平滑度高<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于高频振荡的系统   <span class="Apple-converted-space"> </span><br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 灵敏度低<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对偶然出现的脉冲性干扰的抑制作用较差<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不易消除由于脉冲干扰所引起的采样值偏差<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不适用于脉冲干扰比较严重的场合<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;<br>
+5、中位值平均滤波法（又称防脉冲干扰平均滤波法）<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相当于&ldquo;中位值滤波法&rdquo;+&ldquo;算术平均滤波法&rdquo;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 连续采样N个数据，去掉一个最大值和一个最小值<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 然后计算N-2个数据的算术平均值<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; N值的选取：3~14<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 融合了两种滤波法的优点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于偶然出现的脉冲性干扰，可消除由于脉冲干扰所引起的采样值偏差<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 测量速度较慢，和算术平均滤波法一样<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+<br>
+<br>
+6、限幅平均滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相当于&ldquo;限幅滤波法&rdquo;+&ldquo;递推平均滤波法&rdquo;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 每次采样到的新数据先进行限幅处理，<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 再送入队列进行递推平均滤波处理<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 融合了两种滤波法的优点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于偶然出现的脉冲性干扰，可消除由于脉冲干扰所引起的采样值偏差<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 比较浪费RAM<br>
+<br>
+7、一阶滞后滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 取a=0~1<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 本次滤波结果=（1-a）*本次采样值+a*上次滤波结果<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对周期性干扰具有良好的抑制作用<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于波动频率较高的场合<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相位滞后，灵敏度低<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 滞后程度取决于a值大小<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不能消除滤波频率高于采样频率的1/2的干扰信号<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;<br>
+8、加权递推平均滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 是对递推平均滤波法的改进，即不同时刻的数据加以不同的权<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 通常是，越接近现时刻的数据，权取得越大。<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 给予新采样值的权系数越大，则灵敏度越高，但信号平滑度越低<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 适用于有较大纯滞后时间常数的对象<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 和采样周期较短的系统<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于纯滞后时间常数较小，采样周期较长，变化缓慢的信号<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 不能迅速反应系统当前所受干扰的严重程度，滤波效果差<br>
+<br>
+9、消抖滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 设置一个滤波计数器<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 将每次采样值与当前有效值比较：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果采样值＝当前有效值，则计数器清零<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果采样值&lt;&gt;当前有效值，则计数器+1，并判断计数器是否&gt;=上限N(溢出)<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   如果计数器溢出,则将本次值替换当前有效值,并清计数器<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于变化缓慢的被测参数有较好的滤波效果,<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 可避免在临界值附近控制器的反复开/关跳动或显示器上数值抖动<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于快速变化的参数不宜<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 如果在计数器溢出的那一次采样到的值恰好是干扰值,则会将干扰值当作有效值导入系统<br>
+<br>
+10、限幅消抖滤波法<br>
+    A、方法：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 相当于&ldquo;限幅滤波法&rdquo;+&ldquo;消抖滤波法&rdquo;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 先限幅,后消抖<br>
+    B、优点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 继承了&ldquo;限幅&rdquo;和&ldquo;消抖&rdquo;的优点<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 改进了&ldquo;消抖滤波法&rdquo;中的某些缺陷,避免将干扰值导入系统<br>
+    C、缺点：<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp; 对于快速变化的参数不宜<br>
+<br>
+<br>
+第11种方法：IIR 数字滤波器<span class="Apple-converted-space"> </span><br>
+<br>
+A. 方法：<br>
+   确定信号带宽， 滤之。<br>
+   Y(n) = a1*Y(n-1) + a2*Y(n-2) + &#8230; + ak*Y(n-k) + b0*X(n) + b1*X(n-1) + b2*X(n-2) + &#8230; + bk*X(n-k)<br>
+<br>
+B. 优点：高通，低通，带通，带阻任意。设计简单(用matlab）<br>
+C. 缺点：运算量大。<br>
+　<span class="Apple-converted-space"> </span><br>
+<br>
+//&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;<span class="Apple-converted-space"> </span><br>
+<br>
+软件滤波的C程序样例<br>
+<br>
+10种软件滤波方法的示例程序<br>
+<br>
+假定从8位AD中读取数据（如果是更高位的AD可定义数据类型为int),子程序为get_ad();<br>
+<br>
+1、限副滤波<br>
+/*&nbsp;&nbsp; A值可根据实际情况调整<br>
+    value为有效值，new_value为当前采样值&nbsp;&nbsp;<br>
+    滤波程序返回有效的实际值&nbsp;&nbsp; */<br>
+#define A 10<br>
+<br>
+char value;<br>
+<br>
+char filter()<br>
+{<br>
+   char&nbsp;&nbsp; new_value;<br>
+   new_value = get_ad();<br>
+   if ( ( new_value - value &gt; A ) || ( value - new_value &gt; A )<br>
+  &nbsp;&nbsp;   return value;<br>
+   return new_value;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   <br>
+}<br>
+<br>
+2、中位值滤波法<br>
+/*&nbsp;&nbsp; N值可根据实际情况调整<br>
+    排序采用冒泡法*/<br>
+#define N&nbsp;&nbsp; 11<br>
+<br>
+char filter()<br>
+{<br>
+   char value_buf[N];<br>
+   char count,i,j,temp;<br>
+   for ( count=0;count<br>
+   {<br>
+  &nbsp;&nbsp;   value_buf[count] = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   for (j=0;j<br>
+   {<br>
+  &nbsp;&nbsp;   for (i=0;i<br>
+  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   if ( value_buf&gt;value_buf[i+1] )<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   temp = value_buf;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   value_buf = value_buf[i+1];<span class="Apple-converted-space"> </span><br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;    value_buf[i+1] = temp;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   }<br>
+  &nbsp;&nbsp;   }<br>
+   }<br>
+   return value_buf[(N-1)/2];<br>
+}  &nbsp;&nbsp;&nbsp;<br>
+<br>
+3、算术平均滤波法<br>
+/*<br>
+*/<br>
+<br>
+#define N 12<br>
+<br>
+char filter()<br>
+{<br>
+   int&nbsp;&nbsp; sum = 0;<br>
+   for ( count=0;count<br>
+   {<br>
+  &nbsp;&nbsp;   sum + = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   return (char)(sum/N);<br>
+}<br>
+<br>
+4、递推平均滤波法（又称滑动平均滤波法）<br>
+/*<br>
+*/<br>
+#define N 12<span class="Apple-converted-space"> </span><br>
+<br>
+char value_buf[N];<br>
+char i=0;<br>
+<br>
+char filter()<br>
+{<br>
+   char count;<br>
+   int&nbsp;&nbsp; sum=0;<br>
+   value_buf[i++] = get_ad();<br>
+   if ( i == N )   i = 0;<br>
+   for ( count=0;count<br>
+  &nbsp;&nbsp;   sum = value_buf[count];<br>
+   return (char)(sum/N);<br>
+}<br>
+<br>
+5、中位值平均滤波法（又称防脉冲干扰平均滤波法）<br>
+/*<br>
+*/<br>
+#define N 12<br>
+<br>
+char filter()<br>
+{<br>
+   char count,i,j;<br>
+   char value_buf[N];<br>
+   int&nbsp;&nbsp; sum=0;<br>
+   for&nbsp;&nbsp; (count=0;count<br>
+   {<br>
+  &nbsp;&nbsp;   value_buf[count] = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   for (j=0;j<br>
+   {<br>
+  &nbsp;&nbsp;   for (i=0;i<br>
+  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   if ( value_buf&gt;value_buf[i+1] )<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   {<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   temp = value_buf;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;   value_buf = value_buf[i+1];<span class="Apple-converted-space"> </span><br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;    value_buf[i+1] = temp;<br>
+  &nbsp;&nbsp;  &nbsp;&nbsp;   }<br>
+  &nbsp;&nbsp;   }<br>
+   }<br>
+   for(count=1;count<br>
+  &nbsp;&nbsp;   sum += value[count];<br>
+   return (char)(sum/(N-2));<br>
+}<br>
+<br>
+6、限幅平均滤波法<br>
+/*<br>
+*/&nbsp;&nbsp;<br>
+略 参考子程序1、3<br>
+<br>
+7、一阶滞后滤波法<br>
+/* 为加快程序处理速度假定基数为100，a=0~100 */<br>
+<br>
+#define a 50<br>
+<br>
+char value;<br>
+<br>
+char filter()<br>
+{<br>
+   char&nbsp;&nbsp; new_value;<br>
+   new_value = get_ad();<br>
+   return (100-a)*value + a*new_value;<span class="Apple-converted-space"> </span><br>
+}<br>
+<br>
+8、加权递推平均滤波法<br>
+/* coe数组为加权系数表，存在程序存储区。*/<br>
+<br>
+#define N 12<br>
+<br>
+char code coe[N] = {1,2,3,4,5,6,7,8,9,10,11,12};<br>
+char code sum_coe = 1+2+3+4+5+6+7+8+9+10+11+12;<br>
+<br>
+char filter()<br>
+{<br>
+   char count;<br>
+   char value_buf[N];<br>
+   int&nbsp;&nbsp; sum=0;<br>
+   for (count=0,count<br>
+   {<br>
+  &nbsp;&nbsp;   value_buf[count] = get_ad();<br>
+  &nbsp;&nbsp;   delay();<br>
+   }<br>
+   for (count=0,count<br>
+  &nbsp;&nbsp;   sum += value_buf[count]*coe[count];<br>
+   return (char)(sum/sum_coe);<br>
+}<br>
+<br>
+9、消抖滤波法<br>
+<br>
+#define N 12<br>
+<br>
+char filter()<br>
+{<br>
+   char count=0;<br>
+   char new_value;<br>
+   new_value = get_ad();<br>
+   while (value !=new_value);<br>
+   {<br>
+  &nbsp;&nbsp;   count++;<br>
+  &nbsp;&nbsp;   if (count&gt;=N)   return new_value;<br>
+  &nbsp;&nbsp;    delay();<br>
+  &nbsp;&nbsp;   new_value = get_ad();<br>
+   }<br>
+   return value;   <span class="Apple-converted-space"> </span><br>
+}<br>
+<br>
+10、限幅消抖滤波法<br>
+/*<br>
+*/<br>
+略 参考子程序1、9<br>
+<br>
+11、IIR滤波例子<br>
+<br>
+int&nbsp;&nbsp; BandpassFilter4(int InputAD4)<br>
+{<br>
+    int&nbsp;&nbsp; ReturnValue;<span class="Apple-converted-space"> </span><br>
+    int&nbsp;&nbsp; ii;<br>
+    RESLO=0;<br>
+    RESHI=0;<br>
+    MACS=*PdelIn;<br>
+    OP2=1068; //FilterCoeff4[4];<br>
+    MACS=*(PdelIn+1);<br>
+    OP2=8;    //FilterCoeff4[3];<br>
+    MACS=*(PdelIn+2);<br>
+    OP2=-2001;//FilterCoeff4[2];<br>
+    MACS=*(PdelIn+3);<br>
+    OP2=8;    //FilterCoeff4[1];<br>
+    MACS=InputAD4;<br>
+    OP2=1068; //FilterCoeff4[0];<br>
+    MACS=*PdelOu;<br>
+    OP2=-7190;//FilterCoeff4[8];<br>
+    MACS=*(PdelOu+1);<br>
+    OP2=-1973; //FilterCoeff4[7];<br>
+    MACS=*(PdelOu+2);<br>
+    OP2=-19578;//FilterCoeff4[6];<br>
+    MACS=*(PdelOu+3);<br>
+    OP2=-3047; //FilterCoeff4[5];<br>
+    *p=RESLO;<br>
+    *(p+1)=RESHI;<br>
+    mytestmul&lt;&lt;=2;<br>
+    ReturnValue=*(p+1);<br>
+    for&nbsp;&nbsp; (ii=0;ii&lt;3;ii++)<br>
+    {<br>
+  &nbsp;&nbsp;&nbsp; DelayInput[ii]=DelayInput[ii+1];<br>
+  &nbsp;&nbsp;&nbsp; DelayOutput[ii]=DelayOutput[ii+1];<br>
+  &nbsp;&nbsp;&nbsp; }<span class="Apple-converted-space"> </span><br>
+  &nbsp;&nbsp;&nbsp; DelayInput[3]=InputAD4;<br>
+  &nbsp;&nbsp;&nbsp; DelayOutput[3]=ReturnValue;<br>
+  &nbsp;&nbsp;&nbsp;<br>
+   //&nbsp;&nbsp; if (ReturnValue&lt;0)<br>
+   //&nbsp;&nbsp; {<br>
+   //&nbsp;&nbsp; ReturnValue=-ReturnValue;<br>
+   //&nbsp;&nbsp; }<br>
+    return ReturnValue;&nbsp;&nbsp;<br>
+}</span></span></p></div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">靖天</span></span>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-28T00:00:00+08:00" pubdate data-updated="true">Jun 28<span>th</span>, 2010</time>
+
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/legacy/'>legacy</a>
+  
+</span>
+
+
+
+      
+
+    </p>
+    
+      <div class="sharing">
+<!-- JiaThis Button BEGIN -->
+<div id="ckepop">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_renren"></a>
+	<a class="jiathis_button_kaixin001"></a>
+	<a href="http://www.jiathis.com/share?uid=1663055" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1344059400115285" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+  
+    
+      <a href="http://twitter.com/share" title="Tweet this" class="twitter-share" target="_blank">Tweet</a>
+    
+  
+  
+    
+      <a title="+1 on Google Plus" class="googleplus-share" href="https://plusone.google.com/_/+1/confirm?hl=en&url=http://ifq.github.com/blog/2010/06/28/2/" target="_blank">+1</a>
+    
+  
+  
+    
+    <a title="Share on Facebook" class="facebook-share" href="http://www.facebook.com/sharer.php?u=http://ifq.github.com/blog/2010/06/28/2/" target="_blank">Share</a>
+    
+  
+  
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/06/28/1/" title="Previous Post: 平均值滤波之鬼斧神工算法（转）">&laquo; 平均值滤波之鬼斧神工算法（转）</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/07/04/1/" title="Next Post: Motor93 (Jul,4)">Motor93 (Jul,4) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+<section>
+  <h1>Comments</h1>
+  
+
+  
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  
+</section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/20/roubo-workbench-4/">Roubo Style Workbench - 靖天木工桌 4/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/04/roubo-workbench-2/">Roubo Style Workbench - 靖天木工桌 2/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/28/ifq-roubo-workbench-1/">Roubo Style workbench - 靖天木工桌 1/5</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+
+
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="category-list">
+    <li><a href='/blog/categories/binary'>binary (4)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (1)</a></li><li><a href='/blog/categories/orgmode'>orgmode (1)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+  </ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+  <script src="/javascripts/slash.js"></script>
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+			var disqus_developer = '0';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ifq.github.com/blog/2010/06/28/2/';
+        var disqus_url = 'http://ifq.github.com/blog/2010/06/28/2/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+</body>
+</html>
