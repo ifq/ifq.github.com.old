@@ -99,7 +99,7 @@ delicious_count: 3
 
 # Disqus Comments
 disqus_short_name: ifq
-disqus_show_comment_count: false
+disqus_show_comment_count: true
 disqus_developer: 0
 
 # Google Analytics
