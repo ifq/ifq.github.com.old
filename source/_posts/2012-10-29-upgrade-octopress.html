@@ -1,67 +1,80 @@
-#+BEGIN_HTML
 ---
 layout: post
 title: 更新octopress博客系统后的笔记
 categories: [binary, octopress, orgmode]
 comments: true
 ---
-#+END_HTML
 
+<p>
 octopress的博客系统使用有一段时间了。总体很满意，发博客也渐渐上手了。但是也还有些小问题困扰。比如导入过往blog之后，总共的post量比较大，每次generate的时候耗时很长；比如comment数量总是显示为零。
-
-关于前一个问题，目前还没有找到很好的解决方案，再等等看octopress自己会不会改进这个问题吧。关于comment数量的显示，查到这个bug实际已经解决，但是需要升级到2.1 的branch才行（之前是master分支,是2.0）。于是对博客系统进行了升级，过程这里不复述了，可以参考[[http://octopress.org/docs/updating/][官方指南]] 。但是要注意merge的时候自己定义的一些改动会不会被覆盖，样式表、页脚链接之类。
-
+</p>
+<p>
+关于前一个问题，目前还没有找到很好的解决方案，再等等看octopress自己会不会改进这个问题吧。关于comment数量的显示，查到这个bug实际已经解决，但是需要升级到2.1 的branch才行（之前是master分支,是2.0）。于是对博客系统进行了升级，过程这里不复述了，可以参考<a href="http://octopress.org/docs/updating/">官方指南</a> 。但是要注意merge的时候自己定义的一些改动会不会被覆盖，样式表、页脚链接之类。
+</p>
+<p>
 最终结果，comment的问题解决了，theme最后换回了classic界面。。大众一点也好，UI更友好。后边空闲的时候可以加点logo之类的装饰下。以下是几点memo，供参考。
-
-- upgrade octopress \\
-  如果你使用 =git pull octopress 2.1= 更新时，提
+</p>
+<ul>
+<li>upgrade octopress <br/>
+  如果你使用 <code>git pull octopress 2.1</code> 更新时，提
   示没有相应的 repo，那么说明你和我一样，需要以下的命令首先把octopress
   添加到remote的repo列表。
-  #+begin_html
 ```
 git remote add octopress https://github.com/imathis/octopress.git
 ```
-  #+end_html
+</li>
+</ul>
 
-#+begin_html
+
+
+
 <!-- more -->
-#+end_html
 
-- 回退错误的 git pull \\
+<ul>
+<li>回退错误的 git pull <br/>
   如果做git pull操作的时候, pull错了branch，可以用下面的命令来恢复。
   没有专门去学过，不怎么会用，但是 git 真的感觉好庞大啊。。
-  #+begin_quote
-  git reset --hard ORIG_HEAD
+<blockquote>
 
+<p>  git reset &ndash;hard ORIG_HEAD
+</p>
+<p>
 git pull will do two things: it does a git fetch and then a git merge
 where it merges branches that have been setup to be merged in your
 config.
-
+</p>
+<p>
 So what you want to do is to undo the merge (undoing the fetch doesn't
 make a lot of sense and shouldn't be necessary).
-
-To do that you can try using git reset --hard to reset to a previous
+</p>
+<p>
+To do that you can try using git reset &ndash;hard to reset to a previous
 state. Use the git-reflog command to find the SHA-1 of the previous
 state and then reset to it.
+</p>
 
-  #+end_quote
+</blockquote>
 
-- git 删除未commit的不想要的git改动
-  #+begin_html
+
+</li>
+<li>git 删除未commit的不想要的git改动
 ```
 git clean -f
 ```
-  #+end_html
 
-- 有的post在第一次发出后可能还需要持续更新几次，在post中增加 *本博客于yyyy-mm-dd hh：mm更新* 这样的时间戳提示也许很有用。至少我在单位的个人主页有尝试这样，更新工作进展比较有用。 \\
+</li>
+<li>有的post在第一次发出后可能还需要持续更新几次，在post中增加 <b>本博客于yyyy-mm-dd hh：mm更新</b> 这样的时间戳提示也许很有用。至少我在单位的个人主页有尝试这样，更新工作进展比较有用。 <br/>
   我用的方法是利用 emacs 的org模式中执行 src blog 的功能——Babel。在需要显示时间戳的地方加上以下几句：
-  #+begin_example
-#+begin_src sh :exports results
+
+
+
+<pre class="example">#+begin_src sh :exports results
 echo "本文档更新于: $(date)"
 #+end_src
-  #+end_example
-  之后export的时候转换出来的html里不再是上边几句代码，而是代码执行出来的结果。也就是显示 =本文档更新于: xxx= 。当然，为了正确导出可能需要对 org模式的 Babel 进行额外的设置。貌似需要加上以下几句：
-  #+begin_html
+</pre>
+
+<p>
+  之后export的时候转换出来的html里不再是上边几句代码，而是代码执行出来的结果。也就是显示 <code>本文档更新于: xxx</code> 。当然，为了正确导出可能需要对 org模式的 Babel 进行额外的设置。貌似需要加上以下几句：
 ```
 ; Some initial langauges we want org-babel to support
 (org-babel-do-load-languages
@@ -79,16 +92,19 @@ echo "本文档更新于: $(date)"
    ))
 
 ```
-  #+end_html
   实现时间戳我使用了 sh，当然你也可以用 ruby或者 perl之类。前提是emacs能够正确访问到相应的解释器。ruby如果使用rvm管理的话，可能需要找 rvm.el 做设置。
-
+</p>
+<p>
   下面这个就是时间戳的效果：
+</p></li>
+</ul>
 
 
-#+begin_src sh :exports results
-echo "本文档更新于: $(date)"
-#+end_src
 
-#+RESULTS:
-: 本文档更新于: 2012年 11月 08日 星期四 00:15:24 CST
+
+
+<pre class="example">
+本文档更新于: 2012年 11月 08日 星期四 00:43:39 CST
+</pre>
+
 
