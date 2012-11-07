@@ -96,6 +96,59 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2007/02/27/1/">一段通用的混乱代码</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-27T00:00:00+08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/blog/2007/02/27/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div><pre><code>一下这段代码可以在多种语言的编译器下编译通过,并在不同的编译器下显示出各部相同的字符串.<br></code> 有这几个语言:C, C++, Perl, TeX, LaTeX, PostScript, sh, bash, zsh and Prolog<br><br>我没有验证,也没办法验证哈.我没有那么多的编译器,如果谁有兴趣又无聊可以验证下哈.<br><code><br>&nbsp;&nbsp;&nbsp;&nbsp; %:/*:if 0;"true" +s ||true&lt;&lt;/;#|+q|*/include&lt;stdio.h&gt;/*\_/<br>&nbsp;&nbsp;&nbsp;&nbsp; {\if(%)}newpath/Times-Roman findfont 20 scalefont setfont(<br>&nbsp;&nbsp;&nbsp;&nbsp; %%)pop 72 72 moveto(Just another PostScript hacker,)show((<br>&nbsp;&nbsp;&nbsp;&nbsp; t)}. t:-write('Just another Prolog hacker,'),nl,halt. :-t.<br>&nbsp;&nbsp;&nbsp;&nbsp; :-initialization(t). end_of_file. %)pop pop showpage(-: */<br>&nbsp;&nbsp;&nbsp;&nbsp; int main(){return 0&amp;printf("Just another C%s hacker,\n",1%<br>&nbsp;&nbsp;&nbsp;&nbsp; sizeof'2'*2+"++");}/*\fi}\csname @gobble\endcsname{\egroup<br>&nbsp;&nbsp;&nbsp;&nbsp; \let\LaTeX\TeX\ifx}\if00\documentclass{article}\begin{doc%<br>&nbsp;&nbsp;&nbsp;&nbsp; ument}\fi Just another \LaTeX\ hacker,\end{document}|if 0;<br>&nbsp;&nbsp;&nbsp;&nbsp; /(J.*)\$sh(.*)"/,print"$1Perl$2$/"if$_.=q # hack the lang!<br>&nbsp;&nbsp;&nbsp;&nbsp; /<br>&nbsp;&nbsp;&nbsp;&nbsp; sh=sh;test $BASH_VERSION &amp;&amp;sh=bash;test $POSIXLY_CORRECT&amp;&amp;<br>&nbsp;&nbsp;&nbsp;&nbsp; sh=sh;test&nbsp;&nbsp; $ZSH_VERSION &amp;&amp; sh=zsh;awk 'BEGIN{x="%c[A%c[K"<br>&nbsp;&nbsp;&nbsp;&nbsp; printf(x,27,27)}';echo "Just another $sh hacker," #)pop%*/</code></pre></div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2007/02/27/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/02/27/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2007/02/17/1/">新年快乐!!!</a>
 
 </h1>
@@ -874,246 +927,6 @@ If you want to keeps alien from changing the version number use the following co
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2007/02/03/1/">如何在Debian中安装Vmware Tools. Installing VMWare Tools on a Linux Debian Server Without X</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-02-03T00:00:00+08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2007</time>
-         &bull; <a rel="bookmark" href="/blog/2007/02/03/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div>Open your Server Console and login as root<br>
-During installation the kernel-headers package is required. So we start by first asking the system what kernel we are using, then we install the kernel headers for this kernel.<br>
-# uname –r<br>
-2.6.8-2-386<br>
-#apt-get install kernel-headers-2.6.8-2-386<br>
-The following extra packages will be installed:<br>
-kernel-headers-2.6.8-2 kernel-kbuild-2.6-3<br>
-The following NEW packages will be installed:<br>
-kernel-headers-2.6.8-2 kernel-headers-2.6.8-2-386 kernel-kbuild-2.6-3<br>
-0 upgraded, 3 newly installed, 0 to remove and 8 not upgraded.<br>
-Inst kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
-Inst kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
-Inst kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
-Conf kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
-Conf kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
-Conf kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
-Press Y(es) to continue<br>
-Now on your server Console go to: VM, Install VMWare Tools, Nothing will happen but the Linux VMWare Tools ISO is now mounted on your virtual machine.<br>
-Now mount the iso in your Debian box:<br>
-#mount /dev/cdrom<br>
-To see your mounted drives type:<br>
-#mount<br>
-My cdrom is mounted as cdrom0 so I type:<br>
-#cd /media/cdrom0<br>
-Let’s copy the tools to the debian box:<br>
-#cp vmware-linux-tools.tar.gz /root/.<br>
-#cd /root<br>
-Let’s unpack the VMWare tools and start the installation:<br>
-Installing VMWare Tools on a Linux Debian server without X<br>
-Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
-#tar zxf vmware-linux-tools.tar.gz<br>
-#cd vmware-tools-distrib<br>
-#./vmware-install.pl<br>
-After this command the setup will start, the setup does a proper job of selecting where to put what. I left everything default (just enter through the questions)<br>
-Creating a new installer database using the tar3 format.<br>
-Installing the content of the package.<br>
-In which directory do you want to install the binary files?<br>
-[/usr/bin]<br>
-What is the directory that contains the init directories (rc0.d/ to rc6.d/)?<br>
-[/etc]<br>
-What is the directory that contains the init scripts?<br>
-[/etc/init.d]<br>
-In which directory do you want to install the daemon files?<br>
-[/usr/sbin]<br>
-In which directory do you want to install the library files?<br>
-[/usr/lib/vmware-tools]<br>
-The path &#8220;/usr/lib/vmware-tools&#8221; does not exist currently. This program is going<br>
-to create it, including needed parent directories. Is this what you want?<br>
-[yes]<br>
-In which directory do you want to install the documentation files?<br>
-[/usr/share/doc/vmware-tools]<br>
-The path &#8220;/usr/share/doc/vmware-tools&#8221; does not exist currently. This program is<br>
-going to create it, including needed parent directories. Is this what you want?<br>
-[yes]<br>
-Unmounting the Tools ISO image cdrom .<br>
-The installation of VMware Tools 3.2.0 build-14497 for Linux completed<br>
-successfully. You can decide to remove this software from your system at any<br>
-time by invoking the following command: &#8220;/usr/bin/vmware-uninstall-tools.pl&#8221;.<br>
-Before running VMware Tools for the first time, you need to configure it by<br>
-invoking the following command: &#8220;/usr/bin/vmware-config-tools.pl&#8221;. Do you want<br>
-this program to invoke the command for you now? [yes]<br>
-Making sure services for VMware Tools are stopped.<br>
-Stopping VMware Tools services in the virtual machine:<br>
-Guest operating system daemon: done<br>
-Trying to find a suitable vmhgfs module for your running kernel.<br>
-None of the pre-built vmhgfs modules for VMware Tools is suitable for your<br>
-running kernel. Do you want this program to try to build the vmhgfs module for<br>
-your system (you need to have a C compiler installed on your system)? [yes]<br>
-Using compiler &#8220;/usr/bin/gcc&#8221;. Use environment variable CC to override.<br>
-What is the location of the directory of C header files that match your running<br>
-kernel? [/lib/modules/2.6.8-2-386/build/include]<br>
-Extracting the sources of the vmhgfs module.<br>
-Building the vmhgfs module.<br>
-Installing VMWare Tools on a Linux Debian server without X<br>
-Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
-Using 2.6.x kernel build system.<br>
-make: Entering directory `/tmp/vmware-config0/vmhgfs-only&#8217;<br>
-make -C /lib/modules/2.6.8-2-386/build/include/.. SUBDIRS=$PWD SRCROOT=$PWD/. modules<br>
-make[1]: Entering directory `/usr/src/kernel-headers-2.6.8-2-386&#8217;<br>
-CC [M] /tmp/vmware-config0/vmhgfs-only/cpName.o<br>
-CC [M] /tmp/vmware-config0/vmhgfs-only/cpNameLinux.o<br>
-CC [M] /tmp/vmware-config0/vmhgfs-only/dev.o<br>
-CC [M] /tmp/vmware-config0/vmhgfs-only/driver.o<br>
-CC [M] /tmp/vmware-config0/vmhgfs-only/hgfsUtil.o<br>
-CC [M] /tmp/vmware-config0/vmhgfs-only/main.o<br>
-CC [M] /tmp/vmware-config0/vmhgfs-only/staticEscape.o<br>
-LD [M] /tmp/vmware-config0/vmhgfs-only/vmhgfs.o<br>
-Building modules, stage 2.<br>
-MODPOST<br>
-CC /tmp/vmware-config0/vmhgfs-only/vmhgfs.mod.o<br>
-LD [M] /tmp/vmware-config0/vmhgfs-only/vmhgfs.ko<br>
-make[1]: Leaving directory `/usr/src/kernel-headers-2.6.8-2-386&#8217;<br>
-cp -f vmhgfs.ko ./../vmhgfs.o<br>
-make: Leaving directory `/tmp/vmware-config0/vmhgfs-only&#8217;<br>
-The module loads perfectly in the running kernel.<br>
-No X install found.<br>
-Starting VMware Tools services in the virtual machine:<br>
-Switching to guest configuration: done<br>
-Guest filesystem driver: done<br>
-DMA setup: done<br>
-Guest operating system daemon: done<br>
-The configuration of VMware Tools 3.2.0 build-14497 for Linux for this running<br>
-kernel completed successfully.<br>
-You can now run VMware Tools by invoking the following command:<br>
-&#8220;/usr/bin/vmware-toolbox&#8221; during an XFree86 session.<br>
-Enjoy,<br>
-As you can see, the VMXNet adapter has not been compiled. I asked around on the VMWare forum and found out that the vmware-config-tools.pl for GSX differs from the one provided with ESX (Thanks to Petr from the VMWare forum).<br>
-Now shutdown your Debian Box:<br>
-#halt<br>
-After your debian box has halted, change your NIC hardware to now use the VMXNet adapter.<br>
-Now turn on your Debian Box.<br>
-After the system has booted, login as root and enter the following command: #vi /usr/bin/vmware-config-tools.pl<br>
-Now search for the string “class” and edit the following line: original line = if ($line =~ /class [0-9a-f]{4}: &#8230;../) {<br>
-and change it to:<br>
-if ($line =~ /[0-9a-f]{4}: &#8230;../) {<br>
-Save the file and let the compiling begin!<br>
-Installing VMWare Tools on a Linux Debian server without X<br>
-Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
-Enter the following command:<br>
-#./usr/bin/vmware-config-tools.pl<br>
-Just enter through the questions…if everything went ok, you’ll see the VMXNet adapter being compiled. Info looks like this: Extracting the sources of the vmxnet module.<br>
-Building the vmxnet module.<br>
-Do the following checks to insure the proper startup of the vmxnet adapter:<br>
-Check in /etc/modules.conf for the following line : # Added by VMware Tools alias eth0 vmxnet<br>
-#vi /etc/modutils/aliases<br>
-Edit /etc/modutils/aliases an add the following line:<br>
-alias eth0 vmxnet<br>
-#vi /etc/modules<br>
-then edit the /etc/modules and add: vmxnet to the bottom<br>
-Now the vmxdriver is loaded but the network is brought up before the vmxdriver has loaded. (so no nic is available until you do a network restart) vmwaretools is called at S06vmware-tools in rc2.d<br>
-I made it work like this: #/etc/rc2.d #ln -s /etc/init.d/networking S98networking<br>
-This command creates a link to the networking script and makes it run again at the end of the bootcycle. The vmxnet driver is then already loaded and will now be used<br>
-Time synchronization To enable proper time synch on your Debian box you enter the following command:<br>
-#vi /boot/grub/menu.lst and added the option: clock=pit nosmp noapic nolapic (check VMWare document 1420 for more info about this subject)<br>
-You also need to edit the .vmx file (after shutting down you VM)<br>
-Edit your .vmx file and edit the following line:<br>
-tools.syncTime = FALSE Change FALSE to TRUE!<br>
-And now you have successfully installed the GSX VMWare Tools on your Debian box!!<br>
-After rebooting you might get a message stating: “vmhgfs module taints kernel” error. I checked the message on the VMWare forum and it looks harmless so just ignore it.<br>
-My server now has a smooth power off when I use the VMWare power off script so I can make a good backup whenever I want to.<br>
-Installing VMWare Tools on a Linux Debian server without X<br>
-Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
-VMWare tools, the ESX-way Luckily the procedure for a installation of the tools in a ESX environment is much easier because the install script does a good job of detecting the VMXNet adapter. During installation the kernel-headers package is required. So we start by first asking the system what kernel we are using,then we install the kernel headers for this kernel.<br>
-# uname –r<br>
-2.6.8-2-386<br>
-#apt-get install kernel-headers-2.6.8-2-386<br>
-The following extra packages will be installed:<br>
-kernel-headers-2.6.8-2 kernel-kbuild-2.6-3<br>
-The following NEW packages will be installed:<br>
-kernel-headers-2.6.8-2 kernel-headers-2.6.8-2-386 kernel-kbuild-2.6-3<br>
-0 upgraded, 3 newly installed, 0 to remove and 8 not upgraded.<br>
-Inst kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
-Inst kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
-Inst kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
-Conf kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
-Conf kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
-Conf kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
-Press Y(es) to continue<br>
-Make sure you have met all system requirements because in a minute you won’t have access to the Internet anymore…. Now turn off you Virtual Debian server and change your NIC to use the VMXNet Adapter. Turn on the server and lets install the VMWare Tools!!!<br>
-Now on your server Console go to: VM, Install VMWare Tools, Nothing will happen but the Linux VMWare Tools ISO is now mounted on your virtual machine.<br>
-Now mount the iso in your Debian box:<br>
-#mount /dev/cdrom<br>
-To see your mounted drives type:<br>
-#mount<br>
-My cdrom is mounted as cdrom0 so I type:<br>
-#cd /media/cdrom0<br>
-Let’s copy the tools to the debian box:<br>
-#cp vmware-linux-tools.tar.gz /root/.<br>
-#cd /root<br>
-Let’s unpack the VMWare tools and start the installation:<br>
-#tar zxf vmware-linux-tools.tar.gz<br>
-#cd vmware-tools-distrib<br>
-#./vmware-install.pl Installing VMWare Tools on a Linux Debian server without X<br>
-Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
-After this command the setup will start, the setup does a proper job of selecting where to put what. I left everything default (just enter through the questions)<br>
-Because I selected the VMX Net adapter, I don’t have a ethernet connection, so I can’t provide the output.<br>
-But this is a good thing, because selecting the hardware to use the VMXNet adapter, makes the install script detect the VMXNet adapter and compile the VMXNet driver!!!<br>
-After the smoked has cleared. You should have the VMWare tools installed including the VMXNet driver! What remains is the time synch.<br>
-To enable time synch on your Debian box you enter the following command:<br>
-#vi /boot/grub/menu.lst and added the option: clock=pit nosmp noapic nolapic (check VMWare document 1420 for more info about this subject)<br>
-You also need to edit the .vmx file (after shutting down you VM)<br>
-Edit your .vmx file and edit the following line:<br>
-tools.syncTime = FALSE Change FALSE to TRUE!<br>
-And now you have successfully installed the ESX VMWare Tools on your Debian box!!<br>
-Good luck and cheers<br>
-Aleks<br>
-- - - - Installing VMWare Tools on a Linux Debian server without X<br>
-Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006</div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2007/02/03/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/02/03/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/27/">&larr; Older</a>
@@ -1132,6 +945,10 @@ Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006</div></div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/10/29/upgrade-octopress/">更新octopress博客系统后的笔记</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
       </li>
     
@@ -1145,10 +962,6 @@ Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006</div></div>
     
       <li class="post">
         <a href="/blog/2012/10/04/roubo-workbench-2/">Roubo Style Workbench - 靖天木工桌 2/5</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/09/28/ifq-roubo-workbench-1/">Roubo Style workbench - 靖天木工桌 1/5</a>
       </li>
     
   </ul>
@@ -1166,7 +979,7 @@ Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006</div></div>
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (4)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (1)</a></li><li><a href='/blog/categories/orgmode'>orgmode (1)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (5)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 

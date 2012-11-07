@@ -96,6 +96,246 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2007/02/03/1/">如何在Debian中安装Vmware Tools. Installing VMWare Tools on a Linux Debian Server Without X</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-03T00:00:00+08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/blog/2007/02/03/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div>Open your Server Console and login as root<br>
+During installation the kernel-headers package is required. So we start by first asking the system what kernel we are using, then we install the kernel headers for this kernel.<br>
+# uname –r<br>
+2.6.8-2-386<br>
+#apt-get install kernel-headers-2.6.8-2-386<br>
+The following extra packages will be installed:<br>
+kernel-headers-2.6.8-2 kernel-kbuild-2.6-3<br>
+The following NEW packages will be installed:<br>
+kernel-headers-2.6.8-2 kernel-headers-2.6.8-2-386 kernel-kbuild-2.6-3<br>
+0 upgraded, 3 newly installed, 0 to remove and 8 not upgraded.<br>
+Inst kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
+Inst kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Inst kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Conf kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
+Conf kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Conf kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Press Y(es) to continue<br>
+Now on your server Console go to: VM, Install VMWare Tools, Nothing will happen but the Linux VMWare Tools ISO is now mounted on your virtual machine.<br>
+Now mount the iso in your Debian box:<br>
+#mount /dev/cdrom<br>
+To see your mounted drives type:<br>
+#mount<br>
+My cdrom is mounted as cdrom0 so I type:<br>
+#cd /media/cdrom0<br>
+Let’s copy the tools to the debian box:<br>
+#cp vmware-linux-tools.tar.gz /root/.<br>
+#cd /root<br>
+Let’s unpack the VMWare tools and start the installation:<br>
+Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
+#tar zxf vmware-linux-tools.tar.gz<br>
+#cd vmware-tools-distrib<br>
+#./vmware-install.pl<br>
+After this command the setup will start, the setup does a proper job of selecting where to put what. I left everything default (just enter through the questions)<br>
+Creating a new installer database using the tar3 format.<br>
+Installing the content of the package.<br>
+In which directory do you want to install the binary files?<br>
+[/usr/bin]<br>
+What is the directory that contains the init directories (rc0.d/ to rc6.d/)?<br>
+[/etc]<br>
+What is the directory that contains the init scripts?<br>
+[/etc/init.d]<br>
+In which directory do you want to install the daemon files?<br>
+[/usr/sbin]<br>
+In which directory do you want to install the library files?<br>
+[/usr/lib/vmware-tools]<br>
+The path &#8220;/usr/lib/vmware-tools&#8221; does not exist currently. This program is going<br>
+to create it, including needed parent directories. Is this what you want?<br>
+[yes]<br>
+In which directory do you want to install the documentation files?<br>
+[/usr/share/doc/vmware-tools]<br>
+The path &#8220;/usr/share/doc/vmware-tools&#8221; does not exist currently. This program is<br>
+going to create it, including needed parent directories. Is this what you want?<br>
+[yes]<br>
+Unmounting the Tools ISO image cdrom .<br>
+The installation of VMware Tools 3.2.0 build-14497 for Linux completed<br>
+successfully. You can decide to remove this software from your system at any<br>
+time by invoking the following command: &#8220;/usr/bin/vmware-uninstall-tools.pl&#8221;.<br>
+Before running VMware Tools for the first time, you need to configure it by<br>
+invoking the following command: &#8220;/usr/bin/vmware-config-tools.pl&#8221;. Do you want<br>
+this program to invoke the command for you now? [yes]<br>
+Making sure services for VMware Tools are stopped.<br>
+Stopping VMware Tools services in the virtual machine:<br>
+Guest operating system daemon: done<br>
+Trying to find a suitable vmhgfs module for your running kernel.<br>
+None of the pre-built vmhgfs modules for VMware Tools is suitable for your<br>
+running kernel. Do you want this program to try to build the vmhgfs module for<br>
+your system (you need to have a C compiler installed on your system)? [yes]<br>
+Using compiler &#8220;/usr/bin/gcc&#8221;. Use environment variable CC to override.<br>
+What is the location of the directory of C header files that match your running<br>
+kernel? [/lib/modules/2.6.8-2-386/build/include]<br>
+Extracting the sources of the vmhgfs module.<br>
+Building the vmhgfs module.<br>
+Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
+Using 2.6.x kernel build system.<br>
+make: Entering directory `/tmp/vmware-config0/vmhgfs-only&#8217;<br>
+make -C /lib/modules/2.6.8-2-386/build/include/.. SUBDIRS=$PWD SRCROOT=$PWD/. modules<br>
+make[1]: Entering directory `/usr/src/kernel-headers-2.6.8-2-386&#8217;<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/cpName.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/cpNameLinux.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/dev.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/driver.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/hgfsUtil.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/main.o<br>
+CC [M] /tmp/vmware-config0/vmhgfs-only/staticEscape.o<br>
+LD [M] /tmp/vmware-config0/vmhgfs-only/vmhgfs.o<br>
+Building modules, stage 2.<br>
+MODPOST<br>
+CC /tmp/vmware-config0/vmhgfs-only/vmhgfs.mod.o<br>
+LD [M] /tmp/vmware-config0/vmhgfs-only/vmhgfs.ko<br>
+make[1]: Leaving directory `/usr/src/kernel-headers-2.6.8-2-386&#8217;<br>
+cp -f vmhgfs.ko ./../vmhgfs.o<br>
+make: Leaving directory `/tmp/vmware-config0/vmhgfs-only&#8217;<br>
+The module loads perfectly in the running kernel.<br>
+No X install found.<br>
+Starting VMware Tools services in the virtual machine:<br>
+Switching to guest configuration: done<br>
+Guest filesystem driver: done<br>
+DMA setup: done<br>
+Guest operating system daemon: done<br>
+The configuration of VMware Tools 3.2.0 build-14497 for Linux for this running<br>
+kernel completed successfully.<br>
+You can now run VMware Tools by invoking the following command:<br>
+&#8220;/usr/bin/vmware-toolbox&#8221; during an XFree86 session.<br>
+Enjoy,<br>
+As you can see, the VMXNet adapter has not been compiled. I asked around on the VMWare forum and found out that the vmware-config-tools.pl for GSX differs from the one provided with ESX (Thanks to Petr from the VMWare forum).<br>
+Now shutdown your Debian Box:<br>
+#halt<br>
+After your debian box has halted, change your NIC hardware to now use the VMXNet adapter.<br>
+Now turn on your Debian Box.<br>
+After the system has booted, login as root and enter the following command: #vi /usr/bin/vmware-config-tools.pl<br>
+Now search for the string “class” and edit the following line: original line = if ($line =~ /class [0-9a-f]{4}: &#8230;../) {<br>
+and change it to:<br>
+if ($line =~ /[0-9a-f]{4}: &#8230;../) {<br>
+Save the file and let the compiling begin!<br>
+Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
+Enter the following command:<br>
+#./usr/bin/vmware-config-tools.pl<br>
+Just enter through the questions…if everything went ok, you’ll see the VMXNet adapter being compiled. Info looks like this: Extracting the sources of the vmxnet module.<br>
+Building the vmxnet module.<br>
+Do the following checks to insure the proper startup of the vmxnet adapter:<br>
+Check in /etc/modules.conf for the following line : # Added by VMware Tools alias eth0 vmxnet<br>
+#vi /etc/modutils/aliases<br>
+Edit /etc/modutils/aliases an add the following line:<br>
+alias eth0 vmxnet<br>
+#vi /etc/modules<br>
+then edit the /etc/modules and add: vmxnet to the bottom<br>
+Now the vmxdriver is loaded but the network is brought up before the vmxdriver has loaded. (so no nic is available until you do a network restart) vmwaretools is called at S06vmware-tools in rc2.d<br>
+I made it work like this: #/etc/rc2.d #ln -s /etc/init.d/networking S98networking<br>
+This command creates a link to the networking script and makes it run again at the end of the bootcycle. The vmxnet driver is then already loaded and will now be used<br>
+Time synchronization To enable proper time synch on your Debian box you enter the following command:<br>
+#vi /boot/grub/menu.lst and added the option: clock=pit nosmp noapic nolapic (check VMWare document 1420 for more info about this subject)<br>
+You also need to edit the .vmx file (after shutting down you VM)<br>
+Edit your .vmx file and edit the following line:<br>
+tools.syncTime = FALSE Change FALSE to TRUE!<br>
+And now you have successfully installed the GSX VMWare Tools on your Debian box!!<br>
+After rebooting you might get a message stating: “vmhgfs module taints kernel” error. I checked the message on the VMWare forum and it looks harmless so just ignore it.<br>
+My server now has a smooth power off when I use the VMWare power off script so I can make a good backup whenever I want to.<br>
+Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
+VMWare tools, the ESX-way Luckily the procedure for a installation of the tools in a ESX environment is much easier because the install script does a good job of detecting the VMXNet adapter. During installation the kernel-headers package is required. So we start by first asking the system what kernel we are using,then we install the kernel headers for this kernel.<br>
+# uname –r<br>
+2.6.8-2-386<br>
+#apt-get install kernel-headers-2.6.8-2-386<br>
+The following extra packages will be installed:<br>
+kernel-headers-2.6.8-2 kernel-kbuild-2.6-3<br>
+The following NEW packages will be installed:<br>
+kernel-headers-2.6.8-2 kernel-headers-2.6.8-2-386 kernel-kbuild-2.6-3<br>
+0 upgraded, 3 newly installed, 0 to remove and 8 not upgraded.<br>
+Inst kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
+Inst kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Inst kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Conf kernel-kbuild-2.6-3 (2.6.8-2 Debian:3.1r1/stable)<br>
+Conf kernel-headers-2.6.8-2 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Conf kernel-headers-2.6.8-2-386 (2.6.8-16sarge1 Debian:3.1r1/stable, Debian-Security:3.1/stable)<br>
+Press Y(es) to continue<br>
+Make sure you have met all system requirements because in a minute you won’t have access to the Internet anymore…. Now turn off you Virtual Debian server and change your NIC to use the VMXNet Adapter. Turn on the server and lets install the VMWare Tools!!!<br>
+Now on your server Console go to: VM, Install VMWare Tools, Nothing will happen but the Linux VMWare Tools ISO is now mounted on your virtual machine.<br>
+Now mount the iso in your Debian box:<br>
+#mount /dev/cdrom<br>
+To see your mounted drives type:<br>
+#mount<br>
+My cdrom is mounted as cdrom0 so I type:<br>
+#cd /media/cdrom0<br>
+Let’s copy the tools to the debian box:<br>
+#cp vmware-linux-tools.tar.gz /root/.<br>
+#cd /root<br>
+Let’s unpack the VMWare tools and start the installation:<br>
+#tar zxf vmware-linux-tools.tar.gz<br>
+#cd vmware-tools-distrib<br>
+#./vmware-install.pl Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006<br>
+After this command the setup will start, the setup does a proper job of selecting where to put what. I left everything default (just enter through the questions)<br>
+Because I selected the VMX Net adapter, I don’t have a ethernet connection, so I can’t provide the output.<br>
+But this is a good thing, because selecting the hardware to use the VMXNet adapter, makes the install script detect the VMXNet adapter and compile the VMXNet driver!!!<br>
+After the smoked has cleared. You should have the VMWare tools installed including the VMXNet driver! What remains is the time synch.<br>
+To enable time synch on your Debian box you enter the following command:<br>
+#vi /boot/grub/menu.lst and added the option: clock=pit nosmp noapic nolapic (check VMWare document 1420 for more info about this subject)<br>
+You also need to edit the .vmx file (after shutting down you VM)<br>
+Edit your .vmx file and edit the following line:<br>
+tools.syncTime = FALSE Change FALSE to TRUE!<br>
+And now you have successfully installed the ESX VMWare Tools on your Debian box!!<br>
+Good luck and cheers<br>
+Aleks<br>
+- - - - Installing VMWare Tools on a Linux Debian server without X<br>
+Version 2.0 &copy; Aleks Nikoli&#263; 2005-2006</div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2007/02/03/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/02/03/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2007/02/01/1/">Google推升级版Mini搜索工具 新增安全功能</a>
 
 </h1>
@@ -717,70 +957,6 @@ Google Mini 2.2不会直接对企业应用软件的数据进行索引，而是�
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2007/01/06/1/">在百度知道里看到的一个人解释浩方魔兽掉线的问题</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-01-06T00:00:00+08:00" pubdate data-updated="true">Jan 6<span>th</span>, 2007</time>
-         &bull; <a rel="bookmark" href="/blog/2007/01/06/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><font color="#ff6600">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 在百度知道里看到的一个人解释浩方魔兽掉线的问题,不知道对不对,无从验证.<br>
-<br>
-</font>浩方是在你ping入浩方主机 时间间隔大于 300秒后判断你掉线的 你才被服务器判断为掉线 ！ 这也就是 为什么我们已经在浩方房间里面的时候突然死机 重启后 进入不了 同一个服务器的原因！ 比如你在北京服务器普通房间内掉线了 你可以进入澄海3c服务器 但是5分钟之内你进入不了普通房间的服务器 因为你的账号已经在这个服务器内派发给了一个虚拟的局域网IP了！ 浩方是按照账号给每个玩家绑定实际IP然后虚拟一个局域网IP 这也就是为什么浩方一个房间的人数只能是 250人 而不是 500人 700人 的原因！超出的一般都似VIP通关其他网关转入进来的！ 不过 浩方一个房间实际也真的不够人数 也就是说 显示 280人的时候 我想也不能够 250人吧 盛大没有那么傻 随便虚拟几个空余的地方给VIP进入就可以了 何必要 用一个专用的服务器转入呢 ！不过听说要升级了 升级后后不在按照这个方式虚拟局域网 ！ <br>
-<br>
-首先说 浩方在魔兽链接处理问题 ..浩方把你的Mac地址虚拟成一个局域网IP地址 当你和魔兽里面主机链接的时候 浩方的服务器只负责 保持链接 而不做 实际的数据传送 你与主机数据传送完全是点对点的 ！ 所以你下地图的时候 就是直接从一个有完整地图的玩家下载 而不是通过服务器下载 ！下面说你掉线的原因 <br>
-<br>
-在魔兽里面你与主机3秒无ping 的时候 主机自动判断你为掉线 ！这个时候 你还是和浩方链接的 如果在3秒后主机接收到你仍然在线的数据包 那么你可以继续游戏 ！ 反之就判断你为一直掉线 直到游戏读秒结束 提示你断开链接 ！ 当你断线的时候 主机会给浩方发送一个数据包 告诉浩方 有一个玩家掉线了 这个时候浩方会链接到你 你同时也告知浩方你链接不上主机了 ！这个时候浩方会为你们的数据做中转 ！因为浩方的服务器是保持链接 所以关于链接方面的数据包都是又浩方处理！ 这就发生了你的问题 ！ <br>
-下面说你发生的情况是因为 在你3秒内没有ping到魔兽的主机 主机判断你掉线了 ！然后 你发送一个仍然在线的数据包 给浩方服务器 通过服务器中转到魔兽的主机 这个时候 浩方会一直发送 你在线的数据包以求和主机链接上 你的虚拟局域网IP地址也包含在这个数据包里面 ！ 当然 这个时候魔兽的主机为了判断你是否属实在线 仍然会给你一个回ping的数据包 来验证你是否在线 ！ 可惜 刚好这个时候 你又ping值又大于 3秒！而浩方发完了这个 验证数据包后不在发送 同时 魔兽也把这个大于3秒的验证数据包当作无用数据包丢失 ！这个时候 你既没有接收到魔兽主机的验证数据包 所以你也不能回复 在线 你还是一直发送请求在线数据包 而不是回复验证数据包！ 但是浩方却已经判断你在线了 所以不在替你发送数据包！ 所以魔兽主机自动判断你已经掉线 ！ 然而以后你再次发送在线的数据包的时候 浩方服务器不在给你中转 更不会保留 因为浩方已经判断你是链接的 ！ 所以魔兽主机也一直没有收到你的在线请求数据包和验证回复数据包 当然也不会回ping你或者判断你在线而继续游戏 可是 你聊天的内容是不需要经过服务器中转的 你的其他数据还是进行点对点的链接 所以 大家可以看见你聊天内容 而你却已经被判断为 失去链接 ！ <br>
-<br>
-这个是没有办法解决的 一般发生这种情况都是 你和服务器之间的网络链接不稳定 ！ 你只能是 看看你的上网方式 或者是不是你和你的网络服务器之间延迟太大！ 你只能从这个方面解决 单独的重新安装浩方客户端是没有办法的 ！ <br>
-<br>
-对了 你可以试试重新安装 TCP/IP协议 看看可以不 ？ 重要的是 你的网络链接和浩方服务器不稳定 而不在于你客户端 ！ 主要是网络原因 所以我就想到了 协议问题！ 但是估计帮助不大 你还是要进入 ping值最低的服务器 或者 下载一些优化网络链接的软件进行 优化 因为你只要是玩魔兽 你的延迟就一定不能大于3秒 特别是 连续大于3秒 这样在浩方上很容易丢失你的验证数据包或者回复验证数据包 ！ 这两个数据包丢失一次 就出现你所遇到的问题 ！ 相关知识要只要你学习一下网络协议方面就很容易懂了 ！</div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2007/01/06/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/01/06/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/28/">&larr; Older</a>
@@ -799,6 +975,10 @@ Google Mini 2.2不会直接对企业应用软件的数据进行索引，而是�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/10/29/upgrade-octopress/">更新octopress博客系统后的笔记</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
       </li>
     
@@ -812,10 +992,6 @@ Google Mini 2.2不会直接对企业应用软件的数据进行索引，而是�
     
       <li class="post">
         <a href="/blog/2012/10/04/roubo-workbench-2/">Roubo Style Workbench - 靖天木工桌 2/5</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/09/28/ifq-roubo-workbench-1/">Roubo Style workbench - 靖天木工桌 1/5</a>
       </li>
     
   </ul>
@@ -833,7 +1009,7 @@ Google Mini 2.2不会直接对企业应用软件的数据进行索引，而是�
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (4)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (1)</a></li><li><a href='/blog/categories/orgmode'>orgmode (1)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (5)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 

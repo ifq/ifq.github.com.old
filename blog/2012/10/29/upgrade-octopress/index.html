@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>更新octopress博客系统后的笔记 - Geek Woodworker</title>
+  <meta name="author" content="靖天">
+  <meta name="Generator" content="Jekyll & Octopress (http://octopress.org)">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ifq.github.com/blog/2012/10/29/upgrade-octopress/">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/octopress.min.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+  
+
+<!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<!-- 9jBDGwX2G-7pQ39zs-wElUxm5Tg -->
+<meta name="alexaVerifyID" content="9jBDGwX2G-7pQ39zs-wElUxm5Tg" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33860711-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+   
+  <link href="/octopress-favicon.png" rel="icon">
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Geek Woodworker</a></h1>
+  
+    <h2>一个热爱木工的软件工程师</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ifq.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/archives">所有文章</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+
+
+
+
+
+
+
+
+
+
+
+<article class="hentry " role="article">
+  
+  <header>
+    <h1 class="entry-title">
+
+更新octopress博客系统后的笔记
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-29T00:00:00+08:00" pubdate data-updated="true">Oct 29<span>th</span>, 2012</time>
+         &bull; <a rel="bookmark" href="/blog/2012/10/29/upgrade-octopress/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><p>
+octopress的博客系统使用有一段时间了。总体很满意，发博客也渐渐上手了。但是也还有些小问题困扰。比如导入过往blog之后，总共的post量比较大，每次generate的时候耗时很长；比如comment数量总是显示为零。
+</p>
+<p>
+关于前一个问题，目前还没有找到很好的解决方案，再等等看octopress自己会不会改进这个问题吧。关于comment数量的显示，查到这个bug实际已经解决，但是需要升级到2.1 的branch才行（之前是master分支,是2.0）。于是对博客系统进行了升级，过程这里不复述了，可以参考<a href="http://octopress.org/docs/updating/">官方指南</a> 。但是要注意merge的时候自己定义的一些改动会不会被覆盖，样式表、页脚链接之类。
+</p>
+<p>
+最终结果，comment的问题解决了，theme最后换回了classic界面。。大众一点也好，UI更友好。后边空闲的时候可以加点logo之类的装饰下。以下是几点memo，供参考。
+</p>
+<ul>
+<li>upgrade octopress <br/>
+  如果你使用 <code>git pull octopress 2.1</code> 更新时，提
+  示没有相应的 repo，那么说明你和我一样，需要以下的命令首先把octopress
+  添加到remote的repo列表。
+<figure class='code'><div class='highlight'><table><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='plain'><span class='line'>git remote add octopress https://github.com/imathis/octopress.git</span></code></pre></td></tr></table></div></figure>
+
+</li>
+</ul>
+
+
+
+
+<!-- more -->
+
+<ul>
+<li>回退错误的 git pull <br/>
+  如果做git pull操作的时候, pull错了branch，可以用下面的命令来恢复。
+  没有专门去学过，不怎么会用，但是 git 真的感觉好庞大啊。。
+<blockquote>
+
+<p>  git reset &ndash;hard ORIG_HEAD
+</p>
+<p>
+git pull will do two things: it does a git fetch and then a git merge
+where it merges branches that have been setup to be merged in your
+config.
+</p>
+<p>
+So what you want to do is to undo the merge (undoing the fetch doesn&#8217;t
+make a lot of sense and shouldn&#8217;t be necessary).
+</p>
+<p>
+To do that you can try using git reset &ndash;hard to reset to a previous
+state. Use the git-reflog command to find the SHA-1 of the previous
+state and then reset to it.
+</p>
+
+</blockquote>
+
+
+</li>
+<li>git 删除未commit的不想要的git改动
+<figure class='code'><div class='highlight'><table><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='plain'><span class='line'>git clean -f</span></code></pre></td></tr></table></div></figure>
+
+
+</li>
+<li>有的post在第一次发出后可能还需要持续更新几次，在post中增加 <b>本博客于yyyy-mm-dd hh：mm更新</b> 这样的时间戳提示也许很有用。至少我在单位的个人主页有尝试这样，更新工作进展比较有用。 <br/>
+  我用的方法是利用 emacs 的org模式中执行 src blog 的功能——Babel。在需要显示时间戳的地方加上以下几句：
+
+
+
+<pre class="example">#+begin_src sh :exports results
+echo "本文档更新于: $(date)"
+#+end_src
+</pre>
+
+<p>
+  之后export的时候转换出来的html里不再是上边几句代码，而是代码执行出来的结果。也就是显示 <code>本文档更新于: xxx</code> 。当然，为了正确导出可能需要对 org模式的 Babel 进行额外的设置。貌似需要加上以下几句：
+<figure class='code'><div class='highlight'><table><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='plain'><span class='line'>; Some initial langauges we want org-babel to support
+</span><span class='line'>(org-babel-do-load-languages
+</span><span class='line'> 'org-babel-load-languages
+</span><span class='line'> '(
+</span><span class='line'>   (sh . t)
+</span><span class='line'>   (python . t)
+</span><span class='line'>   (R . t)
+</span><span class='line'>   (ruby . t)
+</span><span class='line'>   (ditaa . t)
+</span><span class='line'>   (dot . t)
+</span><span class='line'>   (octave . t)
+</span><span class='line'>   (sqlite . t)
+</span><span class='line'>   (perl . t)
+</span><span class='line'>   ))
+</span></code></pre></td></tr></table></div></figure>
+
+  实现时间戳我使用了 sh，当然你也可以用 ruby或者 perl之类。前提是emacs能够正确访问到相应的解释器。ruby如果使用rvm管理的话，可能需要找 rvm.el 做设置。
+</p>
+<p>
+  下面这个就是时间戳的效果：
+</p></li>
+</ul>
+
+
+
+
+
+<pre class="example">
+本文档更新于: 2012年 11月 08日 星期四 00:43:39 CST
+</pre>
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">靖天</span></span>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-29T00:00:00+08:00" pubdate data-updated="true">Oct 29<span>th</span>, 2012</time>
+
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/binary/'>binary</a>, <a class='category' href='/blog/categories/octopress/'>octopress</a>, <a class='category' href='/blog/categories/orgmode/'>orgmode</a>
+  
+</span>
+
+
+
+      
+
+    </p>
+    
+      <div class="sharing">
+<!-- JiaThis Button BEGIN -->
+<div id="ckepop">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_renren"></a>
+	<a class="jiathis_button_kaixin001"></a>
+	<a href="http://www.jiathis.com/share?uid=1663055" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1344059400115285" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+  
+    
+      <a href="http://twitter.com/share" title="Tweet this" class="twitter-share" target="_blank">Tweet</a>
+    
+  
+  
+    
+      <a title="+1 on Google Plus" class="googleplus-share" href="https://plusone.google.com/_/+1/confirm?hl=en&url=http://ifq.github.com/blog/2012/10/29/upgrade-octopress/" target="_blank">+1</a>
+    
+  
+  
+    
+    <a title="Share on Facebook" class="facebook-share" href="http://www.facebook.com/sharer.php?u=http://ifq.github.com/blog/2012/10/29/upgrade-octopress/" target="_blank">Share</a>
+    
+  
+  
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/10/28/roubo-workbench-5/" title="Previous Post: Roubo Style Workbench - 靖天木工桌 5/5">&laquo; Roubo Style Workbench - 靖天木工桌 5/5</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+<section>
+  <h1>Comments</h1>
+  
+
+  
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  
+</section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/10/29/upgrade-octopress/">更新octopress博客系统后的笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/20/roubo-workbench-4/">Roubo Style Workbench - 靖天木工桌 4/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/04/roubo-workbench-2/">Roubo Style Workbench - 靖天木工桌 2/5</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+
+
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="category-list">
+    <li><a href='/blog/categories/binary'>binary (5)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+  </ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+  <script src="/javascripts/slash.js"></script>
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+			var disqus_developer = '0';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ifq.github.com/blog/2012/10/29/upgrade-octopress/';
+        var disqus_url = 'http://ifq.github.com/blog/2012/10/29/upgrade-octopress/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+</body>
+</html>

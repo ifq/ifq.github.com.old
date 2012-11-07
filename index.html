@@ -96,6 +96,84 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2012/10/29/upgrade-octopress/">更新octopress博客系统后的笔记</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-29T00:00:00+08:00" pubdate data-updated="true">Oct 29<span>th</span>, 2012</time>
+         &bull; <a rel="bookmark" href="/blog/2012/10/29/upgrade-octopress/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><p>
+octopress的博客系统使用有一段时间了。总体很满意，发博客也渐渐上手了。但是也还有些小问题困扰。比如导入过往blog之后，总共的post量比较大，每次generate的时候耗时很长；比如comment数量总是显示为零。
+</p>
+<p>
+关于前一个问题，目前还没有找到很好的解决方案，再等等看octopress自己会不会改进这个问题吧。关于comment数量的显示，查到这个bug实际已经解决，但是需要升级到2.1 的branch才行（之前是master分支,是2.0）。于是对博客系统进行了升级，过程这里不复述了，可以参考<a href="http://octopress.org/docs/updating/">官方指南</a> 。但是要注意merge的时候自己定义的一些改动会不会被覆盖，样式表、页脚链接之类。
+</p>
+<p>
+最终结果，comment的问题解决了，theme最后换回了classic界面。。大众一点也好，UI更友好。后边空闲的时候可以加点logo之类的装饰下。以下是几点memo，供参考。
+</p>
+<ul>
+<li>upgrade octopress <br/>
+  如果你使用 <code>git pull octopress 2.1</code> 更新时，提
+  示没有相应的 repo，那么说明你和我一样，需要以下的命令首先把octopress
+  添加到remote的repo列表。
+<figure class='code'><div class='highlight'><table><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='plain'><span class='line'>git remote add octopress https://github.com/imathis/octopress.git</span></code></pre></td></tr></table></div></figure>
+
+</li>
+</ul>
+
+
+
+
+</div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2012/10/29/upgrade-octopress/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/10/29/upgrade-octopress/">View comments &raquo;</a></p>
+    
+    
+    
+    <p><a rel="full-article" href="/blog/2012/10/29/upgrade-octopress/">继续阅读 &rarr;</a></p>
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
 
 </h1>
@@ -738,77 +816,6 @@ This is just a quick update about my prograss.
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2012/09/04/really-big-machines/">各种 Big Machine</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-04T00:00:00+08:00" pubdate data-updated="true">Sep 4<span>th</span>, 2012</time>
-         &bull; <a rel="bookmark" href="/blog/2012/09/04/really-big-machines/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><p>
-在youtube上看到的视频，各种庞然大物。各种挖矿的，运火箭的。
-</p><ul>
-<li>2：00位置的那个钻洞的大家伙，每部电影中生活在地下的反派角色都应该攒钱
-  买一个。哥谭镇的贝恩是不是也有一个啊～
-</li>
-<li>运火箭那个，以前电视里见过，原来它的牛B之处是可以保证表面的平稳，晃动
-  都在1/6度以内！！
-</li>
-</ul>
-
-
-   <div class="video-container">
-   <video width='' height='' preload='none' controls poster='  /rc/cool-big-machine.JPG'><source src='/video/really-big-machines-ifq.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/></video>
-   </div>
-
-<p>
-源视频地址：<a href="http://www.youtube.com/watch?v=iE-3awHYsG8&amp;list=UUqmugCqELzhIMNYnsjScXXw&amp;index=33&amp;feature=plcp">http://www.youtube.com/watch?v=iE-3awHYsG8&amp;list=UUqmugCqELzhIMNYnsjScXXw&amp;index=33&amp;feature=plcp</a>
-</p></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2012/09/04/really-big-machines/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/09/04/really-big-machines/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -823,6 +830,10 @@ This is just a quick update about my prograss.
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/10/29/upgrade-octopress/">更新octopress博客系统后的笔记</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
@@ -840,10 +851,6 @@ This is just a quick update about my prograss.
         <a href="/blog/2012/10/04/roubo-workbench-2/">Roubo Style Workbench - 靖天木工桌 2/5</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2012/09/28/ifq-roubo-workbench-1/">Roubo Style workbench - 靖天木工桌 1/5</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -859,7 +866,7 @@ This is just a quick update about my prograss.
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (4)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (1)</a></li><li><a href='/blog/categories/orgmode'>orgmode (1)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (5)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 
