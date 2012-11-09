@@ -1,0 +1,97 @@
+---
+layout: post
+title: 一些linux命令行的memo
+categories: [binary]
+comments: true
+---
+
+
+
+
+<ul>
+<li>文件头部插入多行文本 <br/>
+  一堆周报文件，需要在头部插入特定行才能移植到新blog，于是：
+
+
+
+<pre class="example">sed -i '1i#+BEGIN_HTML\n---\nlayout: post\ntitle: 周报 \n/
+{% include JB/setup %}
+category: WORK\ntags:\n- 周报\n---\n#+END_HTML' /
+*weekly*.org
+
+</pre>
+
+
+<ul>
+<li><code>sed</code> 的 <code>-i</code> 参数表示直接修改到文件，不打印。
+</li>
+<li>多行文本用=\n=作为分割
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+
+<ul>
+<li>文件改名 <br/>
+
+
+
+<pre class="example">find . -name '*weekly*' &gt; tmp
+perl -ne 'chomp; s/.\///; /([0-9]{2})([0-9]{2})/; print "mv $_ /
+2011-$1-$2-$_\n"' tmp &gt; tmp1
+source tmp1
+rm -rf tmp*  
+</pre>
+
+
+<ul>
+<li>需要将 <code>weekly-0102.org</code> 的格式改为 <code>2012-01-02-weekly.org</code>
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+
+<ul>
+<li>DOS 换行批量转 UNIX <br/>
+
+
+
+<pre class="example">sed -i 's/^M//' *.c        # 在bash/tcsh中，将按Ctrl-M改为按Ctrl-V
+sed -i 's/\x0D//' *.c      # ssed、gsed 3.02.80，及更高版本
+</pre>
+
+
+</li>
+<li>更改图片链接 <br/>
+  org 图片链接默认 <code>file:///</code> 的格式，在jekyll下不能识别。于是用脚本手
+  工转换。
+
+
+
+<pre class="example">root@bt:~/ifq.github.com/_posts# sed -i 's/file:[a-zA-Z/-]*pic/\/pic/g' *wsec*.html
+root@bt:~/ifq.github.com/_posts# grep 'file:[a-zA-Z/-]*pic' *root@bt:~/ifq.github.com/_posts# ls
+
+</pre>
+
+
+</li>
+<li>参考资料
+<ul>
+<li><a href="http://www.grymoire.com/Unix/Sed.html#uh-42">http://www.grymoire.com/Unix/Sed.html#uh-42</a>
+</li>
+<li><a href="http://sed.sourceforge.net/sed1line_zh-CN.html">http://sed.sourceforge.net/sed1line\_zh-CN.html</a>
+</li>
+</ul>
+
+</li>
+</ul>
+
+

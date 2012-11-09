@@ -1,0 +1,24 @@
+---
+layout: post
+title: 用 sed 替换二进制内容
+categories: [binary]
+comments: true
+---
+
+<p>
+  文件里有一堆 0，在每个字符后边。需要去掉。
+</p>
+
+
+<pre class="example">00000010: 4f00 4300 4100 4c00 5f00 4d00 4100 4300  O.C.A.L._.M.A.C.
+00000020: 4800 4900 4e00 4500 5c00 4800 4100 5200  H.I.N.E.\.H.A.R.
+00000030: 4400 5700 4100 5200 4500 5d00 0d00 0a00  D.W.A.R.E.].....
+00000040: 0d00 0a00 5b00 4800 4b00 4500 5900 5f00  ....[.H.K.E.Y._.  
+</pre>
+
+
+
+<pre class="example">sed -i 's|\x00||g' filename
+</pre>
+
+
