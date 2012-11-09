@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>tshark 抓包 memo - Geek Woodworker</title>
+  <meta name="author" content="靖天">
+  <meta name="Generator" content="Jekyll & Octopress (http://octopress.org)">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ifq.github.com/blog/2012/03/19/tshark-cmd/">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/octopress.min.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Geek Woodworker" type="application/atom+xml">
+  
+
+<!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<!-- 9jBDGwX2G-7pQ39zs-wElUxm5Tg -->
+<meta name="alexaVerifyID" content="9jBDGwX2G-7pQ39zs-wElUxm5Tg" />
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33860711-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+   
+  <link href="/octopress-favicon.png" rel="icon">
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Geek Woodworker</a></h1>
+  
+    <h2>一个热爱木工的软件工程师</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ifq.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main">
+	<li><a href="/">主页</a></li>
+	<li><a href="/archives">所有文章</a></li>
+	<li><a href="/blog/categories">类别</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+
+
+
+
+
+
+
+
+
+
+
+<article class="hentry " role="article">
+  
+  <header>
+    <h1 class="entry-title">
+
+Tshark 抓包 Memo
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-19T00:00:00+08:00" pubdate data-updated="true">Mar 19<span>th</span>, 2012</time>
+         &bull; <a rel="bookmark" href="/blog/2012/03/19/tshark-cmd/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><ul>
+<li>Tshark help
+
+
+
+<pre class="example">TShark 1.6.5 (SVN Rev Unknown from unknown)
+Dump and analyze network traffic.
+See http://www.wireshark.org for more information.
+
+Copyright 1998-2012 Gerald Combs &lt;gerald@wireshark.org&gt; and contributors.
+This is free software; see the source for copying conditions. There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Usage: tshark [options] ...
+
+Capture interface:
+  -i &lt;interface&gt;           name or idx of interface (def: first non-loopback)
+  -f &lt;capture filter&gt;      packet filter in libpcap filter syntax
+  -s &lt;snaplen&gt;             packet snapshot length (def: 65535)
+  -p                       don't capture in promiscuous mode
+  -I                       capture in monitor mode, if available
+  -B &lt;buffer size&gt;         size of kernel buffer (def: 1MB)
+  -y &lt;link type&gt;           link layer type (def: first appropriate)
+  -D                       print list of interfaces and exit
+  -L                       print list of link-layer types of iface and exit
+
+Capture stop conditions:
+  -c &lt;packet count&gt;        stop after n packets (def: infinite)
+  -a &lt;autostop cond.&gt; ...  duration:NUM - stop after NUM seconds
+                           filesize:NUM - stop this file after NUM KB
+                              files:NUM - stop after NUM files
+Capture output:
+  -b &lt;ringbuffer opt.&gt; ... duration:NUM - switch to next file after NUM secs
+                           filesize:NUM - switch to next file after NUM KB
+                              files:NUM - ringbuffer: replace after NUM files
+Input file:
+  -r &lt;infile&gt;              set the filename to read from (no pipes or stdin!)
+
+Processing:
+  -R &lt;read filter&gt;         packet filter in Wireshark display filter syntax
+  -n                       disable all name resolutions (def: all enabled)
+  -N &lt;name resolve flags&gt;  enable specific name resolution(s): "mntC"
+  -d &lt;layer_type&gt;==&lt;selector&gt;,&lt;decode_as_protocol&gt; ...
+                           "Decode As", see the man page for details
+                           Example: tcp.port==8888,http
+  -H &lt;hosts file&gt;          read a list of entries from a hosts file, which will
+                           then be written to a capture file. (Implies -W n)
+Output:
+  -w &lt;outfile|-&gt;           write packets to a pcap-format file named "outfile"
+                           (or to the standard output for "-")
+  -C &lt;config profile&gt;      start with specified configuration profile
+  -F &lt;output file type&gt;    set the output file type, default is libpcap
+                           an empty "-F" option will list the file types
+  -V                       add output of packet tree        (Packet Details)
+  -O &lt;protocols&gt;           Only show packet details of these protocols, comma
+                           separated
+  -S                       display packets even when writing to a file
+  -x                       add output of hex and ASCII dump (Packet Bytes)
+  -T pdml|ps|psml|text|fields
+                           format of text output (def: text)
+  -e &lt;field&gt;               field to print if -Tfields selected (e.g. tcp.port);
+                           this option can be repeated to print multiple fields
+  -E&lt;fieldsoption&gt;=&lt;value&gt; set options for output when -Tfields selected:
+     header=y|n            switch headers on and off
+     separator=/t|/s|&lt;char&gt; select tab, space, printable character as separator
+     occurrence=f|l|a      print first, last or all occurrences of each field
+     aggregator=,|/s|&lt;char&gt; select comma, space, printable character as
+                           aggregator
+     quote=d|s|n           select double, single, no quotes for values
+  -t ad|a|r|d|dd|e         output format of time stamps (def: r: rel. to first)
+  -u s|hms                 output format of seconds (def: s: seconds)
+  -l                       flush standard output after each packet
+  -q                       be more quiet on stdout (e.g. when using statistics)
+  -W n                     Save extra information in the file, if supported.
+                           n = write network address resolution information
+  -X &lt;key&gt;:&lt;value&gt;         eXtension options, see the man page for details
+  -z &lt;statistics&gt;          various statistics, see the man page for details
+
+Miscellaneous:
+  -h                       display this help and exit
+  -v                       display version info and exit
+  -o &lt;name&gt;:&lt;value&gt; ...    override preference setting
+  -K &lt;keytab&gt;              keytab file to use for kerberos decryption
+  -G [report]              dump one of several available reports and exit
+                           default report="fields"
+                           use "-G ?" for more help
+  
+</pre>
+
+
+</li>
+<li>airodump-ng
+
+
+
+<pre class="example">  
+  Interaction
+
+Since revision r1648, airodump-ng can receive and interpret key strokes while running. The following list describes the currently assigned keys and supposed actions.
+
+[a]: Select active areas by cycling through these display options: AP+STA; AP+STA+ACK; AP only; STA only
+[d]: Reset sorting to defaults (Power)
+[i]: Invert sorting algorithm
+[m]: Mark the selected AP or cycle through different colors if the selected AP is already marked
+[r]: (De-)Activate realtime sorting - applies sorting algorithm everytime the display will be redrawn
+[s]: Change column to sort by, which currently includes: First seen; BSSID; PWR level; Beacons; Data packets; Packet rate; Channel; Max. data rate; Encryption; Strongest Ciphersuite; Strongest Authentication; ESSID
+[SPACE]: Pause display redrawing/ Resume redrawing
+[TAB]: Enable/Disable scrolling through AP list
+[UP]: Select the AP prior to the currently marked AP in the displayed list if available
+[DOWN]: Select the AP after the currently marked AP if available
+If an AP is selected or marked, all the connected stations will also be selected or marked with the same color as the corresponding Access Point.
+
+
+</pre>
+
+</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">靖天</span></span>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-19T00:00:00+08:00" pubdate data-updated="true">Mar 19<span>th</span>, 2012</time>
+
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/binary/'>binary</a>
+  
+</span>
+
+
+
+      
+
+    </p>
+    
+      <div class="sharing">
+<!-- JiaThis Button BEGIN -->
+<div id="ckepop">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_renren"></a>
+	<a class="jiathis_button_kaixin001"></a>
+	<a href="http://www.jiathis.com/share?uid=1663055" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1344059400115285" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+  
+    
+      <a href="http://twitter.com/share" title="Tweet this" class="twitter-share" target="_blank">Tweet</a>
+    
+  
+  
+    
+      <a title="+1 on Google Plus" class="googleplus-share" href="https://plusone.google.com/_/+1/confirm?hl=en&url=http://ifq.github.com/blog/2012/03/19/tshark-cmd/" target="_blank">+1</a>
+    
+  
+  
+    
+    <a title="Share on Facebook" class="facebook-share" href="http://www.facebook.com/sharer.php?u=http://ifq.github.com/blog/2012/03/19/tshark-cmd/" target="_blank">Share</a>
+    
+  
+  
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/03/10/merge-old-blog-stuff/" title="Previous Post: 一些linux命令行的memo">&laquo; 一些linux命令行的memo</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/03/27/sed-binary-replace/" title="Next Post: 用 sed 替换二进制内容">用 sed 替换二进制内容 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+<section>
+  <h1>Comments</h1>
+  
+
+  
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  
+</section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/10/29/upgrade-octopress/">更新octopress博客系统后的笔记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/20/roubo-workbench-4/">Roubo Style Workbench - 靖天木工桌 4/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/04/roubo-workbench-2/">Roubo Style Workbench - 靖天木工桌 2/5</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+
+
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="category-list">
+    <li><a href='/blog/categories/binary'>binary (8)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+  </ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo">Copyright &copy; 2012
+
+    靖天
+    (一个热爱木工的软件工程师)
+
+
+</footer>
+  <script src="/javascripts/slash.js"></script>
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'ifq';
+			var disqus_developer = '0';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ifq.github.com/blog/2012/03/19/tshark-cmd/';
+        var disqus_url = 'http://ifq.github.com/blog/2012/03/19/tshark-cmd/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+</body>
+</html>

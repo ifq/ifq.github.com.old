@@ -96,6 +96,259 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2007/12/08/1/">弱类型还真是弱啊</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-08T00:00:00+08:00" pubdate data-updated="true">Dec 8<span>th</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/blog/2007/12/08/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div>&nbsp;&nbsp;&nbsp;  终于开始干点正式的活儿了。<font color="#ffcc99">最近在写一个开发组用的小工具，用来读取设备的设置信息文件的内容，用来分析设备的状况什么的。设置信息是用二进制存储的，上边要求我把每个字节对应的设置的意思显示出来。而得到这些字节含义的唯一途径就是一大堆的头文件。头文件里有存储这些信息的一个大结构体，通过变量名和enum的定义，再根据数据，大概就知道设置的情况。</font><br>
+<br>
+<font color="#99cc00">&nbsp;&nbsp;&nbsp;  问题就来了。设备的设置情况都存储在一个大的结构体里，如何把它和它在头文件中的定义结合起来，显示出它的设置情况。考虑了一下决定用一个中间文件，把头文件中这个结构体的内容用一定的形式表示出来，我写的工具通过读取这个文件，再结合存储的数据文件就可以完成任务了。</font><br>
+<font color="#00ccff"><br>
+&nbsp;&nbsp;&nbsp;  搞了2天工具倒是做出来了。也能显示个大概了。问题是中间文件怎么生成了。手写肯定是不可能，太低级。全自动似乎不太现实，读那么多头文件，每个人写的风格又不一样，岂不要疯掉。于是开始做半自动的生成程序。上边建议我用脚本语言，那我就用呗。python学了半天，开始搞。一直没用过脚本，刚开始真被糊住了。弱类型真 是弱啊，弱到我自己也分不清是string还是list还是dict了。。。而且当时似乎应该选用perl来做，那个处理文本确实比较强，内部支持正则表 达式。不象python好像是用c的库来支持的吧。做了2天，半自动脚本出来了，也能正常运作，但是需要用户自己输入很多东西。&nbsp;&nbsp;   </font><br>
+<br>
+&nbsp;&nbsp;&nbsp;<font color="#993300"> 最恼火的问题来了：现在小组开发的设备的版本有10多个了，每个版本有10多个这样的设置文件，每个都不一样。同时还有2种设备也想用这个程序，也就是再乘以3 。。 这样的话半自动也要死人了。于是开始全自动的干活。。</font><br>
+<br>
+&nbsp;&nbsp;&nbsp;  由于我学日语啊什么的技术可以说是荒废了半年啊。脑子也有点秀逗了。做东西的时候总是喜欢完美主义。要么就偷懒，要么就完美。似乎和现在的环境不符合了。<font color="#ff6600">折中的思维太重要了！！！ <font color="#000000">要把这个贯彻到底！！！ 不然产品怎么延续？不然社会怎么进步？ 要留有空间啊。 或有说回来，我们还不具备做完美的条件，没那个本事啊。世界本来就是不完美的。<br>
+<br>
+<font color="#0000ff">&nbsp;&nbsp;&nbsp;  最近开始用cvs提交代码了。跟我一起开始工作的那位兄弟被叫去debug一个小错误，做完之后叫他check in他的代码，就在按enter键的时候，前辈一句话他楞是由于了半天。他说，<font color="#99cc00">你确定好了么？你按下去全球的机器就要跟着改变了哟。</font>我听了之后心里很兴奋：）</font><br>
+</font></font></div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2007/12/08/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/12/08/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/blog/2007/12/05/1/">郁闷-驾照得寄回国更新了</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-05T00:00:00+08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/blog/2007/12/05/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div>本来准备翻译驾照了，得到最新消息，国内的旧版驾照日本不认，得换成新的。<br>
+结果老驾驶员却不能换，刚学的小p孩却可以换，垃圾制度啊。<br>
+不过查了下，寄这么个东西回去挺便宜，只要200日币左右。而且貌似也只要1周。<br>
+准备行动了。<br>
+看看这2个·バイク&lsquo;怎么样啊？中古的。<br>
+<div align="center"><font size="2"><font face="黑体">YAMAHA。这个改得比较多</font></font></div>
+<div forimg="1"><img class="" src="/rc/legacy/2df3d25862673d8c810a1833.jpg" width="800"><br>
+<div align="center"><font size="2">光看照片感觉很新哦 喜欢这个轮胎</font></div>
+</div>
+<div align="center" forimg="1"><img class="" src="/rc/legacy/7dce6f8130d348d5bd3e1e3c.jpg" width="800"><br>
+这个也不错</div>
+<div align="center" forimg="1"><img class="" src="/rc/legacy/bd428444bb224b41500ffe3d.jpg" width="800"></div>
+2个价格都还比较合适，20多w吧好像。不知道车况如何。<br>
+看到这些宝贝，就有无穷的动力啦。再麻烦也不怕了！！</div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2007/12/05/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/12/05/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/blog/2007/12/02/1/">转-警车牛-后边还有中国东风哈</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-02T00:00:00+08:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/blog/2007/12/02/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div><h2>The World&rsquo;s Finest Police Cars</h2>
+Ever wondered what happens to the money you pay to the Police when you get a ticket?
+<p>Here&rsquo;s the ultimate battle of Police supercars worldwide. Personally if I would be a cop I would prefer Germany.</p>
+<p><strong>Germany: Brabus CLS Rocket</strong></p>
+<p>With 730hp from a twin-turbo V12 and a top-speed of 225.19mph, the Brabus CLS Rocket is currently the world&rsquo;s <a target="_blank" href="http://www.concept-cars.org/fastest-legal-sedan.html">fastest legal sedan</a>.</p>
+<p><img class="" src="/rc/legacy/Germany%20Brabus%2001.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/Germany%20Brabus%2002.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/Germany%20Brabus%2003.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/Germany%20Brabus%2004.jpg" width="800"></p>
+<p><strong>Germany: Porsche 911 Carrera</strong></p>
+<p>The Porsche 911 Carrera S has been extensively modified by TechArt for its role as a police car. With a 6 cylinder engine and 500hp it&rsquo;s capable of over 186 mph and sprinting to 60 mph in just 4.6 seconds.</p>
+<p><img class="" src="/rc/legacy/Germany%20Porsche%20911%20Carrera.jpg" width="800"></p>
+<p><strong>Austria: Porsche 911 </strong></p>
+<p>A &#163;65,000 supercar that can do up to 177mph for the Austrian Police</p>
+<p><img class="" src="/rc/legacy/Austria%20Porsche%20911.jpg" width="800"></p>
+<p><strong>Italy: Lamborghini Gallardo</strong></p>
+<p>Lamborghini donated one of these beauties to the Italian Police back in 2004. They probably liked it as they purchased another one a year later for around $166,000. Top speed: 190mph. Powered by a 5 liter V10 with 500hp.</p>
+<p><img class="" src="/rc/legacy/Italy%20Lamborghini%20Gallardo%2001.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/Italy%20Lamborghini%20Gallardo%2002.JPG" width="800"></p>
+<p><strong>Italy: Smart</strong></p>
+<p>Not quite a supercar, but I bet chases on the narrow streets of Rome are much more interesting since the Italian Police got this.</p>
+<p><img class="" src="/rc/legacy/Italy%20Smart.jpg" width="800"></p>
+<p><strong>USA: Dodge Magnum</strong></p>
+<p>Michigan Police acquired an entire Magnum fleet (they could be used as rams by their looks)</p>
+<p><img class="" src="/rc/legacy/USA%20Dodge%20Magnum%2001.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/USA%20Dodge%20Magnum%2003.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/USA%20Dodge%20Magnum%2004.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/USA%20Dodge%20Magnum%2005.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/USA%20Dodge%20Magnum%2002.jpg" width="800"></p>
+<p><strong>USA: Dodge Viper</strong></p>
+<p>Texas&rsquo; way of welcoming visitors</p>
+<p><img class="" src="/rc/legacy/USA%20Dodge%20Viper.jpg" width="800"></p>
+<p><strong>USA: Corvette C6</strong></p>
+<p><img class="" src="/rc/legacy/USA%20Corvette%20c5.jpg" width="800"></p>
+<p><strong>USA: Ford Mustang</strong></p>
+<p><img class="" src="/rc/legacy/USA%20Ford%20Mustang%2002.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/USA%20Ford%20Mustang.jpg" width="800"></p>
+<p><strong>USA: Hummer H2</strong></p>
+<p>700hp Hummer powered by a 7.0L supercharged V8 for a sheriff in Texas</p>
+<p><img class="" src="/rc/legacy/USA%20Hummer%20H2.jpg" width="800"></p>
+<p><strong>UK: Lamborghini Gallardo</strong></p>
+<p>Similar to the Italian Police Gallardo, just with a crappy paint job</p>
+<p><img class="" src="/rc/legacy/UK%20Lamborghini%20Gallardo%2001.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/UK%20Lamborghini%20Gallardo%2002.JPG" width="800"></p>
+<p><img class="" src="/rc/legacy/UK%20Lamborghini%20Gallardo.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/UK%20Lamborghini%20Gallardo%2003.jpg" width="800"></p>
+<p><strong>UK: Lotus Exige</strong></p>
+<p>The Exige is a lightweight, high performance car that accelerates from 0 to 60 faster than typical V8 cars and yet only uses around 5 liters / 100 km.</p>
+<p><img class="" src="/rc/legacy/UK%20Lotus%20Exige%2002.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/UK%20Lotus%20Exige.jpg" width="800"></p>
+<p><strong>Australia: Holden VE Commodore</strong></p>
+<p><img class="" src="/rc/legacy/Australia%20Holden%20VE%20Commodore.jpg" width="800"></p>
+<p><strong>Australia: Alfa Romeo GT</strong></p>
+<p><img class="" src="/rc/legacy/Australia%20Alfa%20Romeo%20GT.jpg" width="800"></p>
+<p><strong>Japan: Nissan Skyline GT-R</strong></p>
+<p><img class="" src="/rc/legacy/Japan%20Nissan%20Skyline%20GT-R.jpg" width="800"></p>
+<p><strong>China: Hummer</strong> (It just HAD to be a replica)</p>
+<p><img class="" src="/rc/legacy/China%20Hummer.JPG" width="800"></p>
+<p><strong>Holland: Spyker C8 Spyder</strong></p>
+<p>406hp and a V8 with Lamborghini doors. Maximum speed: 186mph</p>
+<p><img class="" src="/rc/legacy/Holland%20Spyker%20C8%20Spyder%2002.jpg" width="800"></p>
+<p><img class="" src="/rc/legacy/Holland%20Spyker%20C8%20Spyder.jpg" width="800"></p>
+<p><strong>Canada: Jaguar S Type</strong></p>
+<p><img class="" src="/rc/legacy/Canada%20Jaguar%20S%20Type.jpg" width="800"></p>
+<p><strong>Bulgaria: Porsche 911</strong></p>
+<p><img class="" src="/rc/legacy/Bulgaria%20Porsche%20911.jpg" width="800"></p>
+<p><strong>South Africa: Lamborghini Gallardo</strong></p>
+<p>Yet another Gallardo with a better paint job than the British version. The nearly $200,000 car was loaned to the authorities by a local Lamborghini importer to use it as an &ldquo;attention-getting device&rdquo; to control traffic.</p>
+<p><img class="" src="/rc/legacy/Saudi%20Arabia%20Lamborghini%20Gallardo.jpg" width="800"></p>
+<p><strong>A little fun:</strong></p>
+<p><img class="" src="/rc/legacy/Fun%20Australia.jpg" width="800"></p></div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2007/12/02/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/12/02/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2007/11/25/1/">又一周了。</a>
 
 </h1>
@@ -941,210 +1194,6 @@
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2007/11/14/1/">周三，传说中SONY无加班日，所以我没有加班</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-11-14T00:00:00+08:00" pubdate data-updated="true">Nov 14<span>th</span>, 2007</time>
-         &bull; <a rel="bookmark" href="/blog/2007/11/14/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><p>其实这两天都不用加班。</p>
-<p>回来好像也没什么事情做，碰巧今天网上都没人。</p>
-<p>贴几张照片。</p>
-<p> </p>
-<div forimg="1" align="center">
-<p><img class="" src="/rc/legacy/0863cbfc581c46f1fd037f34.jpg" width="800"></p>
-<p>自拍。</p>
-<p> </p>
-<div forimg="1" align="center">
-<p><img class="" src="/rc/legacy/6842cb956d902847d0135e35.jpg" width="800"></p>
-<p>图片怎么老是一半，网络问题么？不过这张的重点已经出来了。电车上的地名有点搞。</p>
-<p> </p>
-<div forimg="1" align="center">
-<p><img class="" src="/rc/legacy/f2d881261e2f9b1b8b82a136.jpg" width="800"></p>
-<p>光线好的时候，130w像素感觉也很细腻哦</p>
-</div>
-</div>
-</div></div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2007/11/14/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/11/14/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2007/11/13/1/">我不做鼹鼠了！！！</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-11-13T00:00:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2007</time>
-         &bull; <a rel="bookmark" href="/blog/2007/11/13/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><p>今天是在SONY第二天了。</p>
-<p>现在不是鼹鼠了！只用做3站就可以到了，没有在地下。</p>
-<p>昨天玩了一天switcher，开始挺有意思的，玩多了就没劲了，毕竟不是玩具。</p>
-<p>今天开始试试我的水平，叫编两个小程序，终于不那么瞌睡了。不然真不知道困成什么样了，又不敢睡。</p>
-<p align="center"><font size="2">sony价格便宜量又足，我们以后就一直吃他了。这碗168自助</font></p>
-<p> </p>
-<div forimg="1" align="center">
-<div forimg="1" align="center"><img class="" src="/rc/legacy/61670a241c04e927d40742fe.jpg" width="800"></div>
-</div>
-<p> </p>
-<div forimg="1" align="center"><img class="" src="/rc/legacy/80dcc8ef3a12353aacafd5fd.jpg" width="800"></div>
-<div forimg="1" align="center">
-<p><img class="" src="/rc/legacy/0bd0ce11ec90391cb9127bfd.jpg" width="800"></p>
-<p>效果不错啊，FE本社24楼的景色</p>
-<p align="center" forimg="1"><img class="" src="/rc/legacy/784c73cfa3dbe131f8dc61fe.jpg" width="800"></p>
-<div forimg="1" align="center">晚上就不行了，东京电视塔，</div>
-<p align="center" forimg="1"><img class="" src="/rc/legacy/e07edaf9f0361e55252df2fe.jpg" width="800"></p>
-<p align="center" forimg="1">塔上的景色，图片是不是只有一半啊</p>
-<p align="center" forimg="1">大家还是自己到这里的相册去看吧。。</p>
-</div>
-<p>睡觉了～</p></div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2007/11/13/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/11/13/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2007/11/11/1/">第三周了～熬出来了！不一样了！！</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-11-11T00:00:00+08:00" pubdate data-updated="true">Nov 11<span>th</span>, 2007</time>
-         &bull; <a rel="bookmark" href="/blog/2007/11/11/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><p>第三周了～！</p>
-<p>解脱了！</p>
-<p>爽了！</p>
-<p>不用那么早起了！</p>
-<p>可以吃SONY食堂了！</p>
-<p>可以早点回来了！</p>
-<p>可以自己做饭了！</p>
-<p>可以省钱了！</p>
-<p>不过具体会怎么样，还是不知道！！！</p></div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2007/11/11/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/11/11/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/15/">&larr; Older</a>
@@ -1197,7 +1246,7 @@
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (5)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (8)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 

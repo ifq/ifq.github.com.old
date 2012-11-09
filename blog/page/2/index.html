@@ -752,7 +752,7 @@ welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
   <header>
     <h1 class="entry-title">
 
-<a href="/blog/2010/10/20/1/">回国了！换博了！</a>
+<a href="/blog/2012/03/27/sed-binary-replace/">用 Sed 替换二进制内容</a>
 
 </h1>
 
@@ -770,19 +770,34 @@ welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
   
 
 
-<time datetime="2010-10-20T00:00:00+08:00" pubdate data-updated="true">Oct 20<span>th</span>, 2010</time>
-         &bull; <a rel="bookmark" href="/blog/2010/10/20/1/">Permalink</a>
+<time datetime="2012-03-27T00:00:00+08:00" pubdate data-updated="true">Mar 27<span>th</span>, 2012</time>
+         &bull; <a rel="bookmark" href="/blog/2012/03/27/sed-binary-replace/">Permalink</a>
       </p>
     
   </header>
 
-<div class="entry-content"><div><p> </p>
-<p>如题！终于把东西都扛回来了。累死了。。所以懒得打字了，以后没特殊情况就去微博了~</p>
-<p><a target="_blank" href="http://t.qq.com/Jingtianwang">t.qq.com/Jingtianwang</a></p></div></div>
+<div class="entry-content"><p>
+  文件里有一堆 0，在每个字符后边。需要去掉。
+</p>
+
+
+<pre class="example">00000010: 4f00 4300 4100 4c00 5f00 4d00 4100 4300  O.C.A.L._.M.A.C.
+00000020: 4800 4900 4e00 4500 5c00 4800 4100 5200  H.I.N.E.\.H.A.R.
+00000030: 4400 5700 4100 5200 4500 5d00 0d00 0a00  D.W.A.R.E.].....
+00000040: 0d00 0a00 5b00 4800 4b00 4500 5900 5f00  ....[.H.K.E.Y._.  
+</pre>
+
+
+
+<pre class="example">sed -i 's|\x00||g' filename
+</pre>
+
+
+</div>
 
   <footer>
     
-    <p><a class="comments-link" href="/blog/2010/10/20/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2010/10/20/1/">View comments &raquo;</a></p>
+    <p><a class="comments-link" href="/blog/2012/03/27/sed-binary-replace/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/03/27/sed-binary-replace/">View comments &raquo;</a></p>
     
     
     
@@ -807,7 +822,7 @@ welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
   <header>
     <h1 class="entry-title">
 
-<a href="/blog/2010/10/10/1/">越来越懒了，换微博吧。</a>
+<a href="/blog/2012/03/19/tshark-cmd/">Tshark 抓包 Memo</a>
 
 </h1>
 
@@ -825,17 +840,135 @@ welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
   
 
 
-<time datetime="2010-10-10T00:00:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2010</time>
-         &bull; <a rel="bookmark" href="/blog/2010/10/10/1/">Permalink</a>
+<time datetime="2012-03-19T00:00:00+08:00" pubdate data-updated="true">Mar 19<span>th</span>, 2012</time>
+         &bull; <a rel="bookmark" href="/blog/2012/03/19/tshark-cmd/">Permalink</a>
       </p>
     
   </header>
 
-<div class="entry-content"><div>http://t.qq.com/Jingtianwang  </div></div>
+<div class="entry-content"><ul>
+<li>Tshark help
+
+
+
+<pre class="example">TShark 1.6.5 (SVN Rev Unknown from unknown)
+Dump and analyze network traffic.
+See http://www.wireshark.org for more information.
+
+Copyright 1998-2012 Gerald Combs &lt;gerald@wireshark.org&gt; and contributors.
+This is free software; see the source for copying conditions. There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Usage: tshark [options] ...
+
+Capture interface:
+  -i &lt;interface&gt;           name or idx of interface (def: first non-loopback)
+  -f &lt;capture filter&gt;      packet filter in libpcap filter syntax
+  -s &lt;snaplen&gt;             packet snapshot length (def: 65535)
+  -p                       don't capture in promiscuous mode
+  -I                       capture in monitor mode, if available
+  -B &lt;buffer size&gt;         size of kernel buffer (def: 1MB)
+  -y &lt;link type&gt;           link layer type (def: first appropriate)
+  -D                       print list of interfaces and exit
+  -L                       print list of link-layer types of iface and exit
+
+Capture stop conditions:
+  -c &lt;packet count&gt;        stop after n packets (def: infinite)
+  -a &lt;autostop cond.&gt; ...  duration:NUM - stop after NUM seconds
+                           filesize:NUM - stop this file after NUM KB
+                              files:NUM - stop after NUM files
+Capture output:
+  -b &lt;ringbuffer opt.&gt; ... duration:NUM - switch to next file after NUM secs
+                           filesize:NUM - switch to next file after NUM KB
+                              files:NUM - ringbuffer: replace after NUM files
+Input file:
+  -r &lt;infile&gt;              set the filename to read from (no pipes or stdin!)
+
+Processing:
+  -R &lt;read filter&gt;         packet filter in Wireshark display filter syntax
+  -n                       disable all name resolutions (def: all enabled)
+  -N &lt;name resolve flags&gt;  enable specific name resolution(s): "mntC"
+  -d &lt;layer_type&gt;==&lt;selector&gt;,&lt;decode_as_protocol&gt; ...
+                           "Decode As", see the man page for details
+                           Example: tcp.port==8888,http
+  -H &lt;hosts file&gt;          read a list of entries from a hosts file, which will
+                           then be written to a capture file. (Implies -W n)
+Output:
+  -w &lt;outfile|-&gt;           write packets to a pcap-format file named "outfile"
+                           (or to the standard output for "-")
+  -C &lt;config profile&gt;      start with specified configuration profile
+  -F &lt;output file type&gt;    set the output file type, default is libpcap
+                           an empty "-F" option will list the file types
+  -V                       add output of packet tree        (Packet Details)
+  -O &lt;protocols&gt;           Only show packet details of these protocols, comma
+                           separated
+  -S                       display packets even when writing to a file
+  -x                       add output of hex and ASCII dump (Packet Bytes)
+  -T pdml|ps|psml|text|fields
+                           format of text output (def: text)
+  -e &lt;field&gt;               field to print if -Tfields selected (e.g. tcp.port);
+                           this option can be repeated to print multiple fields
+  -E&lt;fieldsoption&gt;=&lt;value&gt; set options for output when -Tfields selected:
+     header=y|n            switch headers on and off
+     separator=/t|/s|&lt;char&gt; select tab, space, printable character as separator
+     occurrence=f|l|a      print first, last or all occurrences of each field
+     aggregator=,|/s|&lt;char&gt; select comma, space, printable character as
+                           aggregator
+     quote=d|s|n           select double, single, no quotes for values
+  -t ad|a|r|d|dd|e         output format of time stamps (def: r: rel. to first)
+  -u s|hms                 output format of seconds (def: s: seconds)
+  -l                       flush standard output after each packet
+  -q                       be more quiet on stdout (e.g. when using statistics)
+  -W n                     Save extra information in the file, if supported.
+                           n = write network address resolution information
+  -X &lt;key&gt;:&lt;value&gt;         eXtension options, see the man page for details
+  -z &lt;statistics&gt;          various statistics, see the man page for details
+
+Miscellaneous:
+  -h                       display this help and exit
+  -v                       display version info and exit
+  -o &lt;name&gt;:&lt;value&gt; ...    override preference setting
+  -K &lt;keytab&gt;              keytab file to use for kerberos decryption
+  -G [report]              dump one of several available reports and exit
+                           default report="fields"
+                           use "-G ?" for more help
+  
+</pre>
+
+
+</li>
+<li>airodump-ng
+
+
+
+<pre class="example">  
+  Interaction
+
+Since revision r1648, airodump-ng can receive and interpret key strokes while running. The following list describes the currently assigned keys and supposed actions.
+
+[a]: Select active areas by cycling through these display options: AP+STA; AP+STA+ACK; AP only; STA only
+[d]: Reset sorting to defaults (Power)
+[i]: Invert sorting algorithm
+[m]: Mark the selected AP or cycle through different colors if the selected AP is already marked
+[r]: (De-)Activate realtime sorting - applies sorting algorithm everytime the display will be redrawn
+[s]: Change column to sort by, which currently includes: First seen; BSSID; PWR level; Beacons; Data packets; Packet rate; Channel; Max. data rate; Encryption; Strongest Ciphersuite; Strongest Authentication; ESSID
+[SPACE]: Pause display redrawing/ Resume redrawing
+[TAB]: Enable/Disable scrolling through AP list
+[UP]: Select the AP prior to the currently marked AP in the displayed list if available
+[DOWN]: Select the AP after the currently marked AP if available
+If an AP is selected or marked, all the connected stations will also be selected or marked with the same color as the corresponding Access Point.
+
+
+</pre>
+
+</li>
+</ul>
+
+</div>
 
   <footer>
     
-    <p><a class="comments-link" href="/blog/2010/10/10/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2010/10/10/1/">View comments &raquo;</a></p>
+    <p><a class="comments-link" href="/blog/2012/03/19/tshark-cmd/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/03/19/tshark-cmd/">View comments &raquo;</a></p>
     
     
     
@@ -860,7 +993,7 @@ welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
   <header>
     <h1 class="entry-title">
 
-<a href="/blog/2010/08/20/1/">[IFQ原创]函数时间测量之iPhone篇</a>
+<a href="/blog/2012/03/10/merge-old-blog-stuff/">一些linux命令行的memo</a>
 
 </h1>
 
@@ -878,59 +1011,104 @@ welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
   
 
 
-<time datetime="2010-08-20T00:00:00+08:00" pubdate data-updated="true">Aug 20<span>th</span>, 2010</time>
-         &bull; <a rel="bookmark" href="/blog/2010/08/20/1/">Permalink</a>
+<time datetime="2012-03-10T00:00:00+08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2012</time>
+         &bull; <a rel="bookmark" href="/blog/2012/03/10/merge-old-blog-stuff/">Permalink</a>
       </p>
     
   </header>
 
-<div class="entry-content"><div><p>函数时间测量之iPhone篇</p>
-<p>关键字：<br>
-iPhone OS (or Mac OS) Time Measure in nano second or micro sec IFQ IF.Q ifqqfi.<br>
-时间测量 测速</p>
-<p>在 iPhone （or MacOS）上以微秒或者纳秒单位来测量程序的执行时间，<br>
-我想应该是很常用的功能吧。一年前做iPhone程序的时候就出现了这个需求，当时花了一个晚上才找到相应的方法。往往在这些意想不到的小地方耗费很多时间。一年后的今天我google了下相关的关键字，还是没有相关的文章，所以我就举手之劳，帮大家省点时间吧。</p>
-<p>其实很简单，下面的这段程序就可以搞定：</p>
-<p><font color="#38761d" size="2" face="Times New Roman">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;<br>
-#import &lt;mach/mach.h&gt;<br>
-#import &lt;mach/mach_time.h&gt;</font></p>
-<p><font color="#38761d" size="2" face="Times New Roman">static uint64_t start;<br>
-static uint64_t end;<br>
-static mach_timebase_info_data_t&nbsp;&nbsp;&nbsp;  sTimebaseInfo;</font></p>
-<p><br>
-<font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountStart {<br>
-<br>
-if ( sTimebaseInfo.denom == 0 ) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  (void) mach_timebase_info(&amp;sTimebaseInfo);<br>
-&nbsp;&nbsp;&nbsp;  }<br>
-<br>
-start = mach_absolute_time();<br>
-}</font></p>
-<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountEnd {<br>
-<br>
-end = mach_absolute_time();</font></p>
-<p><font color="#38761d" size="2" face="Times New Roman">}</font></p>
-<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQShowCount {<br>
-uint64_t diff;<br>
-uint64_t diffnano;<br>
-<br>
-diff = end - start;<br>
-<br>
-diffnano = diff * sTimebaseInfo.numer / sTimebaseInfo.denom;<br>
-<br>
-NSLog(@&quot;Nano sec : %qu&quot;, diffnano);<br>
-}</font></p>
-<p><font color="#38761d" size="2" face="Times New Roman">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;</font></p>
-<p>用尻想也知道了，要测量的代码段前后放上Start，End函数，完事后 Show 一下就可以了。</p>
-<p>关于测量的精度是否真的能达到nano,现在有点不确定了。一年前的东西了，能翻出代码就不错了。。我现在用过的其他平台都是和CPU速度相同频率来计数来计时的，精度都还没到1 nano sec的。不过微秒单位的计时肯定是么有问题了。我想一般情况下微秒已经足够了吧～</p>
-<p>最后给出个参考链接。是MacOS下的官方的说明。（其实我就是把这个搬到iPhone来用而已）<br>
-<a href="http://developer.apple.com/mac/library/qa/qa2004/qa1398.html">http://developer.apple.com/mac/library/qa/qa2004/qa1398.html</a></p>
-<p><br>
-下次讲讲 VxWorks 下的计时方法～</p></div></div>
+<div class="entry-content"><ul>
+<li>文件头部插入多行文本 <br/>
+  一堆周报文件，需要在头部插入特定行才能移植到新blog，于是：
+
+
+
+<pre class="example">sed -i '1i#+BEGIN_HTML\n---\nlayout: post\ntitle: 周报 \n/
+Included file 'JB/setup' not found in _includes directory
+category: WORK\ntags:\n- 周报\n---\n#+END_HTML' /
+*weekly*.org
+
+</pre>
+
+
+<ul>
+<li><code>sed</code> 的 <code>-i</code> 参数表示直接修改到文件，不打印。
+</li>
+<li>多行文本用=\n=作为分割
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+
+<ul>
+<li>文件改名 <br/>
+
+
+
+<pre class="example">find . -name '*weekly*' &gt; tmp
+perl -ne 'chomp; s/.\///; /([0-9]{2})([0-9]{2})/; print "mv $_ /
+2011-$1-$2-$_\n"' tmp &gt; tmp1
+source tmp1
+rm -rf tmp*  
+</pre>
+
+
+<ul>
+<li>需要将 <code>weekly-0102.org</code> 的格式改为 <code>2012-01-02-weekly.org</code>
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+
+<ul>
+<li>DOS 换行批量转 UNIX <br/>
+
+
+
+<pre class="example">sed -i 's/^M//' *.c        # 在bash/tcsh中，将按Ctrl-M改为按Ctrl-V
+sed -i 's/\x0D//' *.c      # ssed、gsed 3.02.80，及更高版本
+</pre>
+
+
+</li>
+<li>更改图片链接 <br/>
+  org 图片链接默认 <code>file:///</code> 的格式，在jekyll下不能识别。于是用脚本手
+  工转换。
+
+
+
+<pre class="example">root@bt:~/ifq.github.com/_posts# sed -i 's/file:[a-zA-Z/-]*pic/\/pic/g' *wsec*.html
+root@bt:~/ifq.github.com/_posts# grep 'file:[a-zA-Z/-]*pic' *root@bt:~/ifq.github.com/_posts# ls
+
+</pre>
+
+
+</li>
+<li>参考资料
+<ul>
+<li><a href="http://www.grymoire.com/Unix/Sed.html#uh-42">http://www.grymoire.com/Unix/Sed.html#uh-42</a>
+</li>
+<li><a href="http://sed.sourceforge.net/sed1line_zh-CN.html">http://sed.sourceforge.net/sed1line\_zh-CN.html</a>
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+</div>
 
   <footer>
     
-    <p><a class="comments-link" href="/blog/2010/08/20/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2010/08/20/1/">View comments &raquo;</a></p>
+    <p><a class="comments-link" href="/blog/2012/03/10/merge-old-blog-stuff/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/03/10/merge-old-blog-stuff/">View comments &raquo;</a></p>
     
     
     
@@ -991,7 +1169,7 @@ NSLog(@&quot;Nano sec : %qu&quot;, diffnano);<br>
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (5)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (8)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 

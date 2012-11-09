@@ -1117,6 +1117,18 @@
         <lastmod>2012-10-30T11:32:04+08:00</lastmod>
     </url>
     <url>
+        <loc>http://ifq.github.com/blog/2012/03/10/merge-old-blog-stuff/</loc>
+        <lastmod>2012-11-09T18:22:57+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://ifq.github.com/blog/2012/03/19/tshark-cmd/</loc>
+        <lastmod>2012-11-09T18:28:24+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://ifq.github.com/blog/2012/03/27/sed-binary-replace/</loc>
+        <lastmod>2012-11-09T18:22:56+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://ifq.github.com/blog/2012/07/29/helloworld/</loc>
         <lastmod>2012-10-30T11:32:04+08:00</lastmod>
     </url>
@@ -1186,14 +1198,14 @@
     </url>
     <url>
         <loc>http://ifq.github.com/blog/categories/</loc>
-        <lastmod>2012-11-08T00:43:39+08:00</lastmod>
+        <lastmod>2012-11-09T18:28:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://ifq.github.com/</loc>
-        <lastmod>2012-11-08T00:43:39+08:00</lastmod>
+        <lastmod>2012-11-09T18:28:24+08:00</lastmod>
     </url>
     <url>
         <loc>http://ifq.github.com/archives/</loc>
-        <lastmod>2012-11-08T00:43:39+08:00</lastmod>
+        <lastmod>2012-11-09T18:28:24+08:00</lastmod>
     </url>
 </urlset>

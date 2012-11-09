@@ -96,6 +96,209 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2010/10/20/1/">回国了！换博了！</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-20T00:00:00+08:00" pubdate data-updated="true">Oct 20<span>th</span>, 2010</time>
+         &bull; <a rel="bookmark" href="/blog/2010/10/20/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div><p> </p>
+<p>如题！终于把东西都扛回来了。累死了。。所以懒得打字了，以后没特殊情况就去微博了~</p>
+<p><a target="_blank" href="http://t.qq.com/Jingtianwang">t.qq.com/Jingtianwang</a></p></div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2010/10/20/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2010/10/20/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/blog/2010/10/10/1/">越来越懒了，换微博吧。</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-10T00:00:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2010</time>
+         &bull; <a rel="bookmark" href="/blog/2010/10/10/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div>http://t.qq.com/Jingtianwang  </div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2010/10/10/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2010/10/10/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/blog/2010/08/20/1/">[IFQ原创]函数时间测量之iPhone篇</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-20T00:00:00+08:00" pubdate data-updated="true">Aug 20<span>th</span>, 2010</time>
+         &bull; <a rel="bookmark" href="/blog/2010/08/20/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div><p>函数时间测量之iPhone篇</p>
+<p>关键字：<br>
+iPhone OS (or Mac OS) Time Measure in nano second or micro sec IFQ IF.Q ifqqfi.<br>
+时间测量 测速</p>
+<p>在 iPhone （or MacOS）上以微秒或者纳秒单位来测量程序的执行时间，<br>
+我想应该是很常用的功能吧。一年前做iPhone程序的时候就出现了这个需求，当时花了一个晚上才找到相应的方法。往往在这些意想不到的小地方耗费很多时间。一年后的今天我google了下相关的关键字，还是没有相关的文章，所以我就举手之劳，帮大家省点时间吧。</p>
+<p>其实很简单，下面的这段程序就可以搞定：</p>
+<p><font color="#38761d" size="2" face="Times New Roman">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;<br>
+#import &lt;mach/mach.h&gt;<br>
+#import &lt;mach/mach_time.h&gt;</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">static uint64_t start;<br>
+static uint64_t end;<br>
+static mach_timebase_info_data_t&nbsp;&nbsp;&nbsp;  sTimebaseInfo;</font></p>
+<p><br>
+<font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountStart {<br>
+<br>
+if ( sTimebaseInfo.denom == 0 ) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  (void) mach_timebase_info(&amp;sTimebaseInfo);<br>
+&nbsp;&nbsp;&nbsp;  }<br>
+<br>
+start = mach_absolute_time();<br>
+}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQCountEnd {<br>
+<br>
+end = mach_absolute_time();</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">+ (void) IFQShowCount {<br>
+uint64_t diff;<br>
+uint64_t diffnano;<br>
+<br>
+diff = end - start;<br>
+<br>
+diffnano = diff * sTimebaseInfo.numer / sTimebaseInfo.denom;<br>
+<br>
+NSLog(@&quot;Nano sec : %qu&quot;, diffnano);<br>
+}</font></p>
+<p><font color="#38761d" size="2" face="Times New Roman">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;</font></p>
+<p>用尻想也知道了，要测量的代码段前后放上Start，End函数，完事后 Show 一下就可以了。</p>
+<p>关于测量的精度是否真的能达到nano,现在有点不确定了。一年前的东西了，能翻出代码就不错了。。我现在用过的其他平台都是和CPU速度相同频率来计数来计时的，精度都还没到1 nano sec的。不过微秒单位的计时肯定是么有问题了。我想一般情况下微秒已经足够了吧～</p>
+<p>最后给出个参考链接。是MacOS下的官方的说明。（其实我就是把这个搬到iPhone来用而已）<br>
+<a href="http://developer.apple.com/mac/library/qa/qa2004/qa1398.html">http://developer.apple.com/mac/library/qa/qa2004/qa1398.html</a></p>
+<p><br>
+下次讲讲 VxWorks 下的计时方法～</p></div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2010/08/20/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2010/08/20/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2010/08/06/1/">通知</a>
 
 </h1>
@@ -975,209 +1178,6 @@ int&nbsp;&nbsp; BandpassFilter4(int InputAD4)<br>
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2010/06/28/1/">平均值滤波之鬼斧神工算法（转）</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-06-28T00:00:00+08:00" pubdate data-updated="true">Jun 28<span>th</span>, 2010</time>
-         &bull; <a rel="bookmark" href="/blog/2010/06/28/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><span style="widows: 2; text-transform: none; text-indent: 0px; border-collapse: separate; font: medium Simsun; white-space: normal; orphans: 2; letter-spacing: normal; color: rgb(0,0,0); word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" class="Apple-style-span"><span class="Apple-style-span">
-<div style="text-indent: 2em">采样值 C、累加器 S，平均值 A，采样次数 N</div>
-<div style="text-indent: 2em"> </div>
-<div><font color="#ff0000">传统的平均值滤波算法</font>：</div>
-<div style="text-indent: 2em">S = C(1) + C(2) + &#8230; + C(N)</div>
-<div style="text-indent: 2em">A = S / N</div>
-<div style="text-indent: 2em">需要用循环来计算累加和，比较耗时，C(1～N）是缓存，随采样数N增大，所需内存量也增大</div>
-<div style="text-indent: 2em"> </div>
-<div><font color="#ff0000">向队列平均值算法推进</font>：</div>
-<div style="text-indent: 2em">S = C(1) + C(2) + &#8230; + C(N) （第一次）</div>
-<div style="text-indent: 2em">C(x) = C(x + 1) （队列前移）</div>
-<div style="text-indent: 2em">C(N) = C</div>
-<div style="text-indent: 2em">S = S - C(1) + C(N)</div>
-<div style="text-indent: 2em">A = S / N</div>
-<div style="text-indent: 2em">运算量有所改进（用指针维护循环队列，不实际移动数据），占用内存问题不变</div>
-<div style="text-indent: 2em"> </div>
-<div><font color="#ff0000">鬼斧神工算法</font>：</div>
-<div style="text-indent: 2em">初始化：A=初始值，S=A*N</div>
-<div style="text-indent: 2em">S = S - A + C</div>
-<div style="text-indent: 2em">A = S / N</div>
-<div style="text-indent: 2em">就这么简单，三个变量（N可以是常数），只要 S 的量程足够，N可以任意调整。</div>
-<div style="text-indent: 2em">可以看出，此算法是从队列平均值算法演变而来，因没有了队列，每次计算时不知道该丢弃的最老的一个采样值是多少，这里用了个替代的办法，丢弃上次计算出的平均值。</div>
-<div style="text-indent: 2em">去掉了缓存维护，节省内存空间，同时也将运算量压缩到了最小，执行效率非常高。调试时容易修改采样数。</div>
-</span></span><br class="Apple-interchange-newline"></div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2010/06/28/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2010/06/28/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2010/06/27/1/">Motor Control Pj</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-06-27T00:00:00+08:00" pubdate data-updated="true">Jun 27<span>th</span>, 2010</time>
-         &bull; <a rel="bookmark" href="/blog/2010/06/27/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><p><font size="2">最近在学习Servo Control, 所以见了很多废品回来拆。突然有了很多东西可以学，Servo，PID，Hall Sensor，H-Brige Circuit。。。希望有时间把整个过程记录下来，也给这里增加点工程师气息。。。</font></p>
-<p><font size="2">总之，先Show一下最近玩的东西。</font></p>
-<p><font size="2"><span><img class="" src="/rc/legacy/feb3d662fd7980e3e7113a98.jpg" width="800"></span>这是个93年的老光驱，不过马达，齿轮，滑轨，传感器都完好。最左侧的齿轮下面有个+符号，旁边黑色的芯片是霍尔传感器。费了很多时间搞清楚它的细节。</font></p>
-<p><font size="2"><span>Interface 杂志里附带的开发板。SH-2A，Renesas 的处理器。SH72620。这次的所有控制都由这个处理器完成。<br>
-<span><img class="" src="/rc/legacy/f2d881263eb77b298a82a198.jpg" width="800"></span></span></font></p>
-<p><font size="2"><span><span>这是另一个光存储设备。也非常老了，Olympus 的 650M 的名字忘了。设计的很有趣，滑轨不是用马达，而是直接用线圈和磁铁来完成的。还记得么，洛伦磁力，高中知识。。。<br>
-<span><img class="" src="/rc/legacy/e317d316c66fce26972b439f.jpg" width="800"><br>
-</span></span></span></font></p></div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2010/06/27/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2010/06/27/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2010/06/09/1/">等米饭熟，上几张图</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-06-09T00:00:00+08:00" pubdate data-updated="true">Jun 9<span>th</span>, 2010</time>
-         &bull; <a rel="bookmark" href="/blog/2010/06/09/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><p><span><span><span><span><font size="1">200mm镜头的效果。江之岛。</font><br>
-</span></span></span></span></p>
-<p><span><span><span><span><span><img class="" src="/rc/legacy/657636fa6e14cab59f5146e3.jpg" width="800"></span></span></span></span></span></p>
-<p><span><span><span><span><span><br>
-<span><span><span><img class="" src="/rc/legacy/4647acc3e7eebb69b219a8ea.jpg" width="800"></span><img class="blogimg" border="0" small="0" src="http://hiphotos.baidu.com/ifqq/pic/item/ca9d57e7100d9e12b83820ee.jpg"></span></span></span></span></span></span></span></p>
-<p> </p>
-<p><span><span><span><span><span><span><font size="1">这位大姐把我雷到了。。。小时候最喜欢的迪士尼人物变成了这样。。。岁月不饶人啊。</font></span></span></span></span></span></span></p>
-<p><span><span><span><span><span><span><img class="" src="/rc/legacy/960e9d2fbad499041e3089ef.jpg" width="800"><br>
-</span></span></span></span></span></span></p>
-<p><span><span><span><span><span><span><span><font size="1">比上次 Disney Land 的 Bell 搓多了。。。难道是因为上次没有长焦镜头？？</font><br>
-<span><img class="" src="/rc/legacy/3d2597eecac48b152cf534ed.jpg" width="800"></span></span></span></span></span></span></span></span></p>
-<p><span><span><span><span><span><span><span><span><span><font size="1">比较一下。。。我要求退票！！</font></span></span></span></span></span></span></span></span></span></p>
-<p><span><span><span><span><span><span><span><span><span><img class="" src="/rc/legacy/0f7868631d6fd95c0c33fa9e.jpg" width="800"><br>
-</span><br>
-<span><span><img class="" src="/rc/legacy/6029cfbf235f313618d81fe8.jpg" width="800"></span></span></span></span></span></span></span></span></span></span></p></div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2010/06/09/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2010/06/09/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1230,7 +1230,7 @@ int&nbsp;&nbsp; BandpassFilter4(int InputAD4)<br>
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (5)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (8)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 

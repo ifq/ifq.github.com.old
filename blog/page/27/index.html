@@ -96,6 +96,239 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2007/02/07/1/">重力加速度传感器制作完毕</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-07T00:00:00+08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/blog/2007/02/07/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  最近两天有点时间了,加上器件什么的都准备妥当了,就自己花了个很简单的PCB板子,把以前在ST申请的重力加速度芯片搭建成开发平台,打算做点什么有意思的东西.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  本以为成都电子器件都很齐全了,电路上学要的一个放大器TS924转了半天却怎么也买不到,自己对电路又不太熟悉,只会参考官方的电路来做.没办法,从广州邮寄过来,结果宰了我100RMB.<img class="" src="/rc/legacy/i_f12.gif" width="800">本来价值几元钱的的东西啊&#8230;&#8230;..<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  器件准备好了,剩下的就是画图做板子了.学校的条件不是很好,只能用单层的铜板自己腐蚀线路那种方式.不过我这个东西也很简单,不需要多么复杂的走线.之前没有用过Protel,简单学了学,感觉布线是个很复杂的工作,需要很高的技巧.不过似乎其中有很多问题可以用路径问题解决,似乎可以用计算机来自动布线,这方面我没用过,也不知道有没有.但是在许多接口需要互联的时候,判定他们是否能在一层板子上完成,这个功能应该是可以软件实现的吧..<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+<div align="center" forimg="1"><img class="" src="/rc/legacy/12bd7fd922ce20eb38012f36.jpg" width="800"></div>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  板子走线如上图. 很业余,毕竟不是电子系的.不过感觉接触些电子对嵌入式的帮助是很直接的. 比如我现在做的这个东西,如果我自己不做,又想玩玩,那将会比较痛苦.起码学了这些东西,可以把自己的简单想法变为现实.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  现在电路板已经做好了,调试也通过了.加速度传感器能输出X,Y,Z三个方向的加速度的模拟量,通俗点就是通过电压高低来表示加速度大小.通过AD转换把电压值读出,再根据芯片的设定转换为加速度值.<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  我使用NRF9E5来作为处理器.NRF9E5实际是一款无线电收发芯片,是以前一个项目中使用过的.它具有C51的内核,无线电收发功能,还有4路10位AD.完全能够满足我这个系统的需求. 我要求的功能就是AD转换测量加速度的值通过无线方式发送到计算机,再做进一步的处理.<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  以后要做的工作就是数据的采集和分析了.这也是为什么我把这篇文章归入模式识别的原因.我期望通过加速度来识别人的动作.这个应用在模式识别领域应该是十分简单的.相对于图像识别,人脸识别等技术来说,这个应用能采集到的数据是十分准确的,没有那么多的噪声.是一组时间离散的加速度数值.不过对于我来说还是一个很大的挑战.对于数学知识缺乏的我也是个磨练.(大一高数都没有好好学,现在还得自己补这些,看来出来混迟早都得还啊&#8230;哈哈)<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  不过现在时间也不是那么多,这个工作肯定是一个长期而艰巨的工作哈.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  最后补个做好的板子的张片,懒得拿相机,拿手机拍的,不是很清晰.<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+<div align="center" forimg="1"><img class="" src="/rc/legacy/99491c30a6de9a9ba8018e0a.jpg" width="800"></div></div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2007/02/07/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/02/07/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/blog/2007/02/05/1/">美国《信息周刊》:有史以来最伟大的12款软件</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-05T00:00:00+08:00" pubdate data-updated="true">Feb 5<span>th</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/blog/2007/02/05/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div>看美国《信息周刊》,发现正在评选有史以来最伟大的12款软件,这12款软件排名依次是: (很老的文章了)<br>
+<br>
+1. Unix操作系统 <br>
+<br>
+2. IBM System R－1983年以DB2的形式进入商业市场 <br>
+<br>
+3. 基因排序软件－美国基因组研究所(IGR) <br>
+<br>
+4. IBM System 360系统 <br>
+<br>
+5. Java语言 <br>
+<br>
+6. Mosaic浏览器－第一款图形界面浏览器 <br>
+<br>
+7. Sabre系统－美国航空公司的信息查询系统 <br>
+<br>
+8. 苹果Macintosh系统 <br>
+<br>
+9. 微软Excel电子表格 <br>
+<br>
+10.阿波罗宇宙飞船导航系统 <br>
+<br>
+11.Google搜索排名 <br>
+<br>
+12.IF.Q蠕虫－造成的经济损失超过1000万美元</div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2007/02/05/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/02/05/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/blog/2007/02/03/2/">如何在Debian上安装RPM包.Install .rpm Files in Debian and Ubuntu</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-02-03T00:00:00+08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/blog/2007/02/03/2/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div>Some time you might find some applications are having only .rpm files but you want a .deb package for your debian,Ubuntu and other debian derived ditributions.If you can’t find .deb debian package in any of the debian,ubuntu repositories or elsewhere, you can use the alien package converter&nbsp;&nbsp; to install the .rpm file. 
+<p><strong>Alien</strong> is a program that converts between the rpm, dpkg, stampede slp, and slackware tgz file formats. If you want to use a package from another distribution than the one you have installed on your system, you can use alien to convert it to your preferred package format and install it.</p>
+<p>Despite the large version number, alien is still (and will probably always be) rather experimental software. It has been used by many people for many years, but there are still many bugs and limitations.</p>
+<p>Alien should not be used to replace important system packages, like sysvinit, shared libraries, or other things that are essential for the functioning of your system. Many of these packages are set up differently by Debian and Red Hat, and packages from the different distributions cannot be used interchangably. In general, if you can’t uninstall the package without breaking your system, don’t try to replace it with an alien version.</p>
+<p><strong>Install alien in debian</strong></p>
+<p>#apt-get install alien</p>
+<p>This will install all the required packages.Now you can start converting your .rpm files to .deb packages.</p>
+<p><strong>Available Options for alien</strong></p>
+<p>Convert the package.rpm into a package.deb</p>
+<p>#alien -d package-name.rpm</p>
+<p>Convert the package.rpm into a package.deb, and install the generated package.</p>
+<p>#alien -i package-name.rpm<br>
+ <br>
+If you want to keeps alien from changing the version number use the following command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<p>#alien -k rpm-package-file.rpm</p>
+<p><strong>Example</strong></p>
+<p>Suppose we have a avg antivirus avg71lms-r30-a0782.i386.rpm file</p>
+<p>To convert .rpm to debian</p>
+<p>#alien -k avg71lms-r30-a0782.i386.rpm</p>
+<p>Now you should be having avg71lms-r30-a0782.i386.deb file</p>
+<p><strong>To install .deb file</strong></p>
+<p>#dpkg -i avg71lms-r30-a0782.i386.deb</p>
+<p>If you don’t use -k option you should see avg71lms_r30-1_i386.deb file the difference is it will add 1</p>
+<p><strong>Install alien in Ubuntu</strong></p>
+<p>$sudo apt-get install alien</p>
+<p>You can check the above section for available options</p>
+<p><strong>Example</strong></p>
+<p>Suppose we have a avg antivirus avg71lms-r30-a0782.i386.rpm file</p>
+<p><strong>To convert .rpm to debian</strong></p>
+<p>$sudo alien -k avg71lms-r30-a0782.i386.rpm</p>
+<p>Now you should be having avg71lms-r30-a0782.i386.deb file</p>
+<p><strong>To install .deb file</strong></p>
+<p>$sudo dpkg -i avg71lms-r30-a0782.i386.deb</p>
+<p>If you don’t use -k option you should see avg71lms_r30-1_i386.deb file the difference is it will add 1</p>
+<p>If you want more available options for alien check alien <a target="_blank" href="http://www.debianadmin.com/manpages/alienmanpage.txt">man page</a> </p></div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2007/02/03/2/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/02/03/2/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2007/02/03/1/">如何在Debian中安装Vmware Tools. Installing VMWare Tools on a Linux Debian Server Without X</a>
 
 </h1>
@@ -752,211 +985,6 @@ Google Mini 2.2不会直接对企业应用软件的数据进行索引，而是�
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2007/01/14/1/">相關係數的小故事</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-01-14T00:00:00+08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2007</time>
-         &bull; <a rel="bookmark" href="/blog/2007/01/14/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><table height="592">
-    <tbody>
-        <tr height="110" style="height: 82.5pt;">
-            <td width="700" height="85" class="xl24" style="width: 525pt;"><font color="#ff6600">转载</font>
-            <p style="text-indent: 32px;">相關係數的發展大約是在十九世紀末期的時候，當時的人們還不太清楚要如何去描述在一群樣本中，兩個隨機變項之間的關係。但是在十九世紀中期的時候，許多的數 學家，像是Pascal， Bernoulli， De Moivre ，Simpson ，Laplace ，Gauss ，還有Quetelet等人，已經發展出來機率的概念，集中趨勢指標的測量，誤差值呈現常態分配，中央極限定理，以及可能的誤差概念等，促成了 Galton發展出相關係數的概念。</p>
-            </td>
-        </tr>
-        <tr height="220" style="height: 165pt;">
-            <td width="700" height="177" class="xl24" style="width: 525pt;">
-            <p style="text-indent: 32px;"><span>Galton 會開始研究統計上的問題，是源自於他對遺傳學上的興趣。他在達爾文的「物種原始」一書中提到他對於遺傳的看法：「這些新的觀念激勵了我去從事研究我有興趣 的遺傳學和人類種族的進化。」由於之前已經有人發現誤差值呈現一個常態分配的定理在實際的情況中也可以觀察到，所以Galton就在想，這個定理可能可以 用來描述人類在身體和心理特徵上的差異。在1884年的時候，Galton成立了人體測量實驗室，透過了測量數百人身體的特徵後，證實了人的身體特徵的確 符合了誤差值呈常態分配的理論。但是，Galton不僅僅對身體上的特徵有興趣而已，他認為智力也是經由遺傳而來的。因此，他需要一個方法來描述這一個世 代的智力，與前一個世代的智力是&rdquo;相關&rdquo;的。幸運的，Galton知道這種方法在科學上的重要性必需要跟人類的心理特質的研究分開，因為人類的心理特質並 不容易用量化的方式來測量。所以他就藉著研究香豌豆的特徵，和人類身體上的特徵，而發展出了相關和迴歸的概念。</span></p>
-            </td>
-        </tr>
-        <tr height="88" style="height: 66pt;">
-            <td width="700" height="84" class="xl24" style="width: 525pt;">
-            <p style="text-indent: 32px;"><span>Galton 在1888年的論文中定義了相關係數：有兩個隨機變項（X,Y），其中一個變項（X）的變化，或多或少的跟隨著另一個變項（Y）的變化。而且是相同方向的 變化時，這兩個變項(X,Y)被定義為&rdquo;相關的&rdquo;。&hellip;&hellip;而在這兩個變項中必定有部份相同的因素同時影響著它們，如果兩者間沒有相同的因素的話，那這兩個變 項就不可能有相關。</span></p>
-            </td>
-        </tr>
-        <tr height="154" style="height: 115.5pt;">
-            <td width="700" height="117" class="xl24" style="width: 525pt;">
-            <p style="text-indent: 32px;">在Galton 的定義中，顯示了相關係數的特性。相關係數是用來表示線性關係的強度，強度越大，相關係數越靠近1；並且可以藉由一條線性公式互相作預測。另外，相關係數 也具有方向性：如果相關係數為正，表示當其中一個變項增加的時候，另一個變項會跟著增加；而當相關係數為負的時候，其中一個變項的增加會導致另一個變項減 少。但要注意的是，在Galton的定義中，相關係數並沒有代表著因果關係。Galton計算相關係數的方法是請統計學家把資料點畫出來，然後再去畫出與 這些點最適合的直線，最後再去計算這條直線的斜率。Galton並沒有發展出特殊的公式來計算出這條直線，計算相關係數的公式，則是由Karl Pearson所發展出來的。</p>
-            </td>
-        </tr>
-    </tbody>
-</table></div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2007/01/14/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/01/14/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2007/01/11/1/">千呼万唤始出来!iPhone终于要出来了</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-01-11T00:00:00+08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2007</time>
-         &bull; <a rel="bookmark" href="/blog/2007/01/11/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  Apple公司早就打算做一个手机与音乐播放器的结合,可是迟迟不见动静,于是各方猜测,iPhone到底会是什么样子,PS的假象图片也数不胜数.现在终于知道iPhone是个什么模样了哈.<br>
-&nbsp;&nbsp;&nbsp;
-<div align="center" forimg="1"><img class="" src="/rc/legacy/7f6a9e16a1ee2650f3de32e3.jpg" width="800"></div>
-<font color="#ff6600">iPhone combines three products &mdash; a revolutionary mobile phone, a&nbsp;widescreen iPod with touch controls, and a&nbsp;breakthrough Internet communications device with desktop-class email, web browsing, maps, and searching &mdash; into one small and lightweight handheld device.&nbsp;iPhone also introduces an entirely new user interface based on a large multi-touch display and pioneering new software, letting you control everything with just your fingers. So it ushers in an era of software power and sophistication never before seen in a mobile device, completely redefining what you can do on a mobile phone. <br>
-<font color="#000000">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 话不多说,大家自己到<a href="http://www.apple.com/iphone/" target="_blank">Apple的官网</a>去看看把!</font></font></div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2007/01/11/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/01/11/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2007/01/10/1/">几个笑话,不知道大家看过没有</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-01-10T00:00:00+08:00" pubdate data-updated="true">Jan 10<span>th</span>, 2007</time>
-         &bull; <a rel="bookmark" href="/blog/2007/01/10/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><font class="fbody">多情的MM<br>
-<br>
-昨晚和新交的女友去吃饭，吃到一半突然发现忘了带钱包，想了一下实在没办法，只好向女友开口。因为实在是不好意思所以脸红了，说话也吞吞吐吐：&ldquo;我&hellip;&hellip;&rdquo;这时意想不到的事情发生了，她竟然会错意，也涨红了脸，说：&ldquo;我也喜欢你&hellip;&hellip;&rdquo;&nbsp;&nbsp;  &nbsp;&nbsp; <font color="#ff0000">不知道他后来怎么办了哈..</font><br>
-<br>
-可以杀了它吗？<br>
-<br>
-&ldquo;妈妈，我的海龟死了。&rdquo;儿子眼中含着泪水对妈妈说。&ldquo;别太难过了，我们用纸包把它包上，放在盒子里埋在后院，再给它举行一个葬礼，好吗？葬礼结束后， 妈妈带你去吃冰激凌，再给你买那只你最喜欢的宠物狗，你不要太&hellip;&hellip;&rdquo;妈妈正在安慰儿子时，突然发现海龟动了一下，&ldquo;儿子！海龟没有死呀！&rdquo;&ldquo;那我可以把它 杀了吗？&rdquo;儿子失望地问道。&nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;  <font color="#ff0000">挺可爱的吧</font><br>
-<br>
-鲜花怒放<br>
-<br>
-老师问小明：&ldquo;蜜蜂给花园增加了生气是什么意思？&rdquo;&nbsp;小明回答：&ldquo;蜜蜂偷花，花儿生气呗！&rdquo;大家听了哄堂大笑。小明辩驳道：&ldquo;要是鲜花不生气，哪来的&lsquo;鲜花怒放&rsquo;呢？&rdquo;<br>
-<br>
-小老婆饼<br>
-<br>
-有一天去天津比较出名的食品店买吃的。差不多每次都要买老婆饼吃！结果那天我看到新出了一种稍微小一号的饼，样子基本一致，可是我不确定，于是向售货员阿姨发问：&ldquo;这个是小老婆饼吗？&rdquo;结果全场&hellip;&hellip;<br>
-<br>
-老师，我有了！<br>
-<br>
-考试时老师发卷子，后边的女生多拿了一张，高呼：&ldquo;老师，我有了，我有了。&rdquo;马上坐在她旁边的男生说道：&ldquo;是我的，是我的。&ldquo;全班晕倒。&nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp; <font color="#ff0000">这个够经典.</font><br>
-</font></div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2007/01/10/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/01/10/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/28/">&larr; Older</a>
@@ -1009,7 +1037,7 @@ Google Mini 2.2不会直接对企业应用软件的数据进行索引，而是�
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (5)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (8)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 
