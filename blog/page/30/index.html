@@ -96,6 +96,113 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2006/12/04/3/">一些关于Windows APS驱动及控制的资料</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2006-12-04T00:00:00+08:00" pubdate data-updated="true">Dec 4<span>th</span>, 2006</time>
+         &bull; <a rel="bookmark" href="/blog/2006/12/04/3/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div>这两天在网上查了下,找到一些有用的资料.首先是这个:<a target="_blank" href="ftp://ftp.software.ibm.com/pc/pccbbs/mobiles_pdf/aps2mst.pdf">ftp://ftp.software.ibm.com/pc/pccbbs/mobiles_pdf/aps2mst.pdf</a><br>
+这是IBM官方关于APS的白皮书.介绍的很详细,包括APS程序包主要文件及其功能.<br>
+<font color="#003366">ShockPrf.sys: kernel mode device driver for prediction algorithm and hard disk drive control&nbsp;&nbsp; Shockmgr.sys: kernel mode driver for miscellaneous operation <br>
+Sensor.dll: application interface dll <br>
+TpShCPL.cpl: control applet <br>
+TpShocks.exe: task tray application <br>
+TpShCPL.dll: bitmap resource file for this application program <br>
+TpShPrm.hta: promotion pop-up window <br>
+TpShPrm.gif: animation for promotion pop-up window <br>
+TpShPrm.jpg: banner picture for promotion pop-up window</font><br>
+其中最主要的就是前三个.而两个sys文件是驱动文件,第三个DLL文件是封装给程序使用的库.<br>
+用eXeScope 查看Sensor.dll export的函数:<br>
+<font color="#003300">Ordinal&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name<br>
+00000001&nbsp;&nbsp;&nbsp;&nbsp; 10001960&nbsp;&nbsp;&nbsp;&nbsp; ShockproofCallSMAPIBIOS<br>
+00000002&nbsp;&nbsp;&nbsp;&nbsp; 10001310&nbsp;&nbsp;&nbsp;&nbsp; ShockproofControl<br>
+00000003&nbsp;&nbsp;&nbsp;&nbsp; 100018D0&nbsp;&nbsp;&nbsp;&nbsp; ShockproofEnableDisableSnooze<br>
+00000004&nbsp;&nbsp;&nbsp;&nbsp; 100015E0&nbsp;&nbsp;&nbsp;&nbsp; ShockproofGetAccelerometerData<br>
+00000005&nbsp;&nbsp;&nbsp;&nbsp; 10001640&nbsp;&nbsp;&nbsp;&nbsp; ShockproofGetAccelerometerDataEx<br>
+00000006&nbsp;&nbsp;&nbsp;&nbsp; 10001560&nbsp;&nbsp;&nbsp;&nbsp; ShockproofGetAccelerometerMutex<br>
+00000007&nbsp;&nbsp;&nbsp;&nbsp; 100012B0&nbsp;&nbsp;&nbsp;&nbsp; ShockproofGetAutoDisable<br>
+00000008&nbsp;&nbsp;&nbsp;&nbsp; 100014F0&nbsp;&nbsp;&nbsp;&nbsp; ShockproofGetShockStatus<br>
+00000009&nbsp;&nbsp;&nbsp;&nbsp; 10001500&nbsp;&nbsp;&nbsp;&nbsp; ShockproofGetSlaveCPUinfo<br>
+0000000A&nbsp;&nbsp;&nbsp;&nbsp; 10001480&nbsp;&nbsp;&nbsp;&nbsp; ShockproofGetUnloadCnt<br>
+0000000B&nbsp;&nbsp;&nbsp;&nbsp; 10001360&nbsp;&nbsp;&nbsp;&nbsp; ShockproofGetVersion<br>
+0000000C&nbsp;&nbsp;&nbsp;&nbsp; 10001B30&nbsp;&nbsp;&nbsp;&nbsp; ShockproofInformMouseDevChange<br>
+0000000D&nbsp;&nbsp;&nbsp;&nbsp; 100019C0&nbsp;&nbsp;&nbsp;&nbsp; ShockproofInformPENevent<br>
+0000000E&nbsp;&nbsp;&nbsp;&nbsp; 100016A0&nbsp;&nbsp;&nbsp;&nbsp; ShockproofInformPMevent<br>
+0000000F&nbsp;&nbsp;&nbsp;&nbsp; 10001A20&nbsp;&nbsp;&nbsp;&nbsp; ShockproofInformTabletLIDstate<br>
+00000010&nbsp;&nbsp;&nbsp;&nbsp; 10001810&nbsp;&nbsp;&nbsp;&nbsp; ShockproofInvokeSnooze<br>
+00000011&nbsp;&nbsp;&nbsp;&nbsp; 10001780&nbsp;&nbsp;&nbsp;&nbsp; ShockproofManualSensitivitySetting<br>
+00000012&nbsp;&nbsp;&nbsp;&nbsp; 100015B0&nbsp;&nbsp;&nbsp;&nbsp; ShockproofReleaseAccelerometerMutex<br>
+00000013&nbsp;&nbsp;&nbsp;&nbsp; 10001270&nbsp;&nbsp;&nbsp;&nbsp; ShockproofSetAutoDisable<br>
+00000014&nbsp;&nbsp;&nbsp;&nbsp; 10001840&nbsp;&nbsp;&nbsp;&nbsp; ShockproofSnoozeSetting<br>
+00000015&nbsp;&nbsp;&nbsp;&nbsp; 100016D0&nbsp;&nbsp;&nbsp;&nbsp; ShockproofTaskComplete<br>
+<font color="#000000"><br>
+在众多函数中最有价值的莫过于</font></font><font color="#ff0000">ShockproofGetAccelerometerData<font color="#000000">这个函数.它可以得出传感器输出的数据.输出数据的结构如下:<br>
+<font color="#333300">typedef struct _ACCELREPORT {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PresentState;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Current internal state (stable: 0, unstable1: 1: unstable2: 2)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; USHORT&nbsp;&nbsp;&nbsp; LatestRawAccelDataX; // latest raw acceleration data of X axis&nbsp;&nbsp;&nbsp;&nbsp; &lt;&#8211; works!<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; USHORT&nbsp;&nbsp;&nbsp; LatestRawAccelDataY; // latest raw acceleration data of Y axis&nbsp;&nbsp;&nbsp;&nbsp; &lt;&#8211; works!<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; USHORT&nbsp;&nbsp;&nbsp; LatestAccelDataX;&nbsp;&nbsp;&nbsp;&nbsp; // latest acceleration data of X axis (average in 40ms)&nbsp;&nbsp;&nbsp; &lt;&#8211; Works even better?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; USHORT&nbsp;&nbsp;&nbsp; LatestAccelDataY;&nbsp;&nbsp;&nbsp;&nbsp; // latest acceleration data of Y axis (average in 40ms)&nbsp;&nbsp;&nbsp; &lt;&#8211; Works even better?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CHAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Temperature;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // latest temperature<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; USHORT&nbsp;&nbsp;&nbsp; LatestZeroG_X;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // latest zero-G offset of X axis&nbsp;&nbsp; &lt;&#8211; Seems to be the current notion of &#8220;center&#8221;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; USHORT&nbsp;&nbsp;&nbsp; LatestZeroG_Y;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // latest zero-G offset of Y axis&nbsp;&nbsp; &lt;&#8211; &#8220;&#8221;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } ACCELREPORT;</font><br>
+数据的实际意义我还有搞清楚,但是感觉不像是个加速度传感器输出的数值,更像是个陀螺仪之类.是一个X,Y坐标.利用这个函数就可以做一些有意思的事情.比如配合windows API :LockWorkStation()就可以做个机器锁定并防盗的程序.<br>
+<br>
+<font color="#ff0000">另外还找到一片英文的短文:</font><br>
+</font></font>
+<pre>IBM ThinkPad Accelerometer, aka "Active Protection System"<br><br>Announced in November 2003;&nbsp;&nbsp; Probably shipped in 2004 March<br><br>Analog Devices Inc (ADI) make the sensor and boast about it in their Press Releases<br><br>Probably an ADXL311 originally and now switched to ADXL320 since the first is getting deprecated.<br><br>These eat 3 volts at about 400 micro-amps and give 2 analogue outputs back, X and Y.<br><br>At rest in the horizontal plane these will both be measuring 1g .<br><br>Falling is more than than this, rising is less than this.<br><br>Tilt is collected as gavity decreases in a sin() as the chip is tilted through 90^ degrees.<br><br>Still puzzled about *where* the values are being read in from<br><br>Initial assumption was a chip on the I2C/SMBUS.&nbsp;&nbsp; But since it's a 2-channel a-to-d, could be anyway<br>---eg, existing fan monitoring chip.<br><br>Windows drivers read in 28-bytes via an IOCTL(0x733fc) on "\ShockMgr" .&nbsp;&nbsp; (See shockprf.sys)<br><br>Apple is shipping a 2-axis sensor in new PowerBooks.&nbsp;&nbsp; Acccessed via the smbus.<br>dead easy since we have (some) info.<br><br>Referred to as "Sudden Motion Sensor".&nbsp;&nbsp; and "Mobile Motion Module".&nbsp;&nbsp; and "Apple Motion Sensor"<br>uni-n@f8000000/i2c@f8001000/i2c-bus@1/accelerometer@b0<br>pci@f2000000/mac-io@17/gpio@50/accelerometer-1@13<br>pci@f2000000/mac-io@17/gpio@50/accelerometer-2@14<br><br>Compaq has a sensor in some of their Tablet PCs to tell which way the display is rotated/pointing (Also ADI)<br><br>Windows Driver:<br>===============<br><br>From:<br>&nbsp;&nbsp; ftp://ftp.software.ibm.com/pc/pccbbs/mobiles_pdf/aps2mst.pdf<br><br>&nbsp;&nbsp;&nbsp;&nbsp; The active protection system employs a heuristic learning algorithm to track<br>&nbsp;&nbsp; system orientation. <strong>The Shock Manager, a system thread created by the<br>&nbsp;&nbsp; Shockprf.sys of a kernel mode device driver,</strong> analyzes the variations in acceleration<br>&nbsp;&nbsp; and collects system orientation data into the Shock History Database. The collected<br>&nbsp;&nbsp; data is then used to tune sensitivity and predict excessive shocks. This tuning is<br>&nbsp;&nbsp; important in minimizing the disk performance penalty caused by prediction<br>&nbsp;&nbsp; failures. Once the Shock Manager detects a certain variation which may be<br>&nbsp;&nbsp; equivalent to one usually seen just before receiving an excessive shock, the <strong>Shock<br>&nbsp;&nbsp; Manager acts immediately to stop the hard disk drive</strong>.<br><br>The writes to 0xed are just to the ("non-existant") delay port.<br><br>The other two ports are super-I/O controller/IDE ports and I think the<br>write is to stop the drive and then stop the IDE Bus.<br></pre>
+还没有细看,空了再说,睡觉了,大家晚安.<br>
+<font color="#ff0000"><font color="#000000"><br>
+<br>
+</font></font><font color="#ff0000"></font></div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2006/12/04/3/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2006/12/04/3/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2006/12/04/2/">几个冷笑话,miula提供~</a>
 
 </h1>
@@ -1232,6 +1339,10 @@ pin_helper /usr/pin/my_pin_helper<br />
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/11/10/ps-memo/">802.11协议节电学习memo</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/29/upgrade-octopress/">更新octopress博客系统后的笔记</a>
       </li>
     
@@ -1245,10 +1356,6 @@ pin_helper /usr/pin/my_pin_helper<br />
     
       <li class="post">
         <a href="/blog/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/04/roubo-workbench-2/">Roubo Style Workbench - 靖天木工桌 2/5</a>
       </li>
     
   </ul>
@@ -1266,7 +1373,7 @@ pin_helper /usr/pin/my_pin_helper<br />
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (8)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 

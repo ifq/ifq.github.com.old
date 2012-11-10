@@ -96,6 +96,84 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2012/11/10/ps-memo/">802.11协议节电学习memo</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-10T00:00:00+08:00" pubdate data-updated="true">Nov 10<span>th</span>, 2012</time>
+         &bull; <a rel="bookmark" href="/blog/2012/11/10/ps-memo/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><p>
+根据802.11-2012标准中，章节 <code>10.2 Power management</code> 中的描述，目前 802.11协议中存在的节电技术有以下几种：
+</p><table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">节电方式</th><th scope="col" class="left">介绍</th><th scope="col" class="left">引入时间</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">PS-Poll</td><td class="left">通过PS-Poll报文通告AP发送缓存的报文</td><td class="left">802.11</td></tr>
+<tr><td class="left">S-APSD</td><td class="left">配合QoS工作，AP按照事先协商的时间片发送缓存报文</td><td class="left">802.11e</td></tr>
+<tr><td class="left">U-APSD</td><td class="left">配合QoS工作，STA发送Trigger报文通知AP发送缓存报文</td><td class="left">802.11e</td></tr>
+<tr><td class="left">PSMP</td><td class="left">AP通过发送单个PSMP帧i组织所有STA的缓存报文收发</td><td class="left">802.11n</td></tr>
+<tr><td class="left">TDSL Peer PSM</td><td class="left">未了解，SDK中未找到</td><td class="left">802.11n（？）</td></tr>
+<tr><td class="left">WNM Sleep</td><td class="left">协议中可选内容，SDK中未找到</td><td class="left">未知</td></tr>
+<tr><td class="left">SM Power Save</td><td class="left">通过关闭多条receive chains中一部分来省电</td><td class="left">802.11n</td></tr>
+</tbody>
+</table>
+
+
+
+
+</div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2012/11/10/ps-memo/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/11/10/ps-memo/">View comments &raquo;</a></p>
+    
+    
+    
+    <p><a rel="full-article" href="/blog/2012/11/10/ps-memo/">继续阅读 &rarr;</a></p>
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2012/10/29/upgrade-octopress/">更新octopress博客系统后的笔记</a>
 
 </h1>
@@ -732,90 +810,6 @@ This is just a quick update about my prograss.
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2012/09/10/baidu-blog-to-octo/">百度博客导入octopress&#8211;自力更生本领大</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-10T00:00:00+08:00" pubdate data-updated="true">Sep 10<span>th</span>, 2012</time>
-         &bull; <a rel="bookmark" href="/blog/2012/09/10/baidu-blog-to-octo/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><p>
-使用门户网站的博客系统最大的不爽就是受制于人，什么都不是自己的。网络在不断变化，形式不断在变化，谁也不能保证门户网站的博客不出什么幺蛾子，也不能保证自己不会喜新厌旧。于是想要自己写的那么点废话能够连续的，稳定的呆在某角落，自立门户是最safe的选择。
-</p>
-<p>
-<img class="" src="/rc/legacy/08704990f36425aca977a49e.jpg" width="500"  alt="导入过来的博客中的一张照片，当年喝绿豆稀饭后的legacy，小而强大～">
-</p>
-<p>
-本文介绍我移动旧的百度博客的内容到octopress的方法。试想如果从baidu挪到其他门口的博客是怎么样的过程？幸运的话网站直接支持对接导入，不然就是找工具找工具找工具。但是导入到自由软件的octopress，就简单的多了。
-</p>
-<p>
-下载了你的baidu博客的数据后（恰巧最近baidu博客升级，提供了用户下载自己内容的功能），解压进入blog子目录，敲如下几个命令，5分钟整个导出导入工作就完成了。（当然trans2octo脚本是我写好的）
-</p>
-
-
-<figure class='code'><div class='highlight'><table><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd</span> /DIR/TO/BAIDU_DATA/
-</span><span class='line'>./trans2octo.pl blog_index.html
-</span><span class='line'>cp -r tmp /DIR/TO/BLOG/source/_post/legacy
-</span><span class='line'><span class="nb">cd</span> /DIR/TO/BLOG
-</span><span class='line'>rake generate
-</span><span class='line'>rake _deploy
-</span></code></pre></td></tr></table></div></figure>
-
-
-</div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2012/09/10/baidu-blog-to-octo/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/09/10/baidu-blog-to-octo/">View comments &raquo;</a></p>
-    
-    
-    
-    <p><a rel="full-article" href="/blog/2012/09/10/baidu-blog-to-octo/">继续阅读 &rarr;</a></p>
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -830,6 +824,10 @@ This is just a quick update about my prograss.
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/11/10/ps-memo/">802.11协议节电学习memo</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/10/29/upgrade-octopress/">更新octopress博客系统后的笔记</a>
@@ -847,10 +845,6 @@ This is just a quick update about my prograss.
         <a href="/blog/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2012/10/04/roubo-workbench-2/">Roubo Style Workbench - 靖天木工桌 2/5</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -866,7 +860,7 @@ This is just a quick update about my prograss.
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (8)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 

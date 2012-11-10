@@ -3,7 +3,7 @@
   <title><![CDATA[Geek Woodworker]]></title>
   <link href="http://ifq.github.com/atom.xml" rel="self"/>
   <link href="http://ifq.github.com/"/>
-  <updated>2012-11-09T18:28:33+08:00</updated>
+  <updated>2012-11-10T08:41:13+08:00</updated>
   <id>http://ifq.github.com/</id>
   <author>
     <name><![CDATA[靖天]]></name>
@@ -11,6 +11,375 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[802.11协议节电学习memo]]></title>
+<link href="http://ifq.github.com/blog/2012/11/10/ps-memo/"/>
+<updated>2012-11-10T00:00:00+08:00</updated>
+<id>http://ifq.github.com/blog/2012/11/10/ps-memo</id>
+
+      <content type="html"><![CDATA[<p>
+根据802.11-2012标准中，章节 <code>10.2 Power management</code> 中的描述，目前 802.11协议中存在的节电技术有以下几种：
+</p><table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">节电方式</th><th scope="col" class="left">介绍</th><th scope="col" class="left">引入时间</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">PS-Poll</td><td class="left">通过PS-Poll报文通告AP发送缓存的报文</td><td class="left">802.11</td></tr>
+<tr><td class="left">S-APSD</td><td class="left">配合QoS工作，AP按照事先协商的时间片发送缓存报文</td><td class="left">802.11e</td></tr>
+<tr><td class="left">U-APSD</td><td class="left">配合QoS工作，STA发送Trigger报文通知AP发送缓存报文</td><td class="left">802.11e</td></tr>
+<tr><td class="left">PSMP</td><td class="left">AP通过发送单个PSMP帧i组织所有STA的缓存报文收发</td><td class="left">802.11n</td></tr>
+<tr><td class="left">TDSL Peer PSM</td><td class="left">未了解，SDK中未找到</td><td class="left">802.11n（？）</td></tr>
+<tr><td class="left">WNM Sleep</td><td class="left">协议中可选内容，SDK中未找到</td><td class="left">未知</td></tr>
+<tr><td class="left">SM Power Save</td><td class="left">通过关闭多条receive chains中一部分来省电</td><td class="left">802.11n</td></tr>
+</tbody>
+</table>
+
+
+
+
+<!-- more -->
+
+<ul>
+<li>基础框架 ＆ PS-Poll <br/>
+  节电方式有时显得很多，很复杂，但是都遵循最基本的框架运作。
+<ul>
+<li>电源管理状态
+<dl>
+<dt>Active Mode</dt><dd>对应 STA 的 Awake 状态，STA 全功率运行，可以随时接收报文。
+</dd>
+<dt>PS Mode</dt><dd>对应 STA 的 Doze 状态，STA is not able to transmit or
+                 receive and consumes very low power，定期苏醒接收报文。
+</dd>
+</dl>
+
+</li>
+<li>更改电源管理状态的方法 <br/>
+    以下内容节选自 802.11-2012 章节10.2.1, 这些内容规定了状态切换的基本原则。
+
+<blockquote>
+
+<p>STAs changing Power Management mode shall inform the AP of this
+fact using the Power Management bits within the Frame Control
+field of transmitted frames。
+</p>
+</blockquote>
+
+
+<blockquote>
+
+<p>Power Management mode shall not change during any single frame exchange sequence.
+</p>
+</blockquote>
+
+
+<blockquote>
+
+<p>The Power Management bit shall be ignored in frame exchanges initiated by the AP.
+</p>
+</blockquote>
+
+
+<blockquote>
+
+<p>A non-AP STA shall not change power management mode using a frame
+exchange that does not receive an ACK or BlockAck from the AP.
+</p>
+</blockquote>
+
+
+<blockquote>
+
+<p>NOTE—A PS-Poll frame exchange does not necessarily result in an
+ACK from the AP, so a non-AP STA cannot change power management
+mode using a PS-Poll frame.
+</p>
+</blockquote>
+
+
+
+<blockquote>
+
+<p>the Power Management bit is the same for all MPDUs in an A-MPDU.
+</p>
+</blockquote>
+
+
+</li>
+<li>PS Mode 下的动作
+<ul>
+<li>缓存报文
+<ul>
+<li>缓存到 STA 的可缓存的单播报文（某些medium access control (MAC)
+       management protocol data unit不可缓存）
+</li>
+<li>缓存所有的广播报文
+</li>
+</ul>
+
+</li>
+<li>发送 TIM 和 DTIM
+<dl>
+<dt>TIM</dt><dd>traffic indication map, 每个Beacon都携带
+</dd>
+<dt>DTIM</dt><dd>delivery traffic indication map，特殊的TIM，关注广播包围。
+               在携带DTIM的Beacon发出后，AP会随即发送缓存的广播报文。
+
+</dd>
+</dl>
+
+<p>      TIM 具体格式参看 802.11-2012，8.4.2.7 TIM element。
+      <img src="http://ifq.github.com/rc/tim-element.PNG"  alt="/rc/tim-element.PNG" />
+</p><ul>
+<li>Bitmap 中每一个bit与一个STA的AID对应。具体计算方法参加协议。
+</li>
+<li>需要指出的是 Partial Virtual Bitmap 字段指示的是所有 STA 的节点
+       状态，不包括广播报文。Bit 0 对应与 AID 为 1 的 STA。
+<blockquote>
+
+<p>The Bitmap Control field is a single octet. Bit 0 of the field
+contains the Traffic Indicator bit associated with AID 0. This bit is
+set to 1 in TIM elements with a value of 0 in the DTIM Count field
+when one or more group addressed MSDUs/MMPDUs are buffered at the AP
+or the mesh STA.
+</p>
+</blockquote>
+
+
+</li>
+<li>TIM 与 DTIM 的区分
+<blockquote>
+
+<p>The DTIM is indicated by the DTIM count field of the TIM
+element having a value of 0.
+</p>
+</blockquote>
+
+
+</li>
+</ul>
+
+</li>
+<li>STA 接收报文
+<ul>
+<li>PS-Poll 与 TIM 的关系
+       <img src="http://ifq.github.com/rc/tim-pspoll.PNG"  alt="/rc/tim-pspoll.PNG" />
+</li>
+<li>PS-Poll 获取报文 <br/>
+       <img src="http://ifq.github.com/rc/ps-poll-1.PNG"  alt="/rc/ps-poll-1.PNG" />
+</li>
+<li>切换到 Active Mode
+<blockquote>
+
+<p>When an AP is informed that a STA has changed to the Active
+mode, then the AP shall send buffered BUs (if any exist) to
+that STA without waiting for a PS-Poll. When
+</p>
+</blockquote>
+
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li>youtube上有个 Video 介绍了节电的基本概念，对初学者有参考价值。（不过英文着实难懂）
+<ul>
+<li><a href="http://ifq.github.com/video/Power Save Mechanisms Supported in IEEE 802.11 Protocol - Tutorial 1.mp4">节电介绍视频1/2</a>
+</li>
+<li><a href="http://ifq.github.com/video/Power Save Mechanisms Supported in IEEE 802.11 Protocol - Tutorial 2.mp4">节电介绍视频2/2</a>
+
+</li>
+</ul>
+
+</li>
+<li>U-APSD
+   <img src="http://ifq.github.com/rc/u-apsd-1.JPG"  alt="/rc/u-apsd-1.JPG" />
+
+<ul>
+<li>在基础构架的之上，不同之处在于STA唤醒后于AP交互的方式。Trigger
+     Frame不再是PS-Poll，而是特定优先级的QoS报文作为Trigger报文。
+<ul>
+<li>Trigger 报文的决定可以在管理过程中协商，也可以关联后用ADDTS报文协商。
+</li>
+</ul>
+
+</li>
+<li>BU 按照 Qos 优先级分别进行缓存。有如下两个概念：
+<ul>
+<li>trigger-enabled AC
+</li>
+<li>delivery-enabled AC
+</li>
+</ul>
+
+</li>
+<li>注意点：
+<ul>
+<li>STA 只需要发送一个Trigger报文来通告AP，AP在随后的处理中会发送buffer的多个报文。
+       和 PS-Poll方式不同。
+<blockquote>
+
+<p>If the STA has set up to use unscheduled SPs, the AP shall
+buffer BUs using delivery-enabled ACs until it has received a
+trigger frame using a trigger-enabled AC from the non-AP STA,
+which indicates the start of an unscheduled SP. A trigger frame
+received by the AP from a STA that already has an unscheduled SP
+underway shall not trigger the start of a new unscheduled SP
+</p>
+</blockquote>
+
+
+</li>
+<li>以下内容指明何时返回休眠。
+<blockquote>
+
+<p>The STA shall remain awake until it receives a QoS data frame or
+QoS Null frame addressed to it, with the EOSP subfield in the QoS
+Control field equal to 1
+</p>
+</blockquote>
+
+
+</li>
+</ul>
+
+</li>
+<li>更多内容参考 802.11-2012 的 10.2.1.6，10.2.1.8，10.2.1.9
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+<ul>
+<li>PSMP
+<ul>
+<li>原理
+<blockquote>
+
+<p>Power Save Multi-Poll (PSMP) is a feature of 802.11n that extends
+the Automatic Power Save Delivery (typically called APSD)
+mechanism defined in 802.11e by allowing the client stations to
+operate on a group schedule rather than individually.
+</p>
+</blockquote>
+
+
+<p>
+    <img src="http://ifq.github.com/rc/psmp-1.JPG"  alt="/rc/psmp-1.JPG" />
+</p>
+<ul>
+<li>AP 通过发送 PSMP 报文通知所有STA 之后的 上下行 缓存报文发送的安排。
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+<ul>
+<li>SM Power Save
+
+<ul>
+<li>原理
+<ul>
+<li>Spatial Multiplexing Power Save 的缩写
+</li>
+<li>通过关闭硬件的部分流，从而节电。
+<blockquote>
+
+<p>A STA consumes power on all active receive chains, even though
+they are not necessarily required for the actual frame
+exchange. The SM Power Save feature allows a STA to operate with
+only one active receive chain for a significant portion of time.
+</p>
+</blockquote>
+
+
+</li>
+<li>有静态和动态两种模式。
+<ul>
+<li>静态模式下，STA 将一直关闭部分硬件，持续以单流的形式与AP通行。
+</li>
+<li>动态模式下，STA 关闭部分硬件，处于单流模式。当接受到一个单流的
+        单播报文后，开启省电关闭的硬件，切换到多条流的工作状态。通常使
+        用RTS/CTS报文完成这个动作。
+<blockquote>
+
+<p>In dynamic SM power save mode, a STA enables its multiple
+receive chains when it receives the start of a frame sequence
+addressed to it. Such a frame sequence shall start with a
+single-spatial stream individually addressed frame that
+requires an immediate response and that is addressed to the
+STA in dynamic SM power save mode. An RTS/CTS sequence may be
+used for this purpose.
+</p>
+</blockquote>
+
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li>SDK 现状
+<ul>
+<li>AP 自身处于 <code>HT_CAP_MIMO_PS_OFF</code> 状态，即始终不使用 SM Power Save。
+</li>
+<li>STA 可根据自身情况决定 SM Power Save 状况，并通告 AP。关联时或通过Action报文。
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+
+<ul>
+<li>其他
+    之前北京XX出现过 Intel 6205 网卡的笔记本无故变成单流，之后发现是笔记本使能了静态的SM Power Save导致。
+
+<ul>
+<li>为了避免这种情况对笔记本进行了多种设置和改动，均不能解决。
+</li>
+<li>AP 方面做实验强制将 STA 设为非 SM Power Save 模式也不能生效。由于
+      这个过程不是协商的，STA 仅是通过自己的 SM Power Save状态。
+
+</li>
+</ul>
+
+<p>    最终只能认定为笔记本端硬件，或者驱动的动作导致进入该状态。
+</p></li>
+</ul>
+
+
+<p><a rel="bookmark" href="http://ifq.github.com/blog/2012/11/10/ps-memo/">&#9875; Permalink</a></p>]]></content>
+    </entry>
   
     <entry>
       
@@ -2202,107 +2571,6 @@ If an AP is selected or marked, all the connected stations will also be selected
 </ul>
 
 <p><a rel="bookmark" href="http://ifq.github.com/blog/2012/03/19/tshark-cmd/">&#9875; Permalink</a></p>]]></content>
-    </entry>
-  
-    <entry>
-      
-
-
-
-
-<title type="html"><![CDATA[一些linux命令行的memo]]></title>
-<link href="http://ifq.github.com/blog/2012/03/10/merge-old-blog-stuff/"/>
-<updated>2012-03-10T00:00:00+08:00</updated>
-<id>http://ifq.github.com/blog/2012/03/10/merge-old-blog-stuff</id>
-
-      <content type="html"><![CDATA[<ul>
-<li>文件头部插入多行文本 <br/>
-  一堆周报文件，需要在头部插入特定行才能移植到新blog，于是：
-
-
-
-<pre class="example">sed -i '1i#+BEGIN_HTML\n---\nlayout: post\ntitle: 周报 \n/
-Included file 'JB/setup' not found in _includes directory
-category: WORK\ntags:\n- 周报\n---\n#+END_HTML' /
-*weekly*.org
-
-</pre>
-
-
-<ul>
-<li><code>sed</code> 的 <code>-i</code> 参数表示直接修改到文件，不打印。
-</li>
-<li>多行文本用=\n=作为分割
-</li>
-</ul>
-
-</li>
-</ul>
-
-
-
-
-<ul>
-<li>文件改名 <br/>
-
-
-
-<pre class="example">find . -name '*weekly*' &gt; tmp
-perl -ne 'chomp; s/.\///; /([0-9]{2})([0-9]{2})/; print "mv $_ /
-2011-$1-$2-$_\n"' tmp &gt; tmp1
-source tmp1
-rm -rf tmp*  
-</pre>
-
-
-<ul>
-<li>需要将 <code>weekly-0102.org</code> 的格式改为 <code>2012-01-02-weekly.org</code>
-</li>
-</ul>
-
-</li>
-</ul>
-
-
-
-
-<ul>
-<li>DOS 换行批量转 UNIX <br/>
-
-
-
-<pre class="example">sed -i 's/^M//' *.c        # 在bash/tcsh中，将按Ctrl-M改为按Ctrl-V
-sed -i 's/\x0D//' *.c      # ssed、gsed 3.02.80，及更高版本
-</pre>
-
-
-</li>
-<li>更改图片链接 <br/>
-  org 图片链接默认 <code>file:///</code> 的格式，在jekyll下不能识别。于是用脚本手
-  工转换。
-
-
-
-<pre class="example">root@bt:~/ifq.github.com/_posts# sed -i 's/file:[a-zA-Z/-]*pic/\/pic/g' *wsec*.html
-root@bt:~/ifq.github.com/_posts# grep 'file:[a-zA-Z/-]*pic' *root@bt:~/ifq.github.com/_posts# ls
-
-</pre>
-
-
-</li>
-<li>参考资料
-<ul>
-<li><a href="http://www.grymoire.com/Unix/Sed.html#uh-42">http://www.grymoire.com/Unix/Sed.html#uh-42</a>
-</li>
-<li><a href="http://sed.sourceforge.net/sed1line_zh-CN.html">http://sed.sourceforge.net/sed1line\_zh-CN.html</a>
-</li>
-</ul>
-
-</li>
-</ul>
-
-
-<p><a rel="bookmark" href="http://ifq.github.com/blog/2012/03/10/merge-old-blog-stuff/">&#9875; Permalink</a></p>]]></content>
     </entry>
   
 </feed>
