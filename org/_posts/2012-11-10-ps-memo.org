@@ -1,0 +1,188 @@
+#+BEGIN_HTML
+---
+layout: post
+title: 802.11协议节电学习memo
+categories: [binary, IEEE802.11]
+comments: true
+---
+#+END_HTML
+
+根据802.11-2012标准中，章节 =10.2 Power management= 中的描述，目前 802.11协议中存在的节电技术有以下几种：
+   | 节电方式      | 介绍                                              | 引入时间      |
+   |---------------+---------------------------------------------------+---------------|
+   | PS-Poll       | 通过PS-Poll报文通告AP发送缓存的报文               | 802.11        |
+   | S-APSD        | 配合QoS工作，AP按照事先协商的时间片发送缓存报文   | 802.11e       |
+   | U-APSD        | 配合QoS工作，STA发送Trigger报文通知AP发送缓存报文 | 802.11e       |
+   | PSMP          | AP通过发送单个PSMP帧i组织所有STA的缓存报文收发    | 802.11n       |
+   | TDSL Peer PSM | 未了解，SDK中未找到                               | 802.11n（？） |
+   | WNM Sleep     | 协议中可选内容，SDK中未找到                       | 未知          |
+   | SM Power Save | 通过关闭多条receive chains中一部分来省电          | 802.11n       |
+
+#+begin_html
+<!-- more -->
+#+end_html
+
+- 基础框架 ＆ PS-Poll \\
+  节电方式有时显得很多，很复杂，但是都遵循最基本的框架运作。
+  - 电源管理状态
+    - Active Mode :: 对应 STA 的 Awake 状态，STA 全功率运行，可以随时接收报文。
+    - PS Mode :: 对应 STA 的 Doze 状态，STA is not able to transmit or
+                 receive and consumes very low power，定期苏醒接收报文。
+  - 更改电源管理状态的方法 \\
+    以下内容节选自 802.11-2012 章节10.2.1, 这些内容规定了状态切换的基本原则。
+
+    #+begin_quote
+    STAs changing Power Management mode shall inform the AP of this
+    fact using the Power Management bits within the Frame Control
+    field of transmitted frames。
+    #+end_quote
+
+    #+begin_quote
+    Power Management mode shall not change during any single frame exchange sequence.
+    #+end_quote
+
+    #+begin_quote
+    The Power Management bit shall be ignored in frame exchanges initiated by the AP.
+    #+end_quote
+
+    #+begin_quote
+    A non-AP STA shall not change power management mode using a frame
+    exchange that does not receive an ACK or BlockAck from the AP.
+    #+end_quote
+
+    #+begin_quote
+    NOTE—A PS-Poll frame exchange does not necessarily result in an
+    ACK from the AP, so a non-AP STA cannot change power management
+    mode using a PS-Poll frame.
+    #+end_quote
+   
+    #+begin_quote
+    the Power Management bit is the same for all MPDUs in an A-MPDU.
+    #+end_quote
+
+  - PS Mode 下的动作
+    - 缓存报文
+      - 缓存到 STA 的可缓存的单播报文（某些medium access control (MAC)
+       management protocol data unit不可缓存）
+      - 缓存所有的广播报文
+    - 发送 TIM 和 DTIM
+      - TIM :: traffic indication map, 每个Beacon都携带
+      - DTIM :: delivery traffic indication map，特殊的TIM，关注广播包围。
+               在携带DTIM的Beacon发出后，AP会随即发送缓存的广播报文。
+
+      TIM 具体格式参看 802.11-2012，8.4.2.7 TIM element。
+      [[file:~/blog/source/rc/tim-element.PNG]]
+      - Bitmap 中每一个bit与一个STA的AID对应。具体计算方法参加协议。
+      - 需要指出的是 Partial Virtual Bitmap 字段指示的是所有 STA 的节点
+       状态，不包括广播报文。Bit 0 对应与 AID 为 1 的 STA。
+       #+begin_quote
+       The Bitmap Control field is a single octet. Bit 0 of the field
+       contains the Traffic Indicator bit associated with AID 0. This bit is
+       set to 1 in TIM elements with a value of 0 in the DTIM Count field
+       when one or more group addressed MSDUs/MMPDUs are buffered at the AP
+       or the mesh STA.
+       #+end_quote
+      - TIM 与 DTIM 的区分
+       #+begin_quote
+       The DTIM is indicated by the DTIM count field of the TIM
+       element having a value of 0.
+       #+end_quote
+
+   - STA 接收报文
+     - PS-Poll 与 TIM 的关系
+       [[file:~/blog/source/rc/tim-pspoll.PNG]]
+     - PS-Poll 获取报文 \\
+       [[file:~/blog/source/rc/ps-poll-1.PNG]]
+     - 切换到 Active Mode
+       #+begin_quote
+       When an AP is informed that a STA has changed to the Active
+       mode, then the AP shall send buffered BUs (if any exist) to
+       that STA without waiting for a PS-Poll. When
+       #+end_quote
+
+- youtube上有个 Video 介绍了节电的基本概念，对初学者有参考价值。（不过英文着实难懂）
+   - [[file:~/blog/source/video/Power%20Save%20Mechanisms%20Supported%20in%20IEEE%20802.11%20Protocol%20-%20Tutorial%201.mp4][节电介绍视频1/2]]
+   - [[file:~/blog/source/video/Power%20Save%20Mechanisms%20Supported%20in%20IEEE%20802.11%20Protocol%20-%20Tutorial%202.mp4][节电介绍视频2/2]]
+
+- U-APSD
+   [[file:~/blog/source/rc/u-apsd-1.JPG]]
+
+   - 在基础构架的之上，不同之处在于STA唤醒后于AP交互的方式。Trigger
+     Frame不再是PS-Poll，而是特定优先级的QoS报文作为Trigger报文。
+     + Trigger 报文的决定可以在管理过程中协商，也可以关联后用ADDTS报文协商。
+   - BU 按照 Qos 优先级分别进行缓存。有如下两个概念：
+     + trigger-enabled AC
+     + delivery-enabled AC
+   - 注意点：
+     + STA 只需要发送一个Trigger报文来通告AP，AP在随后的处理中会发送buffer的多个报文。
+       和 PS-Poll方式不同。
+       #+begin_quote
+     If the STA has set up to use unscheduled SPs, the AP shall
+     buffer BUs using delivery-enabled ACs until it has received a
+     trigger frame using a trigger-enabled AC from the non-AP STA,
+     which indicates the start of an unscheduled SP. A trigger frame
+     received by the AP from a STA that already has an unscheduled SP
+     underway shall not trigger the start of a new unscheduled SP
+     #+end_quote
+     + 以下内容指明何时返回休眠。
+       #+begin_quote
+       The STA shall remain awake until it receives a QoS data frame or
+       QoS Null frame addressed to it, with the EOSP subfield in the QoS
+       Control field equal to 1
+       #+end_quote
+   - 更多内容参考 802.11-2012 的 10.2.1.6，10.2.1.8，10.2.1.9
+
+
+- PSMP
+  - 原理
+    #+begin_quote
+    Power Save Multi-Poll (PSMP) is a feature of 802.11n that extends
+    the Automatic Power Save Delivery (typically called APSD)
+    mechanism defined in 802.11e by allowing the client stations to
+    operate on a group schedule rather than individually.
+    #+end_quote
+    [[file:~/blog/source/rc/psmp-1.JPG]]
+
+    - AP 通过发送 PSMP 报文通知所有STA 之后的 上下行 缓存报文发送的安排。
+
+
+- SM Power Save
+    
+  - 原理
+    - Spatial Multiplexing Power Save 的缩写
+    - 通过关闭硬件的部分流，从而节电。
+      #+begin_quote
+    A STA consumes power on all active receive chains, even though
+    they are not necessarily required for the actual frame
+    exchange. The SM Power Save feature allows a STA to operate with
+    only one active receive chain for a significant portion of time.
+    #+end_quote
+    - 有静态和动态两种模式。
+      + 静态模式下，STA 将一直关闭部分硬件，持续以单流的形式与AP通行。
+      + 动态模式下，STA 关闭部分硬件，处于单流模式。当接受到一个单流的
+        单播报文后，开启省电关闭的硬件，切换到多条流的工作状态。通常使
+        用RTS/CTS报文完成这个动作。
+        #+begin_quote
+        In dynamic SM power save mode, a STA enables its multiple
+        receive chains when it receives the start of a frame sequence
+        addressed to it. Such a frame sequence shall start with a
+        single-spatial stream individually addressed frame that
+        requires an immediate response and that is addressed to the
+        STA in dynamic SM power save mode. An RTS/CTS sequence may be
+        used for this purpose.
+        #+end_quote
+
+  - SDK 现状
+    - AP 自身处于 =HT_CAP_MIMO_PS_OFF= 状态，即始终不使用 SM Power Save。
+    - STA 可根据自身情况决定 SM Power Save 状况，并通告 AP。关联时或通过Action报文。
+
+
+  - 其他
+    之前北京XX出现过 Intel 6205 网卡的笔记本无故变成单流，之后发现是笔记本使能了静态的SM Power Save导致。
+
+    - 为了避免这种情况对笔记本进行了多种设置和改动，均不能解决。
+    - AP 方面做实验强制将 STA 设为非 SM Power Save 模式也不能生效。由于
+      这个过程不是协商的，STA 仅是通过自己的 SM Power Save状态。
+    
+    最终只能认定为笔记本端硬件，或者驱动的动作导致进入该状态。
+    

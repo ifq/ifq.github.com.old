@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+# 改变 img 的 url 格式，指向 /pic/下的图片
+echo 'change url style'
+find ~/blog/source/_posts/ -name '*.htm*' -exec sed -i 's|file:[a-zA-Z0-9/]*source/|/|g' {} \;
+echo 'done.'
