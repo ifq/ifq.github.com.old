@@ -96,6 +96,72 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2013/01/16/bedlamp/">悬挂式床头灯</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-16T00:00:00+08:00" pubdate data-updated="true">Jan 16<span>th</span>, 2013</time>
+         &bull; <a rel="bookmark" href="/blog/2013/01/16/bedlamp/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><p>
+床头一直缺个灯，看书不方便，但是一直也没买。原因是有了木工这个爱好之后，什么东西都琢磨着用木头能不能做。于是一直在想用木头做一个什么样的床头灯。设计是一个很有意思但有时候会令人头大的事情。有限的工艺和材料下，想做出定制的东西，能满足功能，又要好用，还要尽量新颖。有时候天马行空想了很多方案，最终不是实现不了，就是造价太高，或者不确定做出来的东西是否实用。
+</p>
+<p>
+所以我想很多东西是需要一代一代演化的，做出一个原型，再慢慢改进。以下就是我的第一代悬挂式的床头灯。
+</p>
+<p>
+<img class="" src="/rc/2013-01-16/P1165012.JPG" width="800" height="600"  >
+</p>
+
+
+</div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2013/01/16/bedlamp/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2013/01/16/bedlamp/">View comments &raquo;</a></p>
+    
+    
+    
+    <p><a rel="full-article" href="/blog/2013/01/16/bedlamp/">继续阅读 &rarr;</a></p>
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2012/11/10/ps-memo/">802.11协议节电学习memo</a>
 
 </h1>
@@ -719,97 +785,6 @@ This is just a quick update about my prograss.
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2012/09/13/enconv-file-encode/">Linux下批量转换文件编码格式</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-13T00:00:00+08:00" pubdate data-updated="true">Sep 13<span>th</span>, 2012</time>
-         &bull; <a rel="bookmark" href="/blog/2012/09/13/enconv-file-encode/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><p>
-工作中被要求所有的代码文件以gb2312-unix编码格式来存放。但是移植的SDK等外来的代码多是UTF-8格式的。另外一些同事使用source insight，似乎不好指定unix的换行符（具体我不清楚），经常出现以dos换行符结尾的文件。在emacs看这些文件很烦，要么忍受每行后边带个^M,要么Ctrl+X-Enter-r，切换成dos。
-</p>
-<p>
-介于以上原因，新项目伊始，决定先打好基础，把所有文件都转换好一下先。linux下批量转换文件的编码格式，iconv是第一个找到的，但是不是很好用。之后找到一个好工具 enca。可以用来查看也可以转换。
-</p>
-
-
-
-<figure class='code'><div class='highlight'><table><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#查看</span>
-</span><span class='line'>enca filename
-</span><span class='line'>
-</span><span class='line'><span class="c"># 将当前目录下所有的代码文件转换到gb2312格式 IFQ</span>
-</span><span class='line'><span class="c"># enca方便之处是可以自动识别输入文件的编码，iconv则必须手动指定</span>
-</span><span class='line'><span class="k">for </span>i in <span class="sb">`</span>find . -name <span class="s2">&quot;*.[ch]&quot;</span><span class="sb">`</span>; <span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">do </span>enconv -x gb2312 <span class="nv">$i</span>; <span class="k">done</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># 之后用sed将换行符全部转换为unix IFQ</span>
-</span><span class='line'>sed -i <span class="s1">&#39;s/\x0D//&#39;</span> *.c
-</span><span class='line'>
-</span><span class='line'><span class="c">#这个是看到的一个更改文件名的方法，mark一下</span>
-</span><span class='line'>find . -name <span class="s2">&quot;*.new&quot;</span> | sed <span class="s1">&#39;s/\(.*\).new$/mv &quot;&amp;&quot; &quot;\1&quot;/&#39;</span> | sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>
-(E59VZJWGQVZE for <a href="http://technorati.com">http://technorati.com</a>)
-</p></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2012/09/13/enconv-file-encode/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/09/13/enconv-file-encode/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -824,6 +799,10 @@ This is just a quick update about my prograss.
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/01/16/bedlamp/">悬挂式床头灯</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/11/10/ps-memo/">802.11协议节电学习memo</a>
@@ -841,10 +820,6 @@ This is just a quick update about my prograss.
         <a href="/blog/2012/10/20/roubo-workbench-4/">Roubo Style Workbench - 靖天木工桌 4/5</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -860,7 +835,7 @@ This is just a quick update about my prograss.
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (11)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 
@@ -881,7 +856,7 @@ This is just a quick update about my prograss.
 
     </div>
   </div>
-  <footer role="contentinfo">Copyright &copy; 2012
+  <footer role="contentinfo">Copyright &copy; 2013
 
     靖天
     (一个热爱木工的软件工程师)

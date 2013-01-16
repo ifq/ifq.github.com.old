@@ -96,6 +96,177 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2012/03/19/tshark-cmd/">Tshark 抓包 Memo</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-19T00:00:00+08:00" pubdate data-updated="true">Mar 19<span>th</span>, 2012</time>
+         &bull; <a rel="bookmark" href="/blog/2012/03/19/tshark-cmd/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><ul>
+<li>Tshark help
+
+
+
+<pre class="example">TShark 1.6.5 (SVN Rev Unknown from unknown)
+Dump and analyze network traffic.
+See http://www.wireshark.org for more information.
+
+Copyright 1998-2012 Gerald Combs &lt;gerald@wireshark.org&gt; and contributors.
+This is free software; see the source for copying conditions. There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Usage: tshark [options] ...
+
+Capture interface:
+  -i &lt;interface&gt;           name or idx of interface (def: first non-loopback)
+  -f &lt;capture filter&gt;      packet filter in libpcap filter syntax
+  -s &lt;snaplen&gt;             packet snapshot length (def: 65535)
+  -p                       don't capture in promiscuous mode
+  -I                       capture in monitor mode, if available
+  -B &lt;buffer size&gt;         size of kernel buffer (def: 1MB)
+  -y &lt;link type&gt;           link layer type (def: first appropriate)
+  -D                       print list of interfaces and exit
+  -L                       print list of link-layer types of iface and exit
+
+Capture stop conditions:
+  -c &lt;packet count&gt;        stop after n packets (def: infinite)
+  -a &lt;autostop cond.&gt; ...  duration:NUM - stop after NUM seconds
+                           filesize:NUM - stop this file after NUM KB
+                              files:NUM - stop after NUM files
+Capture output:
+  -b &lt;ringbuffer opt.&gt; ... duration:NUM - switch to next file after NUM secs
+                           filesize:NUM - switch to next file after NUM KB
+                              files:NUM - ringbuffer: replace after NUM files
+Input file:
+  -r &lt;infile&gt;              set the filename to read from (no pipes or stdin!)
+
+Processing:
+  -R &lt;read filter&gt;         packet filter in Wireshark display filter syntax
+  -n                       disable all name resolutions (def: all enabled)
+  -N &lt;name resolve flags&gt;  enable specific name resolution(s): "mntC"
+  -d &lt;layer_type&gt;==&lt;selector&gt;,&lt;decode_as_protocol&gt; ...
+                           "Decode As", see the man page for details
+                           Example: tcp.port==8888,http
+  -H &lt;hosts file&gt;          read a list of entries from a hosts file, which will
+                           then be written to a capture file. (Implies -W n)
+Output:
+  -w &lt;outfile|-&gt;           write packets to a pcap-format file named "outfile"
+                           (or to the standard output for "-")
+  -C &lt;config profile&gt;      start with specified configuration profile
+  -F &lt;output file type&gt;    set the output file type, default is libpcap
+                           an empty "-F" option will list the file types
+  -V                       add output of packet tree        (Packet Details)
+  -O &lt;protocols&gt;           Only show packet details of these protocols, comma
+                           separated
+  -S                       display packets even when writing to a file
+  -x                       add output of hex and ASCII dump (Packet Bytes)
+  -T pdml|ps|psml|text|fields
+                           format of text output (def: text)
+  -e &lt;field&gt;               field to print if -Tfields selected (e.g. tcp.port);
+                           this option can be repeated to print multiple fields
+  -E&lt;fieldsoption&gt;=&lt;value&gt; set options for output when -Tfields selected:
+     header=y|n            switch headers on and off
+     separator=/t|/s|&lt;char&gt; select tab, space, printable character as separator
+     occurrence=f|l|a      print first, last or all occurrences of each field
+     aggregator=,|/s|&lt;char&gt; select comma, space, printable character as
+                           aggregator
+     quote=d|s|n           select double, single, no quotes for values
+  -t ad|a|r|d|dd|e         output format of time stamps (def: r: rel. to first)
+  -u s|hms                 output format of seconds (def: s: seconds)
+  -l                       flush standard output after each packet
+  -q                       be more quiet on stdout (e.g. when using statistics)
+  -W n                     Save extra information in the file, if supported.
+                           n = write network address resolution information
+  -X &lt;key&gt;:&lt;value&gt;         eXtension options, see the man page for details
+  -z &lt;statistics&gt;          various statistics, see the man page for details
+
+Miscellaneous:
+  -h                       display this help and exit
+  -v                       display version info and exit
+  -o &lt;name&gt;:&lt;value&gt; ...    override preference setting
+  -K &lt;keytab&gt;              keytab file to use for kerberos decryption
+  -G [report]              dump one of several available reports and exit
+                           default report="fields"
+                           use "-G ?" for more help
+  
+</pre>
+
+
+</li>
+<li>airodump-ng
+
+
+
+<pre class="example">  
+  Interaction
+
+Since revision r1648, airodump-ng can receive and interpret key strokes while running. The following list describes the currently assigned keys and supposed actions.
+
+[a]: Select active areas by cycling through these display options: AP+STA; AP+STA+ACK; AP only; STA only
+[d]: Reset sorting to defaults (Power)
+[i]: Invert sorting algorithm
+[m]: Mark the selected AP or cycle through different colors if the selected AP is already marked
+[r]: (De-)Activate realtime sorting - applies sorting algorithm everytime the display will be redrawn
+[s]: Change column to sort by, which currently includes: First seen; BSSID; PWR level; Beacons; Data packets; Packet rate; Channel; Max. data rate; Encryption; Strongest Ciphersuite; Strongest Authentication; ESSID
+[SPACE]: Pause display redrawing/ Resume redrawing
+[TAB]: Enable/Disable scrolling through AP list
+[UP]: Select the AP prior to the currently marked AP in the displayed list if available
+[DOWN]: Select the AP after the currently marked AP if available
+If an AP is selected or marked, all the connected stations will also be selected or marked with the same color as the corresponding Access Point.
+
+
+</pre>
+
+</li>
+</ul>
+
+</div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2012/03/19/tshark-cmd/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/03/19/tshark-cmd/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2012/03/10/merge-old-blog-stuff/">一些linux命令行的memo</a>
 
 </h1>
@@ -836,66 +1007,6 @@ return 0;<br>
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2010/07/04/1/">Motor93 (Jul,4)</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-07-04T00:00:00+08:00" pubdate data-updated="true">Jul 4<span>th</span>, 2010</time>
-         &bull; <a rel="bookmark" href="/blog/2010/07/04/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><p><span><font size="2" face="黑体"><img class="" src="/rc/legacy/08704990c20854b2a977a4d8.jpg" width="800"><br>
-话接上回，Motor Control 。我命名其为 Motor93 Pj &#8211; 因为拆的这个老光驱是93年产的。</font></span><span><font size="2" face="黑体">我买了些元件，拆了从公司捡回来的面板的按钮之类，拼接了 H-Bridge 电路。现在光驱的head可以上下移动。</font></span></p>
-<p><span><font size="2" face="黑体">图左边2个8pin的元件是 H-Bridge 电路的重点。（其实也没有其他东西了）其他就是电阻，滤波电容之类。右边光驱接过来的2根的排线，是Motor的电源线。另外一组7根的排线，是Hall Sensor的电源和反馈。（这个下回再说。）</font></span></p>
-<p><span><font size="2" face="黑体">查了下，Motor 好像和 <a target="_blank" href="http://www.mabuchi-motor.co.jp/cgi-bin/catalog/e_catalog.cgi?CAT_ID=rf_300fa">RF-300FA</a> 很像。工作电压范围 1.5 - 6.0V 。现在的电路，Motor通的是 3.3V。电路左下角的三极管一样的黑色元件，是输出3.3V的电源元件。</font></span></p>
-<p><span><font size="2" face="黑体">本想上传一段 Motor 工作的视频，但是想到国内不能看 YouTube，优酷这边又很慢，所以算了。。</font></span><span><font size="2" face="黑体"><span><img class="" src="/rc/legacy/475568607477a07bebf8f891.jpg" width="800"></span></font></span></p>
-<p><span><font size="2" face="黑体"><span>这是一个 H-Bridge 的电路图。（From Openservo）</span></font></span><span><font size="2" face="黑体"><span>可以改变通过改变电流方向控制 Motor 向两个方向旋转。</span></font></span></p>
-<p><span><font size="2" face="黑体"><span><br>
-</span></font></span> </p></div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2010/07/04/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2010/07/04/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -914,6 +1025,10 @@ return 0;<br>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/16/bedlamp/">悬挂式床头灯</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/10/ps-memo/">802.11协议节电学习memo</a>
       </li>
     
@@ -927,10 +1042,6 @@ return 0;<br>
     
       <li class="post">
         <a href="/blog/2012/10/20/roubo-workbench-4/">Roubo Style Workbench - 靖天木工桌 4/5</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
       </li>
     
   </ul>
@@ -948,7 +1059,7 @@ return 0;<br>
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (11)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 
@@ -969,7 +1080,7 @@ return 0;<br>
 
     </div>
   </div>
-  <footer role="contentinfo">Copyright &copy; 2012
+  <footer role="contentinfo">Copyright &copy; 2013
 
     靖天
     (一个热爱木工的软件工程师)

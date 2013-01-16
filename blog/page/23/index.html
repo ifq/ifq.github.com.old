@@ -96,6 +96,62 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2007/07/27/1/">MindManager7可以用啦</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-27T00:00:00+08:00" pubdate data-updated="true">Jul 27<span>th</span>, 2007</time>
+         &bull; <a rel="bookmark" href="/blog/2007/07/27/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div>&nbsp;&nbsp;&nbsp;   几个月前MindManager7就已经推出了，但是由于没有Serial code，一直没能试用。这两天千辛万苦终于搞到了，试用了一下，果然没有让我失望。<br>
+&nbsp;&nbsp;&nbsp;   界面很亲和，使用很方便，好像多了个Text Marker，还挺实用的。最重要的是！！最重要的是：中文支持好多了，而且处理速度也变快了。<br>
+&nbsp;&nbsp;&nbsp;   强力推荐了。需要key的同志们可以找我。求我的话我会给的。下面是个界面图：
+<div align="center" forimg="1"><img class="" src="/rc/legacy/7dce6f81364452d0bc3e1eac.jpg" width="800"></div></div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2007/07/27/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/07/27/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2007/07/25/1/">转_农民对于猪肉问题的讨论</a>
 
 </h1>
@@ -894,92 +950,6 @@ pH值 ： 不适用 沸点/沸点范围：138 ℃ (280 ℉) <br>
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2007/06/05/1/">转Windows显示所有文件失效时的解决办法</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-06-05T00:00:00+08:00" pubdate data-updated="true">Jun 5<span>th</span>, 2007</time>
-         &bull; <a rel="bookmark" href="/blog/2007/06/05/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><font color="#ff0000">windows的autorun真是万恶之源啊，给那些技术很撮的人有了可乘之机；再让他们改改注册表，觉得自己很完美了哈。</font><br>
-方法一： <br>
-1、在Windows任务栏中依次单击：开始&rarr;运行，然后在运行框中输入 regedit 打开注册表编辑器。  <br>
-<br>
-2、将注册表定位到HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder  <br>
-\Hidden\NOHIDDEN，将右边的CheckedValue和DefaultValue的值设为0x00000002(2)（如果原本就是这个值就不用管）  <br>
-<br>
-3、再将注册表定位到HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder  <br>
-\Hidden\SHOWALL，将右边的CheckedValue和DefaultValue的值分别设为0x00000001(1)和0x00000002(2)  <br>
-<br>
-4、将注册表定位到HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder  <br>
-\SuperHidden\Policy\，将右边的DontShowSuperHidden子项删除。（如果Policy不存在的话，这一步可忽略） <br>
-5、重启 <br>
-OK <br>
-如果还不行就用方法二： <br>
-1、打开记事本，把以下代码复制进去。 <br>
-<br>
-[Version]  <br>
-Signature=&quot;$Chicago$&quot;  <br>
-[DefaultInstall]  <br>
-addreg=add  <br>
-delReg=del  <br>
-[del]  <br>
-HKCU,Software\Microsoft\Windows\CurrentVersion\Policies\Explorer, NoFolderOptions  <br>
-HKCU,Software\Policies\Microsoft\Windows  <br>
-HKLM,SOFTWARE\Policies\Microsoft\Windows\CurrentVersion  <br>
-<br>
-[add]  <br>
-HKCU,Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 0x00010001, 1  <br>
-HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL, CheckedValue, 0x00010001, 1  <br>
-<br>
-2、另存为 Hidden.inf  <br>
-3、找到这个文件，右键&#8211;安装，即可 <br>
-OK</div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2007/06/05/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2007/06/05/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/24/">&larr; Older</a>
@@ -998,6 +968,10 @@ OK</div></div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/16/bedlamp/">悬挂式床头灯</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/10/ps-memo/">802.11协议节电学习memo</a>
       </li>
     
@@ -1011,10 +985,6 @@ OK</div></div>
     
       <li class="post">
         <a href="/blog/2012/10/20/roubo-workbench-4/">Roubo Style Workbench - 靖天木工桌 4/5</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
       </li>
     
   </ul>
@@ -1032,7 +1002,7 @@ OK</div></div>
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (11)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 
@@ -1053,7 +1023,7 @@ OK</div></div>
 
     </div>
   </div>
-  <footer role="contentinfo">Copyright &copy; 2012
+  <footer role="contentinfo">Copyright &copy; 2013
 
     靖天
     (一个热爱木工的软件工程师)

@@ -3,7 +3,7 @@
   <title><![CDATA[Geek Woodworker]]></title>
   <link href="http://ifq.github.com/atom.xml" rel="self"/>
   <link href="http://ifq.github.com/"/>
-  <updated>2012-11-10T08:41:13+08:00</updated>
+  <updated>2013-01-17T00:14:25+08:00</updated>
   <id>http://ifq.github.com/</id>
   <author>
     <name><![CDATA[靖天]]></name>
@@ -11,6 +11,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[悬挂式床头灯]]></title>
+<link href="http://ifq.github.com/blog/2013/01/16/bedlamp/"/>
+<updated>2013-01-16T00:00:00+08:00</updated>
+<id>http://ifq.github.com/blog/2013/01/16/bedlamp</id>
+
+      <content type="html"><![CDATA[<p>
+床头一直缺个灯，看书不方便，但是一直也没买。原因是有了木工这个爱好之后，什么东西都琢磨着用木头能不能做。于是一直在想用木头做一个什么样的床头灯。设计是一个很有意思但有时候会令人头大的事情。有限的工艺和材料下，想做出定制的东西，能满足功能，又要好用，还要尽量新颖。有时候天马行空想了很多方案，最终不是实现不了，就是造价太高，或者不确定做出来的东西是否实用。
+</p>
+<p>
+所以我想很多东西是需要一代一代演化的，做出一个原型，再慢慢改进。以下就是我的第一代悬挂式的床头灯。
+</p>
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-01-16/P1165012.JPG" width="800" height="600"  >
+</p>
+
+
+<!-- more -->
+
+<p>
+我家的床靠背比较高，比较厚，而且目前是靠墙放，所以床头灯就真的要做到头上了。开始想做可调角度的，但是越想越复杂，最后又回到了这个简单的方案。基本上就是一个燕尾榫的盒子的变形。
+</p>
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-01-16/P1165017.JPG" width="800" height="600" title="开灯的效果" alt="两个人看书滑到中间，一个人看书滑到边上">
+</p>
+<p>
+由于边想边做，没心思再拍照记录过程了。另外做燕尾榫的手艺还很差，图上可以看到很多地方缝隙还很大。燕尾榫的制作方法在做之前又重温了一下Rob的视频，但是在实践的时候还是遇到些问题。
+</p><ol>
+<li>用导突锯锯过之后，用线锯去掉废料部分的时候遇到问题了。导突锯的锯路太细，不到1mm，线锯锯条进不去。开始将就着用粗的锯子再锯一边，然后线锯塞进去。后来觉得影响精度，不得不换更细的线锯条。
+</li>
+<li>换了细的线锯条，锯条更容易断了。这个木头也比较硬，做一个盒子断了3，4根锯条。（木头是捡的木地板料刨出来的，不懂是什么，不知道是不是橡木）
+</li>
+</ol>
+
+
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-01-16/P1165019.JPG" width="800" height="600" title="pin" alt="按照rob的说法pin可以做的更小">
+</p>
+<p>
+顶部的盖子是滑动的，方便换灯泡什么的。灯泡用的1W*3的LED灯（10块钱）。前边的按钮想增加点质感，所以从淘宝买了不锈钢的（5块钱）。另外找了块透明塑料粘一层乳白色的塑料纸做灯罩。
+</p>
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-01-16/P1165020.JPG" width="800" height="600"  >
+<img class="" src="http://ifq.github.com/rc/2013-01-16/P1165021.JPG" width="800" height="600"  >
+</p>
+
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-01-16/P1165022.JPG" width="800" height="600"  alt="从后面看的样子">
+</p>
+<p>
+本来以为后边不用两个横杠加固也可以，但是制作的过程中后边的一块已经断了，最后用502粘上继续做的。end grain真的不结实。只有不断接触木头才能更了解木头啊~
+</p>
+<p>
+Thank for looking~
+</p>
+<p><a rel="bookmark" href="http://ifq.github.com/blog/2013/01/16/bedlamp/">&#9875; Permalink</a></p>]]></content>
+    </entry>
   
     <entry>
       
@@ -2439,138 +2502,6 @@ welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
 
 
 <p><a rel="bookmark" href="http://ifq.github.com/blog/2012/03/27/sed-binary-replace/">&#9875; Permalink</a></p>]]></content>
-    </entry>
-  
-    <entry>
-      
-
-
-
-
-<title type="html"><![CDATA[tshark 抓包 memo]]></title>
-<link href="http://ifq.github.com/blog/2012/03/19/tshark-cmd/"/>
-<updated>2012-03-19T00:00:00+08:00</updated>
-<id>http://ifq.github.com/blog/2012/03/19/tshark-cmd</id>
-
-      <content type="html"><![CDATA[<ul>
-<li>Tshark help
-
-
-
-<pre class="example">TShark 1.6.5 (SVN Rev Unknown from unknown)
-Dump and analyze network traffic.
-See http://www.wireshark.org for more information.
-
-Copyright 1998-2012 Gerald Combs &lt;gerald@wireshark.org&gt; and contributors.
-This is free software; see the source for copying conditions. There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-Usage: tshark [options] ...
-
-Capture interface:
-  -i &lt;interface&gt;           name or idx of interface (def: first non-loopback)
-  -f &lt;capture filter&gt;      packet filter in libpcap filter syntax
-  -s &lt;snaplen&gt;             packet snapshot length (def: 65535)
-  -p                       don't capture in promiscuous mode
-  -I                       capture in monitor mode, if available
-  -B &lt;buffer size&gt;         size of kernel buffer (def: 1MB)
-  -y &lt;link type&gt;           link layer type (def: first appropriate)
-  -D                       print list of interfaces and exit
-  -L                       print list of link-layer types of iface and exit
-
-Capture stop conditions:
-  -c &lt;packet count&gt;        stop after n packets (def: infinite)
-  -a &lt;autostop cond.&gt; ...  duration:NUM - stop after NUM seconds
-                           filesize:NUM - stop this file after NUM KB
-                              files:NUM - stop after NUM files
-Capture output:
-  -b &lt;ringbuffer opt.&gt; ... duration:NUM - switch to next file after NUM secs
-                           filesize:NUM - switch to next file after NUM KB
-                              files:NUM - ringbuffer: replace after NUM files
-Input file:
-  -r &lt;infile&gt;              set the filename to read from (no pipes or stdin!)
-
-Processing:
-  -R &lt;read filter&gt;         packet filter in Wireshark display filter syntax
-  -n                       disable all name resolutions (def: all enabled)
-  -N &lt;name resolve flags&gt;  enable specific name resolution(s): "mntC"
-  -d &lt;layer_type&gt;==&lt;selector&gt;,&lt;decode_as_protocol&gt; ...
-                           "Decode As", see the man page for details
-                           Example: tcp.port==8888,http
-  -H &lt;hosts file&gt;          read a list of entries from a hosts file, which will
-                           then be written to a capture file. (Implies -W n)
-Output:
-  -w &lt;outfile|-&gt;           write packets to a pcap-format file named "outfile"
-                           (or to the standard output for "-")
-  -C &lt;config profile&gt;      start with specified configuration profile
-  -F &lt;output file type&gt;    set the output file type, default is libpcap
-                           an empty "-F" option will list the file types
-  -V                       add output of packet tree        (Packet Details)
-  -O &lt;protocols&gt;           Only show packet details of these protocols, comma
-                           separated
-  -S                       display packets even when writing to a file
-  -x                       add output of hex and ASCII dump (Packet Bytes)
-  -T pdml|ps|psml|text|fields
-                           format of text output (def: text)
-  -e &lt;field&gt;               field to print if -Tfields selected (e.g. tcp.port);
-                           this option can be repeated to print multiple fields
-  -E&lt;fieldsoption&gt;=&lt;value&gt; set options for output when -Tfields selected:
-     header=y|n            switch headers on and off
-     separator=/t|/s|&lt;char&gt; select tab, space, printable character as separator
-     occurrence=f|l|a      print first, last or all occurrences of each field
-     aggregator=,|/s|&lt;char&gt; select comma, space, printable character as
-                           aggregator
-     quote=d|s|n           select double, single, no quotes for values
-  -t ad|a|r|d|dd|e         output format of time stamps (def: r: rel. to first)
-  -u s|hms                 output format of seconds (def: s: seconds)
-  -l                       flush standard output after each packet
-  -q                       be more quiet on stdout (e.g. when using statistics)
-  -W n                     Save extra information in the file, if supported.
-                           n = write network address resolution information
-  -X &lt;key&gt;:&lt;value&gt;         eXtension options, see the man page for details
-  -z &lt;statistics&gt;          various statistics, see the man page for details
-
-Miscellaneous:
-  -h                       display this help and exit
-  -v                       display version info and exit
-  -o &lt;name&gt;:&lt;value&gt; ...    override preference setting
-  -K &lt;keytab&gt;              keytab file to use for kerberos decryption
-  -G [report]              dump one of several available reports and exit
-                           default report="fields"
-                           use "-G ?" for more help
-  
-</pre>
-
-
-</li>
-<li>airodump-ng
-
-
-
-<pre class="example">  
-  Interaction
-
-Since revision r1648, airodump-ng can receive and interpret key strokes while running. The following list describes the currently assigned keys and supposed actions.
-
-[a]: Select active areas by cycling through these display options: AP+STA; AP+STA+ACK; AP only; STA only
-[d]: Reset sorting to defaults (Power)
-[i]: Invert sorting algorithm
-[m]: Mark the selected AP or cycle through different colors if the selected AP is already marked
-[r]: (De-)Activate realtime sorting - applies sorting algorithm everytime the display will be redrawn
-[s]: Change column to sort by, which currently includes: First seen; BSSID; PWR level; Beacons; Data packets; Packet rate; Channel; Max. data rate; Encryption; Strongest Ciphersuite; Strongest Authentication; ESSID
-[SPACE]: Pause display redrawing/ Resume redrawing
-[TAB]: Enable/Disable scrolling through AP list
-[UP]: Select the AP prior to the currently marked AP in the displayed list if available
-[DOWN]: Select the AP after the currently marked AP if available
-If an AP is selected or marked, all the connected stations will also be selected or marked with the same color as the corresponding Access Point.
-
-
-</pre>
-
-</li>
-</ul>
-
-<p><a rel="bookmark" href="http://ifq.github.com/blog/2012/03/19/tshark-cmd/">&#9875; Permalink</a></p>]]></content>
     </entry>
   
 </feed>

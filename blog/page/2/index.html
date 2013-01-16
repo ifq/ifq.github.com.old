@@ -96,6 +96,97 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2012/09/13/enconv-file-encode/">Linux下批量转换文件编码格式</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-13T00:00:00+08:00" pubdate data-updated="true">Sep 13<span>th</span>, 2012</time>
+         &bull; <a rel="bookmark" href="/blog/2012/09/13/enconv-file-encode/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><p>
+工作中被要求所有的代码文件以gb2312-unix编码格式来存放。但是移植的SDK等外来的代码多是UTF-8格式的。另外一些同事使用source insight，似乎不好指定unix的换行符（具体我不清楚），经常出现以dos换行符结尾的文件。在emacs看这些文件很烦，要么忍受每行后边带个^M,要么Ctrl+X-Enter-r，切换成dos。
+</p>
+<p>
+介于以上原因，新项目伊始，决定先打好基础，把所有文件都转换好一下先。linux下批量转换文件的编码格式，iconv是第一个找到的，但是不是很好用。之后找到一个好工具 enca。可以用来查看也可以转换。
+</p>
+
+
+
+<figure class='code'><div class='highlight'><table><td class='gutter'><pre class='line-numbers'><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#查看</span>
+</span><span class='line'>enca filename
+</span><span class='line'>
+</span><span class='line'><span class="c"># 将当前目录下所有的代码文件转换到gb2312格式 IFQ</span>
+</span><span class='line'><span class="c"># enca方便之处是可以自动识别输入文件的编码，iconv则必须手动指定</span>
+</span><span class='line'><span class="k">for </span>i in <span class="sb">`</span>find . -name <span class="s2">&quot;*.[ch]&quot;</span><span class="sb">`</span>; <span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">do </span>enconv -x gb2312 <span class="nv">$i</span>; <span class="k">done</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 之后用sed将换行符全部转换为unix IFQ</span>
+</span><span class='line'>sed -i <span class="s1">&#39;s/\x0D//&#39;</span> *.c
+</span><span class='line'>
+</span><span class='line'><span class="c">#这个是看到的一个更改文件名的方法，mark一下</span>
+</span><span class='line'>find . -name <span class="s2">&quot;*.new&quot;</span> | sed <span class="s1">&#39;s/\(.*\).new$/mv &quot;&amp;&quot; &quot;\1&quot;/&#39;</span> | sh
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+(E59VZJWGQVZE for <a href="http://technorati.com">http://technorati.com</a>)
+</p></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2012/09/13/enconv-file-encode/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/09/13/enconv-file-encode/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2012/09/10/baidu-blog-to-octo/">百度博客导入octopress&#8211;自力更生本领大</a>
 
 </h1>
@@ -890,177 +981,6 @@ welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2012/03/19/tshark-cmd/">Tshark 抓包 Memo</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-19T00:00:00+08:00" pubdate data-updated="true">Mar 19<span>th</span>, 2012</time>
-         &bull; <a rel="bookmark" href="/blog/2012/03/19/tshark-cmd/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><ul>
-<li>Tshark help
-
-
-
-<pre class="example">TShark 1.6.5 (SVN Rev Unknown from unknown)
-Dump and analyze network traffic.
-See http://www.wireshark.org for more information.
-
-Copyright 1998-2012 Gerald Combs &lt;gerald@wireshark.org&gt; and contributors.
-This is free software; see the source for copying conditions. There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-Usage: tshark [options] ...
-
-Capture interface:
-  -i &lt;interface&gt;           name or idx of interface (def: first non-loopback)
-  -f &lt;capture filter&gt;      packet filter in libpcap filter syntax
-  -s &lt;snaplen&gt;             packet snapshot length (def: 65535)
-  -p                       don't capture in promiscuous mode
-  -I                       capture in monitor mode, if available
-  -B &lt;buffer size&gt;         size of kernel buffer (def: 1MB)
-  -y &lt;link type&gt;           link layer type (def: first appropriate)
-  -D                       print list of interfaces and exit
-  -L                       print list of link-layer types of iface and exit
-
-Capture stop conditions:
-  -c &lt;packet count&gt;        stop after n packets (def: infinite)
-  -a &lt;autostop cond.&gt; ...  duration:NUM - stop after NUM seconds
-                           filesize:NUM - stop this file after NUM KB
-                              files:NUM - stop after NUM files
-Capture output:
-  -b &lt;ringbuffer opt.&gt; ... duration:NUM - switch to next file after NUM secs
-                           filesize:NUM - switch to next file after NUM KB
-                              files:NUM - ringbuffer: replace after NUM files
-Input file:
-  -r &lt;infile&gt;              set the filename to read from (no pipes or stdin!)
-
-Processing:
-  -R &lt;read filter&gt;         packet filter in Wireshark display filter syntax
-  -n                       disable all name resolutions (def: all enabled)
-  -N &lt;name resolve flags&gt;  enable specific name resolution(s): "mntC"
-  -d &lt;layer_type&gt;==&lt;selector&gt;,&lt;decode_as_protocol&gt; ...
-                           "Decode As", see the man page for details
-                           Example: tcp.port==8888,http
-  -H &lt;hosts file&gt;          read a list of entries from a hosts file, which will
-                           then be written to a capture file. (Implies -W n)
-Output:
-  -w &lt;outfile|-&gt;           write packets to a pcap-format file named "outfile"
-                           (or to the standard output for "-")
-  -C &lt;config profile&gt;      start with specified configuration profile
-  -F &lt;output file type&gt;    set the output file type, default is libpcap
-                           an empty "-F" option will list the file types
-  -V                       add output of packet tree        (Packet Details)
-  -O &lt;protocols&gt;           Only show packet details of these protocols, comma
-                           separated
-  -S                       display packets even when writing to a file
-  -x                       add output of hex and ASCII dump (Packet Bytes)
-  -T pdml|ps|psml|text|fields
-                           format of text output (def: text)
-  -e &lt;field&gt;               field to print if -Tfields selected (e.g. tcp.port);
-                           this option can be repeated to print multiple fields
-  -E&lt;fieldsoption&gt;=&lt;value&gt; set options for output when -Tfields selected:
-     header=y|n            switch headers on and off
-     separator=/t|/s|&lt;char&gt; select tab, space, printable character as separator
-     occurrence=f|l|a      print first, last or all occurrences of each field
-     aggregator=,|/s|&lt;char&gt; select comma, space, printable character as
-                           aggregator
-     quote=d|s|n           select double, single, no quotes for values
-  -t ad|a|r|d|dd|e         output format of time stamps (def: r: rel. to first)
-  -u s|hms                 output format of seconds (def: s: seconds)
-  -l                       flush standard output after each packet
-  -q                       be more quiet on stdout (e.g. when using statistics)
-  -W n                     Save extra information in the file, if supported.
-                           n = write network address resolution information
-  -X &lt;key&gt;:&lt;value&gt;         eXtension options, see the man page for details
-  -z &lt;statistics&gt;          various statistics, see the man page for details
-
-Miscellaneous:
-  -h                       display this help and exit
-  -v                       display version info and exit
-  -o &lt;name&gt;:&lt;value&gt; ...    override preference setting
-  -K &lt;keytab&gt;              keytab file to use for kerberos decryption
-  -G [report]              dump one of several available reports and exit
-                           default report="fields"
-                           use "-G ?" for more help
-  
-</pre>
-
-
-</li>
-<li>airodump-ng
-
-
-
-<pre class="example">  
-  Interaction
-
-Since revision r1648, airodump-ng can receive and interpret key strokes while running. The following list describes the currently assigned keys and supposed actions.
-
-[a]: Select active areas by cycling through these display options: AP+STA; AP+STA+ACK; AP only; STA only
-[d]: Reset sorting to defaults (Power)
-[i]: Invert sorting algorithm
-[m]: Mark the selected AP or cycle through different colors if the selected AP is already marked
-[r]: (De-)Activate realtime sorting - applies sorting algorithm everytime the display will be redrawn
-[s]: Change column to sort by, which currently includes: First seen; BSSID; PWR level; Beacons; Data packets; Packet rate; Channel; Max. data rate; Encryption; Strongest Ciphersuite; Strongest Authentication; ESSID
-[SPACE]: Pause display redrawing/ Resume redrawing
-[TAB]: Enable/Disable scrolling through AP list
-[UP]: Select the AP prior to the currently marked AP in the displayed list if available
-[DOWN]: Select the AP after the currently marked AP if available
-If an AP is selected or marked, all the connected stations will also be selected or marked with the same color as the corresponding Access Point.
-
-
-</pre>
-
-</li>
-</ul>
-
-</div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2012/03/19/tshark-cmd/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/03/19/tshark-cmd/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1079,6 +999,10 @@ If an AP is selected or marked, all the connected stations will also be selected
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/16/bedlamp/">悬挂式床头灯</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/11/10/ps-memo/">802.11协议节电学习memo</a>
       </li>
     
@@ -1092,10 +1016,6 @@ If an AP is selected or marked, all the connected stations will also be selected
     
       <li class="post">
         <a href="/blog/2012/10/20/roubo-workbench-4/">Roubo Style Workbench - 靖天木工桌 4/5</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/09/roubo-workbench-3/">Roubo Style Workbench - 靖天木工桌 3/5</a>
       </li>
     
   </ul>
@@ -1113,7 +1033,7 @@ If an AP is selected or marked, all the connected stations will also be selected
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (10)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (11)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 
@@ -1134,7 +1054,7 @@ If an AP is selected or marked, all the connected stations will also be selected
 
     </div>
   </div>
-  <footer role="contentinfo">Copyright &copy; 2012
+  <footer role="contentinfo">Copyright &copy; 2013
 
     靖天
     (一个热爱木工的软件工程师)
