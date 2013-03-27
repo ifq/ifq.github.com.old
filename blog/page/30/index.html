@@ -96,6 +96,62 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2006/12/07/1/">世界上智慧最集中的一张照片</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2006-12-07T00:00:00+08:00" pubdate data-updated="true">Dec 7<span>th</span>, 2006</time>
+         &bull; <a rel="bookmark" href="/blog/2006/12/07/1/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><div><div forimg="1"><img class="" src="/rc/legacy/d3a1f403f6f0bded08fa9396.jpg" width="800"><font size="5" color="#ff0000">太厉害了哈!教科书中的人物大汇集!<br>
+<br>
+<div forimg="1"><img class="" src="/rc/legacy/e232f8f22f908e12b07ec590.jpg" width="800"></div>
+<font size="3" color="#000000">这张不知道大家见过没有哈</font></font></div></div></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2006/12/07/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2006/12/07/1/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2006/12/05/1/">McAfee Avert实验室预测的2007年十大安全威胁</a>
 
 </h1>
@@ -1062,275 +1118,6 @@ Google 研究员 吴军<br>
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2006/11/29/1/">搬家工程-蓝牙协议栈的移植</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2006-11-29T00:00:00+08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2006</time>
-         &bull; <a rel="bookmark" href="/blog/2006/11/29/1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><div><font color="#ff6600" >这是在以前博客上文章,自己手动转载过来..</font ><br />
-近两天在HHARM2410-R3上移植了USB蓝牙设备和 BlueZ 蓝牙协议栈，呵呵，蓝牙果然是个很好的东西，协议栈内容很丰富，挂上去以后可以使用很多功能。我现在就可以用它来接收 GPS 数据以及和用手机上网。我是在做车载的，所以特别有用。积累了一些关于蓝牙的知识，但是算是初步的，把我的经验发上来，各位做过蓝牙的大哥请多指导。<br />
-<br />
-一切版权归bluez的作者－－－同济大学高性能计算中心 Dennis          <br />
-<br />
-欢迎各位发邮件给我和我讨论 dennis.he.2005@gmail.com<br />
-先介绍一下硬件，我用的是电脑卖场里面随便买到的 USB 蓝牙适配器，价格在80元左右，应该是台产的，没有牌子，像一个小一点的U盘。买之前叫卖家在windows下测试一下，带一个带蓝牙的手机过去试试看，确认能用再买。<br />
-linux上的蓝牙协议栈有好几个，官方的蓝牙协议栈是Bluez，在www.bluez.org上能找到所有的说明文档和源代码。我先是在自己的pc上安装了bluez的协议栈，然后又把它移植到了华恒HHARM2410-R3上。<br />
-<br />
-<span class="text_title" >(一) 在Red hat 9上安装Bluez</span ><br />
-在pc上的安装我参考了O&#8217;Reilly的Linux Unwired一书，chapter 7中详细地介绍了linux下的bluetooth的基础知识、安装、配置和使用。安装前必须了解一下bluez的基本结构，直接位于发射传输协议之上的 协议是HCI(host control interface)，我的手机和蓝牙GPS用到的高层协议是服务发现协议SDP和模拟串口的协议RFCOMM，中间那一层协议是L2CAP，应该是处理 逻辑链路的吧，我并不是很清楚，请参考bluez的官方文档。<br />
-HHARM2410-R3上用到内核版本是2.4.18，于是我在pc上安装bluez时也使用了2.4.18的内核。使用bluez必须要对内核打 patch的，于是到www.kernel.org上下载了linux-2.4.18.tar.bz2后到http: //www.bluez.org/patches.html上下载针对2.4.18的patch，patch-2.4.18-mh15.gz。于是，解 压，打patch:<br />
-# tar xjvf linux-2.4.18.tar.bz2<br />
-# cd linux/<br />
-# gzip -dc ../patch-2.4.18-mh15.gz | patch -p1<br />
-注意一下这时的patch的输出，在源代码方面的patch是针对driver/、include/、net/目录下的代码的修改，并没有修改到内核部分的内容，应该没有修改到linux核心的东西，在移植到S3C2410时应该不会有太大的问题。<br />
-下面就是编译内核，在config的时候关于bluez我的配置是这样的:<br />
-#<br />
-# Bluetooth support<br />
-#
-<p >CONFIG_BLUEZ=m<br />
-CONFIG_BLUEZ_L2CAP=m<br />
-CONFIG_BLUEZ_SCO=m<br />
-CONFIG_BLUEZ_RFCOMM=m<br />
-CONFIG_BLUEZ_RFCOMM_TTY=y<br />
-CONFIG_BLUEZ_BNEP=m<br />
-CONFIG_BLUEZ_BNEP_MC_FILTER=y<br />
-CONFIG_BLUEZ_BNEP_PROTO_FILTER=y          </p >
-<p >#<br />
-# Bluetooth device drivers<br />
-#<br />
-CONFIG_BLUEZ_HCIUSB=m<br />
-# CONFIG_BLUEZ_HCIUSB_SCO is not set<br />
-CONFIG_BLUEZ_HCIUART=m<br />
-CONFIG_BLUEZ_HCIUART_H4=m<br />
-CONFIG_BLUEZ_HCIUART_BCSP=m<br />
-# CONFIG_BLUEZ_HCIUART_BCSP_TXCRC is not set<br />
-# CONFIG_BLUEZ_HCIBFUSB is not set<br />
-CONFIG_BLUEZ_HCIDTL1=m<br />
-CONFIG_BLUEZ_HCIBT3C=m<br />
-CONFIG_BLUEZ_HCIBLUECARD=m<br />
-CONFIG_BLUEZ_HCIBTUART=m<br />
-CONFIG_BLUEZ_HCIVHCI=m<br />
-供大家参考，Linux Unwired一书中有详细的说明，注意如果使用make menuconfig，一定要打开一下.config文件看看CONFIG_BLUEZ_RFCOMM_TTY=y，不能为n或者m。还有注意 CONFIG_USB_BLUETOOTH一定不能选(在USB support下)，否则会影响到bluez的运行的。<br />
-内核编译好了就开始准备bluez的库和工具了。到http://www.bluez.org/download.html上下载最新的bluez程 序包，我只下载了bluez-libs-2.20.tar.gz,bluez-utils-2.20.tar.gz,bluez-pin- 0.25.tar.gz三个包，分别是库，工具集和由bluez提供的一个 pin_helper。由于在pc下，安装的过程没什么好说的，解压，./configure，make，make install。<br />
-然后就是注意一下默认配置目录/etc/bluetooth/下的hcid.conf配置文件，这是用来配置后台daemon进程hcid的。如果把 这台pc机器+蓝牙适配器看成是一个蓝牙设备的话，进程hcid就管理这个蓝牙设备的基本配置信息，例如名称，class，地址，feature等等。还 有当设备与其他蓝牙设备Bonding/Pairing即所谓的配对时，处理PIN code的程序也是hcid，而在hcid.conf脚本中比较重要的一项就是pin_helper，默认的配置是pin_helper= /usr/bin/bluepin，这个是python写的用来读取用户输入的PIN code的程序，安装bluez-pin包的时候装在/usr/bin下的。<br />
-这里有必要了解一下配对的过程，我感觉就是两个设备互相通密码建立相互之间连接的过程。我看了hcid部分的代码，了解的大致是这样:比如两个蓝牙设 备A和B，A先发送要求配对的请求给B，B由用户设置好配对的密码即PIN code，然后回一个消息给A，说你想配对可以呀，知道我的密码吗?然后A就发送PIN code过去，B看和自己的密码相符合，就发送一个replyOK的消息给A，这样两者就建立起来了信任关系。<br />
-在pc+蓝牙适配器这个蓝牙设备A上，如果这个设备先发送配对请求给另一个远程设备B，那么当B发送询问密码请求过来时，在A上运行的hcid后台进 程就通过一个pin_helper的程序读取PIN code，并发送回给B；如果远程设备B先发送配对请求给A，hcid上用作验证的PIN code就是/etc/bluetooth/pin的内容，如果读取失败程序在启动的时候会默认地设置一个密码的，代码在bluez- utils/hcid/security.c中的init_security_data函数中，默认的是BlueZ。为了和我的手机相配，我把它改成了 123，手机只能输入数字。 <br />
-关于其他hcid.conf的设置，请man hcid.conf。<br />
-设置好以后，换上新内核，启动linux。插入USB蓝牙适配器，# dmesg | tail会发现有usb.c: USB device 2 (vend/prod 0x1131/0x1001) is not claimed by any active driver.这个问题，不管它，只要有usb.c: registered new driver hci_usb的消息就可以，然后 # lsmod 会发现hci_usb的模块被安装了，再# modprobe rfcomm，这样基本上所有的模块都安装齐了。<br />
-# hciconfig hci0 up<br />
-# hcid -f /etc/bluetooth/hcid.conf<br />
-启动hci设备和hcid精灵进程<br />
-# hciconfig -a<br />
-hci0: Type: USB<br />
-BD Address: 00:11:67:0F:BB:A1 ACL MTU: 678:8 SCO MTU: 48:10<br />
-UP RUNNING PSCAN ISCAN<br />
-RX bytes:115 acl:0 sco:0 events:15 errors:0<br />
-TX bytes:313 acl:0 sco:0 commands:15 errors:0<br />
-Features: 0xff 0xff 0x8d 0x78 0x08 0x18 0x00 0x00<br />
-Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3<br />
-Link policy: RSWITCH HOLD SNIFF PARK<br />
-Link mode: SLAVE ACCEPT<br />
-Name: &#8216;BlueZ (0)&#8217;<br />
-Class: 0x000100<br />
-Service Classes: Unspecified<br />
-Device Class: Computer, Uncategorized<br />
-HCI Ver: 1.2 (0x2) HCI Rev: 0x1ae LMP Ver: 1.2 (0x2) LMP Subver: 0x1ae<br />
-Manufacturer: Integrated System Solution Corp. (57)<br />
-可以看到目前设备的配置情况，有些是从hcid.conf中读取的，有些是从设备中读取的。<br />
-下面，打开手机上的蓝牙，启动蓝牙GPS<br />
-# hcitool scan<br />
-Scanning &#8230;<br />
-00:0E:07:58:1A:33 T628<br />
-00:08:1B:C0:D1:3C HOLUX GR-231<br />
-这样就看到了两个设备了，我用的是索爱的T628和HOLUX的蓝牙GPS，前面的一串应该是蓝牙设备唯一的地址。<br />
-#sdptool browse 可以看到每个设备所提供的服务<br />
-Inquiring &#8230;<br />
-Browsing 00:0E:07:58:1A:33 &#8230;<br />
-Service Name: Dial-up Networking<br />
-Service RecHandle: 0x10000<br />
-Service Class ID List:<br />
-&quot;Dialup Networking&quot; (0x1103)<br />
-&quot;Generic Networking&quot; (0x1201)<br />
-Protocol Descriptor List:<br />
-&quot;L2CAP&quot; (0x0100)<br />
-&quot;RFCOMM&quot; (0x0003)<br />
-Channel: 1<br />
-Profile Descriptor List:<br />
-&quot;Dialup Networking&quot; (0x1103)<br />
-Version: 0x0100</p >
-<p >&#8230;&#8230;&#8230;&#8230;. </p >
-<p >Service Name: Serial Port 1<br />
-Service RecHandle: 0x10003<br />
-Service Class ID List:<br />
-&quot;Serial Port&quot; (0x1101)<br />
-Protocol Descriptor List:<br />
-&quot;L2CAP&quot; (0x0100)<br />
-&quot;RFCOMM&quot; (0x0003)<br />
-Channel: 4<br />
-</p >
-<p >&#8230;&#8230;&#8230;&#8230;           </p >
-<p >Service Name: OBEX Object Push <br />
-Service RecHandle: 0x10005 <br />
-Service Class ID List: <br />
-&quot;OBEX Object Push&quot; (0x1105) <br />
-Protocol Descriptor List: <br />
-&quot;L2CAP&quot; (0x0100) <br />
-&quot;RFCOMM&quot; (0x0003) <br />
-Channel: 10 <br />
-&quot;OBEX&quot; (0x0008) <br />
-Profile Descriptor List: <br />
-&quot;OBEX Object Push&quot; (0x1105) <br />
-Version: 0x0100 <br />
-<br />
-Browsing 00:08:1B:C0:D1:3C &#8230; </p >
-手机上绑定了很多的服务，有拨号服务，音频服务，串口服务，文件交换服务(OBEX)&#8230;在SDP协议下，每个服务绑定到一个Channel上。GPS上没有绑定服务，它只作为虚拟串口设备来使用。<br />
-利用实用工具rfcomm可以把遵循RFCOMM的服务bind到一个类似的串口设备上。在绑定之前，必须确保/dev下有rfcomm*的设备，如果没有，就自己建立:<br />
-# mknod -m 666 /dev/rfcommX c 216 X (X是数字)<br />
-这样就可以绑定了，比如我需要用手机拨号上网的功能，看到它的Channel 1是RFCOMM的Dialup Networking功能，则:<br />
-# rfcomm bind 0 00:0E:07:58:1A:33 1<br />
-即将00:0E:07:58:1A:33设备的Channel 1服务绑定到/dev/rfcomm0上，这样，就相当于建立了一个虚拟的串行连接到一个可以拨号的无线modem上了，打开minicom，设置串口为 /dev/rfcomm0，波特率19200，8N1，键入atz，返回OK。用ppp就可以拨号上网了，第一次连接时手机会弹出个输入框问PIN code，以后就不用了。<br />
-GPS设备只是作为串口来用的，也很简单:<br />
-# rfcomm bind 1 00:08:1B:C0:D1:3C<br />
-打开minicom设置波特率为4800就可以读GPS数据了，大功告成!<br />
-另外，sdpd程序是本设备提供给对外的看到的服务，可以通过sdptool add &#8211;channel=X SP来增加对外的服务，我没有研究过。还有对于文件传输OBEX和个人局域网BNEQ还需要继续学习。<br />
-<br />
-<span class="text_title" >(二)在HHARM2410-R3上的移植</span ><br />
-完成了在普通red hat上的安装，熟悉了蓝牙协议栈一些基本的东西，下面的任务就是把协议栈搬到开发板上了。<br />
-第一步当然是内核了，由于华恒的内核代码改过，我也不知道从bluez上下载的patch能不能使用，试试看了，只好。<br />
-# cd /HHARM2410/kernel<br />
-# gzip -dc ~/patch-2.4.18-mh15.gz | patch -p1<br />
-# find ./ -name &#8216;*rej&#8217;<br />
-./fs/cramfs/inode.c.rej<br />
-不好，有文件不能patch，看看是针对cramfs文件系统的patch，我也不清楚为什么bluez的patch会修改到cramfs，不过我想 问题应该不大。内核源代码关于bluetooth的部分华恒应该没有改过，因此patch的主要部分应该是没有问题的。如果内核编译后发生问题，我想大概 也只有把内核代码翻出来看了。<br />
-先就这样了，用用试试看好了。与普通pc上的类似，只不过有些是m的现在统统为y了。我的配置关于Bluez的部分设置为:<br />
-#<br />
-# Bluetooth support<br />
-#<br />
-CONFIG_BLUEZ=y<br />
-CONFIG_BLUEZ_L2CAP=y<br />
-# CONFIG_BLUEZ_SCO is not set<br />
-CONFIG_BLUEZ_RFCOMM=y<br />
-CONFIG_BLUEZ_RFCOMM_TTY=y<br />
-CONFIG_BLUEZ_BNEP=y<br />
-CONFIG_BLUEZ_BNEP_MC_FILTER=y<br />
-CONFIG_BLUEZ_BNEP_PROTO_FILTER=y<br />
-# CONFIG_BLUEZ_HIDP is not set<br />
-#<br />
-# Bluetooth device drivers<br />
-#<br />
-CONFIG_BLUEZ_HCIUSB=y<br />
-# CONFIG_BLUEZ_HCIUSB_SCO is not set<br />
-# CONFIG_BLUEZ_HCIUART is not set<br />
-# CONFIG_BLUEZ_HCIBFUSB is not set<br />
-# CONFIG_BLUEZ_HCIDTL1 is not set<br />
-# CONFIG_BLUEZ_HCIBT3C is not set<br />
-# CONFIG_BLUEZ_HCIBLUECARD is not set<br />
-# CONFIG_BLUEZ_HCIBTUART is not set<br />
-# CONFIG_BLUEZ_HCIVHCI is not set<br />
-<br />
-device部分就设了个USB的，其他的就不设置了。<br />
-下面继续make dep;make zImage的常规过程，OK，没有发生编译问题，可以稍微舒口气了。
-<p >下面要移植Bluez的基础库了，在Redhat 9下执行<br />
-# ldd /usr/lib/libbluetooth.so.1.0.17<br />
-libc.so.6 =&gt; /lib/libc.so.6 (0x4002c000)<br />
-/lib/ld-linux.so.2 =&gt; /lib/ld-linux.so.2 (0x80000000)<br />
-发现没有依赖什么莫名其妙的库，应该换个编译器就可以了，configure一下就可以了。我的配置命令很简单: <br />
-# ./configure &#8211;host=armv4l &#8211;prefix=/HHARM2410/applications/bluezport/libs CC=/opt/host/armv4l/bin/armv4l-unknown-linux-gcc CPP=/opt/host/armv4l/bin/armv4l-unknown-linux-cpp AR=/opt/host/armv4l/bin/armv4l-unknown-linux-ar STRIP=/opt/host/armv4l/bin/armv4l-unknown-linux-strip RANLIB=/opt/host/armv4l/bin/armv4l-unknown-linux-ranlib<br />
-LD=/opt/host/armv4l/bin/armv4l-unknown-linux-ld<br />
-# make<br />
-# make install<br />
-OK了，到了/HHARM2410/applications/bluezport/libs下看看，我也不清楚为什么，居然只有.a和.la的静态库，没有动态库。只好自己动手，到bluz-libs-2.17/src/下，自己编译动态库:<br />
-# /opt/host/armv4l/bin/armv4l-unknown-linux-gcc -shared -o libbluetooth.so.1.0.17 bluetooth.o hci.o sdp.o<br />
-再做两个符号连接<br />
-# ln -s libbluetooth.so.1.0.17 libbluetooth.so<br />
-# ln -s libbluetooth.so.1.0.17 libbluetooth.so.1<br />
-好了，库交叉编译完毕，mv到/HHARM2410/application/bluezport/libs/lib文件夹下就可以了。<br />
-<br />
-接着移植Bluez的工具集。与库类似，先看一下各个程序需要用到什么库，比如:<br />
-#ldd /usr/sbin/hcid<br />
-libbluetooth.so.1 =&gt; /usr/lib/libbluetooth.so.1 (0x40035000)<br />
-libc.so.6 =&gt; /lib/libc.so.6 (0x40042000)<br />
-/lib/ld-linux.so.2 =&gt; /lib/ld-linux.so.2 (0x40000000)<br />
-挨个试试需要用的工具，发现需要的库华恒和Bluez都提供了，应该换个编译器编译一下就可以了。编译之前我为了到板子上与我自己的手机连接方便修改 了bluez-utils-2.17/hcid/security.c文件，在init_security_data函数中的设置默认的密码，非常简单地 改了两行:<br />
-strcpy(hcid.pin_code, &quot;123&quot;);<br />
-hcid.pin_len = 3;<br />
-然后configure我想就行了，我的configure设置为:<br />
-# ./configure &#8211;prefix=/HHARM2410-R3/applications/bluezport/utils &#8211;includedir=/HHARM2410-R3/applications/bluezport/libs/include &#8211;libdir=/HHARM2410-R3/applications/bluezport/libs/lib &#8211;with-bluez=/HHARM2410-R3/applications/bluezport/libs &#8211;disable-test &#8211;disable-cups &#8211;disable-pcmia &#8211;host=armv4l CC=/opt/host/armv4l/bin/armv4l-unknown-linux-gcc CPP=/opt/host/armv4l/bin/armv4l-unknown-linux-cpp AR=/opt/host/armv4l/bin/armv4l-unknown-linux-ar STRIP=/opt/host/armv4l/bin/armv4l-unknown-linux-strip RANLIB=/opt/host/armv4l/bin/armv4l-unknown-linux-ranlib LD=/opt/host/armv4l/bin/armv4l-unknown-linux-ld<br />
-# make<br />
-我在这步make的时候出现了一点小错误,好像是说PATH_MAX没有定义，这个是LINUX设置的存放路径名缓冲区的最大长度。应该是少包含了一个头文件造成的。我没有去仔细考究，就在当前文件下的config.h中添加了三行:<br />
-#ifndef PATH_MAX<br />
-#define PATH_MAX 4095/* PAGE_SIZE - 1 */<br />
-#endif<br />
-采用简单粗鲁的添加定义的方式。再make，通过。<br />
-# make install<br />
-好了，工具集都在/HHARM2410-R3/applications/bluezport/util下了<br />
-最后，由于在PC的LINUX下的默认pin_helper /usr/bin/bluepin是用python写的代码，在2410上当然不能用了，所以要自己写一个pin_helper的程序。翻翻 /usr/bin/bluepin的代码以及hcid/security.c的代码，事实上hcid进程在验证PIN code的时候开了一个pipe指向pin_helper进程的标准输出，pin_helper进程向用户询问PIN code，如果用户输入密码XXXX就以&quot;PIN:XXXX&quot;的形式写到标准输出中去，如果用户reject就写个&quot;ERR&quot;回去。<br />
-我以一种最简单的方式实现pin_helper程序，即固定地写一个code回去，比如123,牺牲安全性。<br />
-用脚本实现就是:<br />
-#!/bin/sh</p >
-<p >echo &quot;PIN:123&quot;<br />
-用C实现一个就是:<br />
-#include &lt;stdio.h&gt;</p >
-<p >int main(int argc, char* argv[])<br />
-{<br />
-printf(&quot;PIN:123&quot;);<br />
-}<br />
-交叉编译成my_pin_helper再放到板子的/usr/bin下，那么就可以把板子的hcid.conf修改成:<br />
-pin_helper /usr/pin/my_pin_helper<br />
-后来，我在板子上也用MiniGUI写了一个pin_helper，也挺简单的。</p >
-好了，一切准备完毕，做好ramdisk，记得在/dev下mknod几个rfcomm，放到板子上，可以运行!<br />
-插上USB适配器，连模块都不用probe<br />
-# hciconfig hci0 up<br />
-# hcid -f /etc/bluetooth/hcid.conf<br />
-# hciconfig -a<br />
-看到设备了，其他的运行都OK。结合ppp就可以用手机上网了~~</div></div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2006/11/29/1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2006/11/29/1/">View comments &raquo;</a></p>
-    
-    
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/31/">&larr; Older</a>
@@ -1349,6 +1136,10 @@ pin_helper /usr/pin/my_pin_helper<br />
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/03/23/cage-for-kira/">龙猫柜笼制作系列-1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/16/bedlamp/">悬挂式床头灯</a>
       </li>
     
@@ -1362,10 +1153,6 @@ pin_helper /usr/pin/my_pin_helper<br />
     
       <li class="post">
         <a href="/blog/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/20/roubo-workbench-4/">Roubo Style Workbench - 靖天木工桌 4/5</a>
       </li>
     
   </ul>
@@ -1383,7 +1170,7 @@ pin_helper /usr/pin/my_pin_helper<br />
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (11)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (12)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 

@@ -3,7 +3,7 @@
   <title><![CDATA[Geek Woodworker]]></title>
   <link href="http://ifq.github.com/atom.xml" rel="self"/>
   <link href="http://ifq.github.com/"/>
-  <updated>2013-01-17T00:14:25+08:00</updated>
+  <updated>2013-03-27T19:39:40+08:00</updated>
   <id>http://ifq.github.com/</id>
   <author>
     <name><![CDATA[靖天]]></name>
@@ -11,6 +11,78 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[龙猫柜笼制作系列-1]]></title>
+<link href="http://ifq.github.com/blog/2013/03/23/cage-for-kira/"/>
+<updated>2013-03-23T00:00:00+08:00</updated>
+<id>http://ifq.github.com/blog/2013/03/23/cage-for-kira</id>
+
+      <content type="html"><![CDATA[<p>
+首先澄清，这里说的龙猫，其实跟猫没有关系。很多朋友见了都说：哪里是猫，明明是老鼠嘛。实际是它确实是鼠，学名美洲栗鼠，哺乳纲啮齿目豪猪亚目毛丝鼠科动物。因为样子和宫崎骏动画中的龙猫造型酷似，所以被人们叫做龙猫。
+</p>
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-03-26/IMG_5245.JPG" width="800" height="600" title="龙猫吃草图" alt="咱家的龙猫kira">
+</p>
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-03-26/IMG_5250.JPG" width="800" height="600" title="龙猫吃草图" alt="吃草卖萌两不误">
+</p>
+
+
+<!-- more -->
+
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-03-26/IMG_5260.JPG" width="800" height="600" title="kira盟照" alt="专注的卖萌">
+</p>
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-03-26/IMG_5264.JPG" width="800" height="600" title="继续吃草图" alt="人生就是吃草+卖萌">
+</p>
+<p>
+话说我在日本的时候就想养龙猫，但是碍于龙猫极其怕热，28摄氏度就有可能中暑致死，所以据说夏天在要长时间开这空调饲养。如此高的挑费让人难以承担，所以迟迟不敢下手。不过真正和养过龙猫的人交流之后，似乎也没有那么夸张，并且有其他一些廉价的方法给龙猫降温，所以我养龙猫的愿望成为可能。
+</p>
+<p>
+给龙猫降温常见的方法有：空调、风扇、冰窝、半导体制冷片。风扇指标不治本，但是据说不是超级热也可以过去；冰窝能降温，但是冰化了又得换，麻烦；半导体制冷片对我来说也许是个折中的选择。制作相对复杂，但是耗电量较低，效果持续。况且身边可以找到很多制作材料，何乐而不为~
+</p>
+
+<p>
+<img class="left" src="http://ifq.github.com/rc/2013-03-26/cold.jpg" title="半导体制冷片" >
+半导体制冷片，通电之后一面的热量被搬运到另一面，从而产生制冷的效果。我买的是最常见的12706型号，12V6A，功率60W左右。13块钱一片，用四片，功耗240W左右，24小时开电费也不会觉得夸张。
+</p>
+
+<p>
+能量守恒，有冷就有热，而且热似乎大于冷，制冷片产生的热量是比较大的。不加上辅助的散热装备，一会儿就会烧坏。幸好我身边能找到不少散热片，省了不少银子：） 
+</p>
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-03-26/IMG_5225.JPG" width="800" height="600" title="制冷器" alt="制冷片加上散热器，中间用铝片，螺丝固定">
+</p>
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-03-26/IMG_5226.JPG" width="800" height="600"  alt="平置的制冷器，白色散热片用于制冷，黑色的面用于散热">
+</p>
+<p>
+之前买来本来打算DIY其他东西后来放弃了的风扇，现在散热全靠他们了。为了降低几个暴力风扇的噪音，还在网上找了PWM风扇调速器。
+<img class="" src="http://ifq.github.com/rc/2013-03-26/IMG_5227.JPG" width="800" height="600"  alt="不要小看那个小个子的，这家伙12V5A，能把自己吹起来，超暴力！就是声音很大。。">
+<img class="" src="http://ifq.github.com/rc/2013-03-26/IMG_5228.JPG" width="800" height="600"  alt="这个涡轮风扇也有12V4A，也很暴力。">
+</p>
+<p>
+说了半天，这个60W，那个5A，没有个给力的电源都是白搭。身边找到一个不用的PC电源，300W，足够用了。还是DELL上拆下来的~
+<img class="" src="http://ifq.github.com/rc/2013-03-26/IMG_5229.JPG" width="800" height="600"  >
+</p>
+
+<p>
+最后是这次project的主体了，制冷器再好，没有一个封闭的空间，也没有好的制冷效果。这时候是我木工爱好大显身手的时候了。用SketchUp画了个草图，大概就按这个来做了。两侧和柜门都用钢化玻璃；最下方是一个大抽屉，放龙猫的东西；抽屉上方的隔层是猫沙架子；顶部的留空可以上钢丝网也可以上制冷器模块。
+</p>
+<p>
+<img class="" src="http://ifq.github.com/rc/2013-03-26/cage.PNG" width="600"  >
+</p>
+<p>
+木材也到位了，剩下来就等大汗淋漓一番了。Thanks for looking~ 
+</p><p><a rel="bookmark" href="http://ifq.github.com/blog/2013/03/23/cage-for-kira/">&#9875; Permalink</a></p>]]></content>
+    </entry>
   
     <entry>
       
@@ -2471,37 +2543,6 @@ welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
 </div>
 </div>
 <p><a rel="bookmark" href="http://ifq.github.com/blog/2012/07/29/helloworld/">&#9875; Permalink</a></p>]]></content>
-    </entry>
-  
-    <entry>
-      
-
-
-
-
-<title type="html"><![CDATA[用 sed 替换二进制内容]]></title>
-<link href="http://ifq.github.com/blog/2012/03/27/sed-binary-replace/"/>
-<updated>2012-03-27T00:00:00+08:00</updated>
-<id>http://ifq.github.com/blog/2012/03/27/sed-binary-replace</id>
-
-      <content type="html"><![CDATA[<p>
-  文件里有一堆 0，在每个字符后边。需要去掉。
-</p>
-
-
-<pre class="example">00000010: 4f00 4300 4100 4c00 5f00 4d00 4100 4300  O.C.A.L._.M.A.C.
-00000020: 4800 4900 4e00 4500 5c00 4800 4100 5200  H.I.N.E.\.H.A.R.
-00000030: 4400 5700 4100 5200 4500 5d00 0d00 0a00  D.W.A.R.E.].....
-00000040: 0d00 0a00 5b00 4800 4b00 4500 5900 5f00  ....[.H.K.E.Y._.  
-</pre>
-
-
-
-<pre class="example">sed -i 's|\x00||g' filename
-</pre>
-
-
-<p><a rel="bookmark" href="http://ifq.github.com/blog/2012/03/27/sed-binary-replace/">&#9875; Permalink</a></p>]]></content>
     </entry>
   
 </feed>
