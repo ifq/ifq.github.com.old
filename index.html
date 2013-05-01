@@ -96,6 +96,236 @@
   <header>
     <h1 class="entry-title">
 
+<a href="/blog/2013/05/01/emacs-modify/">最近修缮了下emacs</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-01T00:00:00+08:00" pubdate data-updated="true">May 1<span>st</span>, 2013</time>
+         &bull; <a rel="bookmark" href="/blog/2013/05/01/emacs-modify/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"><p>
+emacs这东西，深啊。
+身边没有人交流，孤独啊。
+很多功能都是凑合着用，焦急啊。
+趁着五一优化了一下配置，清爽啊。
+</p>
+
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">magit</h2>
+<div class="outline-text-2" id="text-1">
+
+<p>  公司一直还没导入git，所以一直也没去尝试。最近貌似要导入了，于是认真学
+  习了下。另外看了youtube上linus对subversion的强烈鄙视，subversion顿时
+  一无是处啊。
+</p>
+<p>
+  公司还在用svn，因此考虑本地用git管理代码，于是发现了git-svn。一个分支
+  下多个branch，本地空间立马节省了许多，管理的代码也清晰了。之前为了解一
+  个bug，需要下一份特定版本的代码，修改之后又不一定commit。本地的修改越
+  积越多，占有空间不说，时间长了还不知道改了什么。
+</p>
+<p>
+  导入了git，相应的emacs下也就导入了相应的mode，magit。绑定F10到
+  magit-status，M-F10 到 Magit-log。目前用起来感觉还是很爽。本地的脚本、
+  配置也终于使用SCM管理起来了，心里舒坦多了。
+</p>
+<p>
+  如果你也和我一样，还没有用过分布式的版本控制，建议你试试git。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">auto-complete</h2>
+<div class="outline-text-2" id="text-2">
+
+<p>  之前陆陆续续用过几次AC mode，但是由于各种的问题（要么是速度奇慢，要么
+  是和YASnippet冲突神马的）又懒得解决就放弃了。这次重新编译了 24.3 的
+  emacs之后，决定重新试试。。
+</p>
+<p>
+  和gccsense，自动不全结构体成员的功能还是弄不起来。不知道gccsense的配
+  置还有哪里不对。暂时还是配合gtags来进行补全。目前没有经常编码，所以
+  需求不是很高，所以又偷懒了。速度慢的问题也没有了，原因不明。。
+</p>
+<p>
+  总之先用用看把。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">smex</h2>
+<div class="outline-text-2" id="text-3">
+
+<p>  使用ido的模式为 M-x 补全的功能，挺实用。推荐！
+</p>
+<p>
+  &#8220;` elisp 配置代码
+  (require &#8216;smex) ; Not needed if you use package.el
+(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
+                  ; when Smex is auto-initialized on its first run.
+(global-set-key (kbd &#8220;M-x&#8221;) &#8216;smex)
+(global-set-key (kbd &#8220;M-X&#8221;) &#8216;smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd &#8220;C-c C-c M-x&#8221;) &#8216;execute-extended-command)
+   &#8220;` 
+</p>
+<p>
+  算我孤陋寡闻，才知道<a href="https://github.com/technomancy/emacs-starter-kit">emacs-starter-kit</a>。 要是一开始学emacs的时候知道
+  这么好的初学者工具该多好啊。smex也是包含在其中的工具。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">emacs-color-theme-solarized</h2>
+<div class="outline-text-2" id="text-4">
+
+<p>  这个也是<a href="https://github.com/technomancy/emacs-starter-kit">emacs-starter-kit</a> 里包含的东西，是emacs的主题。之前emacs23的
+  时候还是用扩展的 color-theme.el，现在可以不用那个了，直接用系统自带
+  的。这个theme的配色考虑的比较全面，看起来很和谐。
+</p>
+<p>
+  <img class="" src="/rc/emacs-color-theme.png" width="800" height="600" title="emacs-color-theme-solarized" alt="效果解图">
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">feng-highlight</h2>
+<div class="outline-text-2" id="text-5">
+
+<p>  本来在看idle-highligh-mode，无意间浏览到了shenfeng的<a href="http://shenfeng.me/highlight-thing-under-cursor.html">这篇博客</a>。 试用
+  了一下感觉不错。
+</p>
+<p>
+  在一个词上 M-i，即高亮现实所以相同的地方；还可以用M-n/p来上下导航，
+  M-r来替换。一看就是实用注意者啊，其实这点子我也有想过，但是我基本不
+  会lisp，所以这种想法都基本上立马忽略。但是有了这种功能确实很爽。
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+</div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2013/05/01/emacs-modify/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2013/05/01/emacs-modify/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/blog/2013/04/20/noppoo-keyboard/">Noppoo Keyboard</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-20T00:00:00+08:00" pubdate data-updated="true">Apr 20<span>th</span>, 2013</time>
+         &bull; <a rel="bookmark" href="/blog/2013/04/20/noppoo-keyboard/">Permalink</a>
+      </p>
+    
+  </header>
+
+<div class="entry-content"></div>
+
+  <footer>
+    
+    <p><a class="comments-link" href="/blog/2013/04/20/noppoo-keyboard/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2013/04/20/noppoo-keyboard/">View comments &raquo;</a></p>
+    
+    
+    
+  </footer>
+
+
+    </article>
+  
+    
+
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
 <a href="/blog/2013/03/23/cage-for-kira/">龙猫柜笼制作系列-1</a>
 
 </h1>
@@ -644,143 +874,6 @@ This is just a quick update about my prograss.
 
     </article>
   
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2012/09/28/ifq-roubo-workbench-1/">Roubo Style Workbench - 靖天木工桌 1/5</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-28T00:00:00+08:00" pubdate data-updated="true">Sep 28<span>th</span>, 2012</time>
-         &bull; <a rel="bookmark" href="/blog/2012/09/28/ifq-roubo-workbench-1/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><p>
-接触木工半年多了，handtool进了不少，但是没有注重木工桌。目前的工作平台是一个淘宝买的几十块的折叠木工桌和一条很有年头的长凳。时间长了体会出两个问题：
-</p><ol>
-<li>折叠桌子十分不稳，夹持能力也差。就算你有再好的刨子或者锯子，在这种桌子上还是很头大。我经常需要把桌子顶在墙上并用身体压住桌子才能施力。这样带来了很大的限制，浪费时间、浪费体力、还做不精准。
-</li>
-<li>高度不对。长凳上锯东西或者刨东西猫着腰，容易疲劳，时间长了很容易伤着腰。
-</li>
-</ol>
-
-
-<p>
-于是我开始关注workbench。国外的网站上可以找到各种风格的workbench，modern euro、shaker sytle，roubo style神马的。看来看去，我最喜欢roubo style，简单、粗壮、功能。
-</p>
-<p>
-<img class="" src="/rc/2012-09-25/BCSPLITTOPROUBO.JPG" width="600" title="benchcraft的roubo workbench" alt="一个roubo style workbench的图例">
-</p>
-
-
-</div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2012/09/28/ifq-roubo-workbench-1/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/09/28/ifq-roubo-workbench-1/">View comments &raquo;</a></p>
-    
-    
-    
-    <p><a rel="full-article" href="/blog/2012/09/28/ifq-roubo-workbench-1/">继续阅读 &rarr;</a></p>
-    
-  </footer>
-
-
-    </article>
-  
-    
-
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2012/09/19/screen-door-3/">纱门制作专题-3（完结）</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-19T00:00:00+08:00" pubdate data-updated="true">Sep 19<span>th</span>, 2012</time>
-         &bull; <a rel="bookmark" href="/blog/2012/09/19/screen-door-3/">Permalink</a>
-      </p>
-    
-  </header>
-
-<div class="entry-content"><p>
-纱门进入最后一道工序，上漆。以前以为上漆没那么重要，但是实际动手做过一个鞋凳之后发现上漆很重要，做出来的东西看上去好不好，也许一半都得靠上漆。难怪英文里称之为finishing，做不好就不算finish吧。
-</p>
-<p>
-<img class="" src="/rc/2012-09-15/P9103406.JPG" width="600" title="木蜡油" alt="表面这薄薄的一层覆盖比里边的杉木要昂贵许多">
-</p>
-<p>
-油漆有很多种，目前我还只用过木蜡油，是基于对健康的考虑首先选择了木蜡油，据称这玩意儿是纯天然的
-<img class="" src="/rc/2012-09-15/P9103411.JPG" width="600"  alt="找了半天找到这个巧克力盒子用来调木蜡油的颜色">
-</div>
-
-  <footer>
-    
-    <p><a class="comments-link" href="/blog/2012/09/19/screen-door-3/#disqus_thread" data-disqus-identifier="http://ifq.github.com/blog/2012/09/19/screen-door-3/">View comments &raquo;</a></p>
-    
-    
-    
-    <p><a rel="full-article" href="/blog/2012/09/19/screen-door-3/">继续阅读 &rarr;</a></p>
-    
-  </footer>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -797,6 +890,14 @@ This is just a quick update about my prograss.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/05/01/emacs-modify/">最近修缮了下emacs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/20/noppoo-keyboard/">Noppoo Keyboard</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/03/23/cage-for-kira/">龙猫柜笼制作系列-1</a>
       </li>
     
@@ -806,14 +907,6 @@ This is just a quick update about my prograss.
     
       <li class="post">
         <a href="/blog/2012/11/10/ps-memo/">802.11协议节电学习memo</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/29/upgrade-octopress/">更新octopress博客系统后的笔记</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/10/28/roubo-workbench-5/">Roubo Style Workbench - 靖天木工桌 5/5</a>
       </li>
     
   </ul>
@@ -831,7 +924,7 @@ This is just a quick update about my prograss.
 <section>
   <h1>Categories</h1>
   <ul id="category-list">
-    <li><a href='/blog/categories/binary'>binary (9)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (12)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
+    <li><a href='/blog/categories/binary'>binary (10)</a></li><li><a href='/blog/categories/cool'>cool (1)</a></li><li><a href='/blog/categories/handtool'>handtool (4)</a></li><li><a href='/blog/categories/ieee802-11'>IEEE802.11 (1)</a></li><li><a href='/blog/categories/legacy'>legacy (279)</a></li><li><a href='/blog/categories/octopress'>octopress (2)</a></li><li><a href='/blog/categories/orgmode'>orgmode (2)</a></li><li><a href='/blog/categories/other'>other (1)</a></li><li><a href='/blog/categories/woodworking'>woodworking (13)</a></li><li><a href='/blog/categories/workbench'>workbench (5)</a></li>
   </ul>
 </section>
 

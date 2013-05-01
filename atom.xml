@@ -3,7 +3,7 @@
   <title><![CDATA[Geek Woodworker]]></title>
   <link href="http://ifq.github.com/atom.xml" rel="self"/>
   <link href="http://ifq.github.com/"/>
-  <updated>2013-03-27T19:39:40+08:00</updated>
+  <updated>2013-05-02T00:32:40+08:00</updated>
   <id>http://ifq.github.com/</id>
   <author>
     <name><![CDATA[靖天]]></name>
@@ -11,6 +11,158 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[最近修缮了下emacs]]></title>
+<link href="http://ifq.github.com/blog/2013/05/01/emacs-modify/"/>
+<updated>2013-05-01T00:00:00+08:00</updated>
+<id>http://ifq.github.com/blog/2013/05/01/emacs-modify</id>
+
+      <content type="html"><![CDATA[<p>
+emacs这东西，深啊。
+身边没有人交流，孤独啊。
+很多功能都是凑合着用，焦急啊。
+趁着五一优化了一下配置，清爽啊。
+</p>
+
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">magit</h2>
+<div class="outline-text-2" id="text-1">
+
+<p>  公司一直还没导入git，所以一直也没去尝试。最近貌似要导入了，于是认真学
+  习了下。另外看了youtube上linus对subversion的强烈鄙视，subversion顿时
+  一无是处啊。
+</p>
+<p>
+  公司还在用svn，因此考虑本地用git管理代码，于是发现了git-svn。一个分支
+  下多个branch，本地空间立马节省了许多，管理的代码也清晰了。之前为了解一
+  个bug，需要下一份特定版本的代码，修改之后又不一定commit。本地的修改越
+  积越多，占有空间不说，时间长了还不知道改了什么。
+</p>
+<p>
+  导入了git，相应的emacs下也就导入了相应的mode，magit。绑定F10到
+  magit-status，M-F10 到 Magit-log。目前用起来感觉还是很爽。本地的脚本、
+  配置也终于使用SCM管理起来了，心里舒坦多了。
+</p>
+<p>
+  如果你也和我一样，还没有用过分布式的版本控制，建议你试试git。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">auto-complete</h2>
+<div class="outline-text-2" id="text-2">
+
+<p>  之前陆陆续续用过几次AC mode，但是由于各种的问题（要么是速度奇慢，要么
+  是和YASnippet冲突神马的）又懒得解决就放弃了。这次重新编译了 24.3 的
+  emacs之后，决定重新试试。。
+</p>
+<p>
+  和gccsense，自动不全结构体成员的功能还是弄不起来。不知道gccsense的配
+  置还有哪里不对。暂时还是配合gtags来进行补全。目前没有经常编码，所以
+  需求不是很高，所以又偷懒了。速度慢的问题也没有了，原因不明。。
+</p>
+<p>
+  总之先用用看把。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">smex</h2>
+<div class="outline-text-2" id="text-3">
+
+<p>  使用ido的模式为 M-x 补全的功能，挺实用。推荐！
+</p>
+<p>
+  &#8220;` elisp 配置代码
+  (require &#8216;smex) ; Not needed if you use package.el
+(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
+                  ; when Smex is auto-initialized on its first run.
+(global-set-key (kbd &#8220;M-x&#8221;) &#8216;smex)
+(global-set-key (kbd &#8220;M-X&#8221;) &#8216;smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd &#8220;C-c C-c M-x&#8221;) &#8216;execute-extended-command)
+   &#8220;` 
+</p>
+<p>
+  算我孤陋寡闻，才知道<a href="https://github.com/technomancy/emacs-starter-kit">emacs-starter-kit</a>。 要是一开始学emacs的时候知道
+  这么好的初学者工具该多好啊。smex也是包含在其中的工具。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">emacs-color-theme-solarized</h2>
+<div class="outline-text-2" id="text-4">
+
+<p>  这个也是<a href="https://github.com/technomancy/emacs-starter-kit">emacs-starter-kit</a> 里包含的东西，是emacs的主题。之前emacs23的
+  时候还是用扩展的 color-theme.el，现在可以不用那个了，直接用系统自带
+  的。这个theme的配色考虑的比较全面，看起来很和谐。
+</p>
+<p>
+  <img class="" src="http://ifq.github.com/rc/emacs-color-theme.png" width="800" height="600" title="emacs-color-theme-solarized" alt="效果解图">
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">feng-highlight</h2>
+<div class="outline-text-2" id="text-5">
+
+<p>  本来在看idle-highligh-mode，无意间浏览到了shenfeng的<a href="http://shenfeng.me/highlight-thing-under-cursor.html">这篇博客</a>。 试用
+  了一下感觉不错。
+</p>
+<p>
+  在一个词上 M-i，即高亮现实所以相同的地方；还可以用M-n/p来上下导航，
+  M-r来替换。一看就是实用注意者啊，其实这点子我也有想过，但是我基本不
+  会lisp，所以这种想法都基本上立马忽略。但是有了这种功能确实很爽。
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+<p><a rel="bookmark" href="http://ifq.github.com/blog/2013/05/01/emacs-modify/">&#9875; Permalink</a></p>]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Noppoo Keyboard]]></title>
+<link href="http://ifq.github.com/blog/2013/04/20/noppoo-keyboard/"/>
+<updated>2013-04-20T00:00:00+08:00</updated>
+<id>http://ifq.github.com/blog/2013/04/20/noppoo-keyboard</id>
+
+      <content type="html"><![CDATA[<p><a rel="bookmark" href="http://ifq.github.com/blog/2013/04/20/noppoo-keyboard/">&#9875; Permalink</a></p>]]></content>
+    </entry>
   
     <entry>
       
@@ -2281,268 +2433,6 @@ Thanks for watching. Any comments and suggestions are welcomed.
 <p>
 关于这个锯子有任何问题都欢迎你在下方留言与我交流。Thanks for watching.
 </p><p><a rel="bookmark" href="http://ifq.github.com/blog/2012/08/07/gyokujou-saw/">&#9875; Permalink</a></p>]]></content>
-    </entry>
-  
-    <entry>
-      
-
-
-
-
-<title type="html"><![CDATA[N0.0 Post - Why I'm back to blog]]></title>
-<link href="http://ifq.github.com/blog/2012/08/03/1stpost/"/>
-<updated>2012-08-03T00:00:00+08:00</updated>
-<id>http://ifq.github.com/blog/2012/08/03/1stpost</id>
-
-      <content type="html"><![CDATA[<p>
-为什么我又回到博客？既然说到“又”，那最好介绍下以前的博客，他们现在还活着，不过已经沉寂很久了。
-</p>
-<dl>
-<dt><a href="http://blog.csdn.net/ifq">http://blog.csdn.net/ifq</a></dt><dd>2006年2月建立。既然在csdn，那表示当时一心在学术，写的也多是计算机、找工作相关的内容。记录了我最单纯最充实的一段生活。放了这么多年没管，这个博客在csdn还能排3000多名让人有点惊讶。看来只要你有认真分享，就有人能找到其中的价值。当时写的最有价值的可能就是交叉编译BlueZ蓝牙协议栈到我的ARM板吧，这在2006年还不多。最终选择了离开，是因为当时的csdn很不稳定，让人烦躁。
-
-</dd>
-<dt><a href="http://hi.baidu.com/ifqq">http://hi.baidu.com/ifqq</a></dt><dd>离开csdn，来到baidu，少了许多专业气氛，大家的互动也增加了，慢慢的随着后来工作后身在异乡，也懒得写技术的东西了。开始传照片，show在异国的生活，表达对伟大祖国的思念(哈哈)。后期有一些猫猫的照片，喜欢猫的同志可以去参观下。最终离开，可能是对网页里写博客的厌倦吧。。
-     <img class="" src="http://ifq.github.com/rc/219e75c61d06e65b9c163dff.jpg" width="600" title="haru猫" alt="外边捉来的猫，当时好兴奋，中文名字哈鲁，陪我度过了在日本的最后一段时光。">
-
-</dd>
-<dt><a href="http://t.qq.com/Jingtianwang">http://t.qq.com/Jingtianwang</a></dt><dd>离开baidu，被朋友邀请来到微博。（好像三次转移都是同一个人邀请的。。@kebing）那是不知道国内微博行情，以为腾讯会比新浪牛一些，结果现在发现好像不是了&ndash;。
-</dd>
-</dl>
-
-
-<p>
-一开始觉得微博拥有积少成多的力量，每个人不一定有功夫发一片博客，但是总有时间发发微博。这样就有很大的信息量和并且具有很强的实时性。这一点在一些社会公益、爱心传递、社会监督方面起到了很好的作用。但是谈到专业领域和兴趣爱好方面，微博上很少有高分享度的东西。大部分微博可以归类到以下几种：
-</p><ul>
-<li>我今天吃了两个包子
-</li>
-<li>今天好难过
-</li>
-<li>ZF都是傻逼，我要民主
-</li>
-<li>狮子座今年最牛逼
-</li>
-<li>你来，我热情拥抱。你走，我坦然放手。
-</li>
-</ul>
-
-
-
-
-<!--more-->
-
-<p>
-玩了两年微博，看到的废话越来越多。和我最初的想象不太一样。如果大家都拿它来扯淡，你也不得不拿他来扯淡。。造成这种局面，我想和厂商的导向是有关系的。首先，微博似乎与搜索引擎隔绝，很难搜到微博的信息，所以大家不会觉得微博上有重要的东西，也不会自己在上边认真分享；另外，140 Byte的长度限制搞得很难写出有用的东西（这个限制最初是为了SMS短信设计的）。
-</p>
-<p>
-各种的不满意，导致开始寻找替代的解决方案，不再关心快捷的互动，更关心有内容的交流。不需要人人都看你的页面，只需要与志同道合的人分享。其实Google+是个不错的东西，很方便，内容可长可短，还有很强的hangout视频功能，结合youtube是一种全新的体验。但是在国内你懂的。
-</p>
-<p>
-最终我回到了blog，也许是回国之后度过了浮躁期，以及装修+生娃的忙碌之后，可以坐下来反朴贵真了～当然现在建博客也要与时俱进了，静态网页博客什么时候开始火的我不知道，不过感觉也很久了。但由于技术上有一定门槛，所以国内大多是IT人事居多，讲的也多是IT或宅男生活。我的这个可不同，讲二进制也讲木工，一虚一实两个极端。
-</p>
-<p>
-<img class="" src="http://ifq.github.com/rc/P6142136-001.JPG" width="380" title="薄薄的刨花" alt="木工让人感觉到真实的存在，也许我应该另开一题讲讲为什么喜欢木工">
-</p>
-<p>
-我使用的博客环境是 emacs + org-mode + octopress + github。四个词也许很多人都很陌生，回头可以慢慢分解（这篇不是技术博～），这里只简单介绍下。
-</p>
-<dl>
-<dt>emacs</dt><dd>简单说是一个文本编辑器。特点是可定执性强、快捷键操作很方便，缺点是入门困难。也就是说是一个越用越好用的东西。鉴于我上班一直用这东西，所以觉得得心应手（不过还是emacs菜鸟）。
-</dd>
-<dt>org-mode</dt><dd>简单说就是emacs下的一种编辑模式，写提纲式的文档很快捷。写的文档可以很方便的导成html等格式。
-</dd>
-<dt>octopress</dt><dd>重点来了。生成静态博客的脚本工具。也就是说我用emacs+org写的简单的文档，通过这个工具就可以转化成博客组织形式的，格式统一的静态页面。（octopress实际是基于jekyll的）
-</dd>
-<dt>github</dt><dd>这里理解为一个提供免费站点host服务的网站就好。octopress生成的页面通过git工具同步到github，就成了你现在看到的页面。
-</dd>
-</dl>
-
-
-<p>
-看起来听复杂，其实。。真的有点复杂。但是复杂并不代表不好用，站点只要建立了，后边就很简单。这种方式的吸引力对我来说有几个：
-</p><ol>
-<li>让你专注你的内容
-</li>
-<li>很强的扩展和定制性
-</li>
-<li>内容全部在本地备份，从容应对未来变化。（话说以前的博客内容怎么弄过来才好呢～）
-</li>
-<li>用着心里舒服。。
-</li>
-<li>对移动设备的支持好。如果你现在拿手机在浏览，就有体会。
-</li>
-<li>HTML5。还能直接丢mp4文件进来，只要浏览器支持HTML5，就能播放。
-</li>
-<li>好像还有个啥来着
-</li>
-</ol>
-
-
-<p>
-忍不住贴张emacs的图给大家看看。
-<img class="" src="http://ifq.github.com/rc/20120804-1.JPG" title="emacs写博客的样子" alt="看似单调的界面，其实暗藏玄机～">
-</p>
-<p>
-其实说了这么多，并不是向谁解释我回博客的理由，而是为自己的博客找一个存在的理由，找一个定位，等于是写文档先开个题。
-</p>
-<p>
-如果你赞同或者不赞同我的观点，都欢迎你在下面留言～谢谢。
-</p><p><a rel="bookmark" href="http://ifq.github.com/blog/2012/08/03/1stpost/">&#9875; Permalink</a></p>]]></content>
-    </entry>
-  
-    <entry>
-      
-
-
-
-
-<title type="html"><![CDATA[hello world - NO.-1 post]]></title>
-<link href="http://ifq.github.com/blog/2012/07/29/helloworld/"/>
-<updated>2012-07-29T00:00:00+08:00</updated>
-<id>http://ifq.github.com/blog/2012/07/29/helloworld</id>
-
-      <content type="html"><![CDATA[<p>
-welcome to my blog. This is just a &#8220;hello world&#8221; testing post.
-重新建立一个blog这个念头在脑袋里已经有些日子了，关于原因以后再说，总之今天算一个“冒烟测试”。
-</p>
-
-
-<div id="outline-container-1" class="outline-2">
-<h2 id="sec-1">TEST</h2>
-<div class="outline-text-2" id="text-1">
-
-
-
-
-</div>
-
-<div id="outline-container-1-1" class="outline-3">
-<h3 id="sec-1-1">视频</h3>
-<div class="outline-text-3" id="text-1-1">
-
-<p>   一个工厂里切OAK的视频，看着这过瘾。也许以后可以经常转点youtube的视频
-   来给大家看。
-   <div class="video-container">
-   <video width='' height='' preload='none' controls poster='  /rc/dovetail-special.JPG'><source src='http://ifq.github.com/video/hull.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/></video>
-   </div>
-
-</p></div>
-
-</div>
-
-<div id="outline-container-1-2" class="outline-3">
-<h3 id="sec-1-2">各国文字测试</h3>
-<div class="outline-text-3" id="text-1-2">
-
-<dl>
-<dt>中文</dt><dd>上边已经试过了
-</dd>
-<dt>英文</dt><dd>上边也试过了
-</dd>
-<dt>日文</dt><dd>现在的linux下没装日文输入法。。<br/>
-             テストご挨拶、はじめまして。
-</dd>
-</dl>
-
-
-
-
-</div>
-
-</div>
-
-<div id="outline-container-1-3" class="outline-3">
-<h3 id="sec-1-3">Quote</h3>
-<div class="outline-text-3" id="text-1-3">
-
-
-   <blockquote><p>Every interaction is both precious and an opportunity to delight.</p><footer><strong>Seth Godin</strong> <cite><a href='http://sethgodin.typepad.com/seths_blog/2009/07/welcome-to-island-marketing.html'>Welcome to Island Marketing</a></cite></footer></blockquote>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-1-4" class="outline-3">
-<h3 id="sec-1-4">二级标题</h3>
-<div class="outline-text-3" id="text-1-4">
-
-
-
-</div>
-
-<div id="outline-container-1-4-1" class="outline-4">
-<h4 id="sec-1-4-1">三级标题</h4>
-<div class="outline-text-4" id="text-1-4-1">
-
-
-
-</div>
-
-<div id="outline-container-1-4-1-1" class="outline-5">
-<h5 id="sec-1-4-1-1">四级标题</h5>
-<div class="outline-text-5" id="text-1-4-1-1">
-
-
-</div>
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-1-5" class="outline-3">
-<h3 id="sec-1-5">链接</h3>
-<div class="outline-text-3" id="text-1-5">
-
-
-
-</div>
-
-<div id="outline-container-1-5-1" class="outline-4">
-<h4 id="sec-1-5-1">ORG 链接</h4>
-<div class="outline-text-4" id="text-1-5-1">
-
-<p>    <a href="http://ifq.herokuapp.com">http://ifq.herokuapp.com</a>
-    <a href="#sec-1-4-1-1">四级标题</a>
-</p>
-
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-1-6" class="outline-3">
-<h3 id="sec-1-6">图片</h3>
-<div class="outline-text-3" id="text-1-6">
-
-
-</div>
-
-<div id="outline-container-1-6-1" class="outline-4">
-<h4 id="sec-1-6-1">ORG</h4>
-<div class="outline-text-4" id="text-1-6-1">
-
-<p>    <img src="file:///rc/dovetail-special.JPG"  alt="file:///rc/dovetail-special.JPG" />
-</p>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-1-6-2" class="outline-4">
-<h4 id="sec-1-6-2">markdown 格式</h4>
-<div class="outline-text-4" id="text-1-6-2">
-
-
-    <img class="" src="http://ifq.github.com/rc/dovetail-special.JPG" title="一个很特别的dovetail" alt="不知道这个pin和tail是怎么敲起来的啊">
-
-
-</div>
-</div>
-</div>
-</div>
-<p><a rel="bookmark" href="http://ifq.github.com/blog/2012/07/29/helloworld/">&#9875; Permalink</a></p>]]></content>
     </entry>
   
 </feed>
