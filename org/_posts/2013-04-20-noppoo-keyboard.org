@@ -1,0 +1,8 @@
+#+BEGIN_HTML
+---
+layout: post
+title: 
+categories: [woodworking]
+comments: true
+---
+#+END_HTML

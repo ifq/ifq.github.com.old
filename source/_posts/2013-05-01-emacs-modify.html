@@ -1,0 +1,131 @@
+---
+layout: post
+title: 最近修缮了下emacs
+categories: [binary]
+comments: true
+---
+
+<p>
+emacs这东西，深啊。
+身边没有人交流，孤独啊。
+很多功能都是凑合着用，焦急啊。
+趁着五一优化了一下配置，清爽啊。
+</p>
+
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">magit</h2>
+<div class="outline-text-2" id="text-1">
+
+<p>  公司一直还没导入git，所以一直也没去尝试。最近貌似要导入了，于是认真学
+  习了下。另外看了youtube上linus对subversion的强烈鄙视，subversion顿时
+  一无是处啊。
+</p>
+<p>
+  公司还在用svn，因此考虑本地用git管理代码，于是发现了git-svn。一个分支
+  下多个branch，本地空间立马节省了许多，管理的代码也清晰了。之前为了解一
+  个bug，需要下一份特定版本的代码，修改之后又不一定commit。本地的修改越
+  积越多，占有空间不说，时间长了还不知道改了什么。
+</p>
+<p>
+  导入了git，相应的emacs下也就导入了相应的mode，magit。绑定F10到
+  magit-status，M-F10 到 Magit-log。目前用起来感觉还是很爽。本地的脚本、
+  配置也终于使用SCM管理起来了，心里舒坦多了。
+</p>
+<p>
+  如果你也和我一样，还没有用过分布式的版本控制，建议你试试git。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">auto-complete</h2>
+<div class="outline-text-2" id="text-2">
+
+<p>  之前陆陆续续用过几次AC mode，但是由于各种的问题（要么是速度奇慢，要么
+  是和YASnippet冲突神马的）又懒得解决就放弃了。这次重新编译了 24.3 的
+  emacs之后，决定重新试试。。
+</p>
+<p>
+  和gccsense，自动不全结构体成员的功能还是弄不起来。不知道gccsense的配
+  置还有哪里不对。暂时还是配合gtags来进行补全。目前没有经常编码，所以
+  需求不是很高，所以又偷懒了。速度慢的问题也没有了，原因不明。。
+</p>
+<p>
+  总之先用用看把。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">smex</h2>
+<div class="outline-text-2" id="text-3">
+
+<p>  使用ido的模式为 M-x 补全的功能，挺实用。推荐！
+</p>
+<p>
+  ``` elisp 配置代码
+  (require 'smex) ; Not needed if you use package.el
+(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
+                  ; when Smex is auto-initialized on its first run.
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+   ``` 
+</p>
+<p>
+  算我孤陋寡闻，才知道<a href="https://github.com/technomancy/emacs-starter-kit">emacs-starter-kit</a>。 要是一开始学emacs的时候知道
+  这么好的初学者工具该多好啊。smex也是包含在其中的工具。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">emacs-color-theme-solarized</h2>
+<div class="outline-text-2" id="text-4">
+
+<p>  这个也是<a href="https://github.com/technomancy/emacs-starter-kit">emacs-starter-kit</a> 里包含的东西，是emacs的主题。之前emacs23的
+  时候还是用扩展的 color-theme.el，现在可以不用那个了，直接用系统自带
+  的。这个theme的配色考虑的比较全面，看起来很和谐。
+</p>
+<p>
+  {% img /rc/emacs-color-theme.png 800 600 "emacs-color-theme-solarized" "效果解图" %}
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">feng-highlight</h2>
+<div class="outline-text-2" id="text-5">
+
+<p>  本来在看idle-highligh-mode，无意间浏览到了shenfeng的<a href="http://shenfeng.me/highlight-thing-under-cursor.html">这篇博客</a>。 试用
+  了一下感觉不错。
+</p>
+<p>
+  在一个词上 M-i，即高亮现实所以相同的地方；还可以用M-n/p来上下导航，
+  M-r来替换。一看就是实用注意者啊，其实这点子我也有想过，但是我基本不
+  会lisp，所以这种想法都基本上立马忽略。但是有了这种功能确实很爽。
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
